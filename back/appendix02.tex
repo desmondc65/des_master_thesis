@@ -1,5 +1,58 @@
 % !TeX root = ../main.tex
 
-\appendix{B}{Introduction}
-\section{Introduction}
-\section{Further Introduction}
+\appendix{B}{Reproducibility}
+\label{app:repro}
+
+\section{Code Availability}
+
+The full training and evaluation code for this thesis lives in the \texttt{Stormcast-Distilation} repository, branch \texttt{distillation\_setup}. The key entry points are:
+\begin{itemize}
+  \item \texttt{stormcast/train\_progressive.py} --- progressive distillation training.
+  \item \texttt{stormcast/train\_consistency.py} --- consistency distillation training.
+  \item \texttt{stormcast/utils/trainer\_progressive.py} --- PD phase loop (\texttt{progressive\_distillation\_loop}).
+  \item \texttt{stormcast/utils/trainer\_consistency.py} --- CD training loop with adaptive $N(k)$ and EMA.
+  \item \texttt{physicsnemo/experimental/metrics/diffusion/progressive\_distillation\_loss.py}
+  \item \texttt{physicsnemo/experimental/metrics/diffusion/consistency\_loss.py}
+\end{itemize}
+
+\section{Dataset and Checkpoints}
+
+\paragraph{Zarr store.} The Taiwan RWRF dataset used throughout this thesis is the local Zarr store at
+\begin{center}
+\texttt{exp\_3\_train\_2\_5\_yrs\_val\_1yr\_tp1/zarr\_exp3\_L\_24\_H\_24\_train\_2\_5\_years\_full/}
+\end{center}
+with sub-groups \texttt{LowRes/}, \texttt{HighRes/}, and \texttt{invariants/}.
+
+\paragraph{Pretrained teacher and regression checkpoints.}
+\begin{itemize}
+  \item Regression: \texttt{StormCastUNet.0.14000.mdlus} in \texttt{exp\_3\_reg\_L\_24\_H\_4\_train\_2\_5\_years/0/checkpoints\_regression/}.
+  \item EDM teacher: \texttt{EDMPrecond.0.70000.mdlus} in \texttt{exp\_3\_dif\_L\_24\_H\_4\_train\_2\_5\_years/0/checkpoints\_diffusion/}.
+\end{itemize}
+
+\section{Commands}
+
+All commands below launch from the \texttt{stormcast/} directory. The shipped configs point at stale NCDR-cluster paths and outdated \texttt{valid\_dates}; the overrides here are required on the local workstation.
+
+\paragraph{Progressive distillation.}
+\begin{verbatim}
+python train_progressive.py \
+    model.teacher_weights=.../EDMPrecond.0.70000.mdlus \
+    model.regression_weights=.../StormCastUNet.0.14000.mdlus \
+    dataset.location=.../zarr_exp3_L_24_H_24_train_2_5_years_full \
+    dataset.valid_dates=['2022/01/01','2022/12/31'] \
+    training.experiment_name=pd_main
+\end{verbatim}
+
+\paragraph{Consistency distillation.}
+\begin{verbatim}
+python train_consistency.py \
+    model.teacher_weights=.../EDMPrecond.0.70000.mdlus \
+    model.regression_weights=.../StormCastUNet.0.14000.mdlus \
+    dataset.location=.../zarr_exp3_L_24_H_24_train_2_5_years_full \
+    dataset.valid_dates=['2022/01/01','2022/12/31'] \
+    training.experiment_name=cd_main
+\end{verbatim}
+
+\paragraph{Auto-resume.} Re-running the same command picks up from the latest checkpoint. PD uses \texttt{\_detect\_resume\_state}; CD reads \texttt{checkpoints\_consistency/checkpoint\_latest.pt}.
+
+\paragraph{CD inference weights.} Inference must load \texttt{ema\_state.pt} rather than the online \texttt{checkpoint\_*.pt}. The provided evaluation scripts do this by default.

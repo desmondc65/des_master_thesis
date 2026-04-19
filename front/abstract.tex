@@ -2,12 +2,20 @@
 
 \begin{abstract}
 
-中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要中文摘要
+近年來，基於擴散模型的生成式天氣預報（例如 GenCast 與 StormCast）已展現出在機率性、銳利化、且可集成的短時預報任務上超越傳統確定性深度學習模型的能力。然而，這類模型在推論階段需要執行數十次神經網路前向傳遞（Number of Function Evaluations, NFE），使其在進行長時間自迴歸滾動預測或大規模集成預報時的計算成本過高，難以部署於區域對流尺度的實際業務場景。
+
+本論文以一個以臺灣區域（RWRF）資料集訓練的 StormCast 擴散教師模型為起點，探討如何透過擴散蒸餾技術，在不顯著損失預報品質的前提下，將推論所需的 NFE 從約 25 步壓縮至 1 至 8 步。我們實作並比較兩種主流蒸餾方法：漸進式蒸餾（Progressive Distillation, PD）與一致性蒸餾（Consistency Distillation, CD），並另外訓練一個以條件流匹配（Conditional Flow Matching）為基礎的 FlowCast 學生模型，做為無需教師、直接學習雜訊到資料直線 ODE 的對照基準。針對臺灣 RWRF 資料集僅有 4 個高解析度輸出通道的特性，我們設計逐通道加權的 Pseudo-Huber 損失以及針對稀疏、重尾降水通道 \texttt{qpepre} 的徑向功率譜密度正則化項。
+
+我們在 2022 年整年逐小時驗證資料上，以確定性誤差（RMSE/MAE）、降水類別分數（CSI、FSS、不同閾值下的頻率偏差）、徑向功率譜，以及 1/3/6/12 小時滾動預測誤差等指標，系統性地比較學生模型與教師模型的表現。實驗結果顯示，兩種蒸餾方法皆能在 4 步以內達到接近教師的確定性誤差，而一致性蒸餾在極端情況（1 步推論）下對降水銳利度的保持較為穩定。本研究為區域對流尺度擴散預報模型的加速部署提供了一套可重現的蒸餾流程與評估基準。
 
 \end{abstract}
 
 \begin{abstract*}
 
-Abstract
+Diffusion-based generative weather forecasters such as GenCast and StormCast have recently surpassed deterministic deep-learning baselines on probabilistic, sharp, and ensemble-capable short-range prediction tasks. However, these models require tens of neural-network function evaluations (NFE) per forecast step at inference time, which makes autoregressive rollouts and large ensembles computationally prohibitive for operational regional, convective-scale deployment.
+
+This thesis takes a pretrained StormCast EDM diffusion teacher trained on a Taiwan-domain RWRF dataset as its starting point, and investigates how diffusion distillation techniques can compress the sampling budget from roughly 25 NFE to between 1 and 8 NFE without sacrificing forecast quality. We implement and compare two mainstream distillation methods --- \emph{Progressive Distillation} (PD) and \emph{Consistency Distillation} (CD) --- and a third, teacher-free alternative based on \emph{Conditional Flow Matching}, which we call FlowCast and which learns a straight-line noise-to-data ODE directly from the data. Because the Taiwan RWRF target contains only four high-resolution output channels (\texttt{t2m}, \texttt{u10}, \texttt{v10}, \texttt{qpepre}), we can afford channel-specific loss design: we use a channel-weighted Pseudo-Huber loss and add a radial power-spectral-density regularizer on the sparse, heavy-tailed precipitation channel \texttt{qpepre}.
+
+We evaluate the distilled students against the teacher on the full 2022 hourly validation year using a precipitation-aware metric suite: per-channel RMSE/MAE, categorical precipitation scores (CSI, FSS, frequency bias) at operational thresholds, radial log-PSD, and 1/3/6/12-hour rollout errors. Our experiments show that both methods approach teacher-level deterministic error within four inference steps, and that consistency distillation preserves precipitation sharpness more robustly in the one-step regime. The thesis contributes a reproducible distillation pipeline and an evaluation protocol for accelerating regional convective-scale diffusion forecasters.
 
 \end{abstract*}

@@ -1,47 +1,56 @@
 % !TeX root = ../main.tex
 
-\chapter{中國文學}
+\chapter{Introduction}
+\label{ch:introduction}
 
-\section{出師表}
+\section{Weather Forecasting and Its Societal Stakes}
+\label{sec:intro-motivation}
 
-\begingroup
-\centering
+Accurate short-range weather forecasting is a public-safety service. In Taiwan, a small, densely populated island lying along the western Pacific typhoon track, the stakes are especially concentrated: a single landfalling typhoon can dump more than \SI{1000}{\milli\metre} of rainfall on steep orography in twelve hours, trigger flash floods and landslides, and disrupt transportation, agriculture, and power. Between typhoons, Mei-yu frontal systems, afternoon convective storms, and orographically forced rainfall drive the remainder of the hydrological cycle. For decision-makers who must issue evacuation orders, schedule reservoir releases, or re-route air traffic, the relevant question is almost always probabilistic and local: \emph{how much rain, where, within the next six to twelve hours?}
 
-\begin{tabular}{ll}
-What & is \\
-this & doing? \\
-\end{tabular}
-\captionsetup{type=table}
-\captionof{table}{A nice table}\label{tbl:nicetablelesstable}
-\endgroup
+The operationally critical quantity --- precipitation at convective scales --- is also the hardest for weather models to predict. Precipitation fields are sparse (most pixels are dry), heavy-tailed (the few wet pixels span orders of magnitude), and strongly coupled to terrain and mesoscale dynamics that only emerge at kilometre-scale resolution. This combination means that any forecasting system which produces visually smooth outputs, or which regresses toward the mean, will systematically underpredict the very events that matter most.
 
-臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州疲弊，此誠危急存亡之秋也。然侍衛之臣，不懈於內；忠志之士，忘身於外者，蓋追先帝之殊遇，欲報之於陛下也。誠宜開張聖聽，以光先帝遺德，恢弘志士之氣；不宜妄自菲薄，引喻失義，以塞忠諫之路也。宮中府中，俱為一體，陟罰臧否，不宜異同。若有作姦犯科，及為忠善者，宜付有司，論其刑賞，以昭陛下平明之治，不宜篇私，使內外異法也。\par
+\section{A Brief History of Weather Prediction Methods}
+\label{sec:intro-history}
 
-侍中、侍郎郭攸之、費褘、董允等，此皆良實，志慮忠純，是以先帝簡拔以遺陛下。愚以為宮中之事，事無大小，悉以咨之，然後施行，必能裨補闕漏，有所廣益。將軍向寵，性行淑均，曉暢軍事，試用於昔日，先帝稱之曰「能」，是以眾議舉寵為督。愚以為營中之事，悉以咨之，必能使行陣和睦，優劣得所。親賢臣，遠小人，此先漢所以興隆也；親小人，遠賢臣，此後漢所以傾頹也。先帝在時，每與臣論此事，未嘗不歎息痛恨於桓、靈也。侍中、尚書、長史；參軍，此悉貞良死節之臣也，願陛下親之信之，則漢室之隆，可計日而待也。
+Modern weather forecasting has passed through four broad eras, each driven by a different scientific or computational advance.
 
-臣本布衣，躬耕於南陽，苟全性命於亂世，不求聞達於諸侯。先帝不以臣卑鄙，猥自枉屈，三顧臣於草廬之中，諮臣以當世之事，由是感激，遂許先帝以驅馳。後值傾覆，受任於敗軍之際，奉命於危難之間，爾來二十有一年矣！先帝知臣謹慎，故臨崩寄臣以大事也。受命以來，夙夜憂勤，恐託付不效，以傷先帝之明。故五月渡瀘，深入不毛。今南方已定，兵甲已足，當獎率三軍，北定中原，庶竭駑鈍，攘除奸凶，興復漢室，還於舊都；此臣所以報先帝而忠陛下之職分也。至於斟酌損益，進盡忠言，則攸之、褘、允之任也。
+\paragraph{Numerical Weather Prediction (NWP).} Since Richardson's early twentieth-century vision and its post-war realisation by Charney, Phillips, and others, operational forecasting has been dominated by numerical integration of the primitive equations of atmospheric motion. State-of-the-art systems such as the ECMWF Integrated Forecasting System (IFS), the NCEP Global Forecast System (GFS), and regional convection-permitting models like WRF and its Taiwan variant RWRF discretise the atmosphere on a three-dimensional grid, solve the governing fluid-dynamics and thermodynamics equations, and close the unresolved sub-grid processes (convection, microphysics, boundary-layer turbulence, radiation) through physical parameterisations. Uncertainty is quantified by ensemble prediction systems that perturb initial conditions and model physics. NWP is physically consistent, well-understood, and remarkably skilful, but convection-permitting runs are computationally expensive, parameterisation error is non-trivial, and operational latency is a fundamental constraint.
 
-願陛下託臣以討賊興復之效；不效，則治臣之罪，以告先帝之靈。若無興德之言，則戮允等，以彰其慢。陛下亦宜自課，以諮諏善道，察納雅言，深追先帝遺詔，臣不勝受恩感激。
+\paragraph{Statistical and classical machine-learning post-processing.} Long before deep learning, statistical techniques --- model output statistics (MOS), analog methods, kriging, and more recently random forests and gradient-boosted trees --- have been used to bias-correct and downscale NWP outputs. These approaches treat the NWP forecast as a feature vector and learn a local correction to each observation site. They set an important precedent: that learned components can complement physical cores, and that the ultimate criterion is predictive skill at points of interest rather than global physical fidelity.
 
-今當遠離，臨表涕泣，不知所云。
+\paragraph{The deep-learning era.} Starting around 2020, a new generation of purely data-driven global weather models began to rival and in some cases surpass operational NWP at synoptic scales. FourCastNet \citep{pathak2022fourcastnet} used an Adaptive Fourier Neural Operator to produce six-hourly global forecasts at \ang{0.25} resolution. Pangu-Weather \citep{bi2023pangu} introduced a three-dimensional hierarchical transformer and demonstrated medium-range skill competitive with IFS. GraphCast \citep{lam2023graphcast} adopted an icosahedral-mesh graph neural network and achieved operational-quality ten-day forecasts at a fraction of the inference cost of IFS. At convective scales, MetNet \citep{sonderby2020metnet,espeholt2022metnet2,andrychowicz2023metnet3} and the Deep Generative Model of Rainfall (DGMR) \citep{ravuri2021dgmr} pushed radar-based nowcasting from deterministic CNNs toward generative models capable of producing sharp, ensemble-like outputs. Most recently, StormCast \citep{pathak2024stormcast} demonstrated that a convection-permitting diffusion model can learn a km-scale regional forecaster directly from reanalysis data.
 
-\section{短歌行}
+\paragraph{The generative turn.} A persistent problem of deterministic deep-learning forecasters is that, because they are trained with pixelwise regression losses, they produce fields that are systematically blurry and that underestimate extremes. Generative models resolve this by learning the \emph{distribution} of plausible forecasts rather than its conditional mean. DGMR showed this qualitatively for radar nowcasting; GenCast \citep{price2024gencast} made the argument at global scale, demonstrating that a conditional diffusion model produces both sharper and better-calibrated ensemble forecasts than GraphCast. The lesson transfers directly to regional convective forecasting, and it motivates the teacher model at the centre of this thesis.
 
-對酒當歌，人生幾何！譬如朝露，去日苦多。
-慨當以慷，憂思難忘。何以解憂？唯有杜康。
-青青子衿，悠悠我心。但為君故，沉吟至今。
-呦呦鹿鳴，食野之苹。我有嘉賓，鼓瑟吹笙。
-明明如月，何時可掇？憂從中來，不可斷絕。
-越陌度阡，枉用相存。契闊談宴，心念舊恩。
-月明星稀，烏鵲南飛。繞樹三匝，何枝可依？
-山不厭高，海不厭深。周公吐哺，天下歸心。
+\section{Diffusion Models for Weather: Intuition}
+\label{sec:intro-diffusion}
 
-\section{始得西山宴遊記}
+A \emph{diffusion model} is a generative model trained to reverse a gradual noising process. Given a clean sample $x_0$ drawn from some data distribution --- say, a high-resolution precipitation field over Taiwan --- we progressively add Gaussian noise until after enough steps the result is indistinguishable from pure noise. A neural network is then trained to undo one step of this process: given a noised sample and the current noise level, predict the underlying clean signal (equivalently, the score of the noised distribution). At sampling time we start from pure Gaussian noise and apply the learned denoiser repeatedly until we recover a clean sample.
 
-自余爲僇人，居是州，恆惴慄。其隙也，則施施而行，漫漫而遊。日與其徒上高山，入深林，窮回溪；幽泉怪石，無遠不到。到則披草而坐，傾壺而醉，醉則更相枕以臥，臥而夢。意有所極，夢亦同趣。覺而起，起而歸。以爲凡是州之山有異態者，皆我有也，而未始知西山之怪特。
+Three properties make this framework attractive for weather forecasting. First, it is naturally \emph{probabilistic}: different noise seeds produce different but equally plausible samples, giving an ensemble for free. Second, the samples are \emph{sharp}: because the model is never asked to average over outcomes, it does not regress toward the mean. Third, the denoiser can be \emph{conditioned} on auxiliary inputs --- the previous atmospheric state, coarse boundary fields, invariant land-surface information --- which is exactly the interface a forecaster needs. GenCast at global scale and StormCast at regional scale both exploit these properties.
 
-今年九月二十八日，因坐法華西亭，望西山，始指異之。遂命僕人過湘江，緣染溪，斫榛莽，焚茅茷，窮山之高而止。攀援而登，箕踞而遨，則凡數州之土壤，皆在衽席之下
+\section{The Inference-Cost Problem}
+\label{sec:intro-cost}
 
-其高下之勢，岈然窪然，若垤若穴，尺寸千里，攢蹙累積，莫得遁隱；縈青繚白，外與天際，四望如一。然後知是山之特出，不與培塿爲類。悠悠乎與灝氣俱，而莫得其涯；洋洋乎與造物者遊，而不知其所窮。
+The cost of this flexibility is paid at inference time. High-quality diffusion sampling requires on the order of 25 neural-network forward passes per generated sample --- the so-called \emph{number of function evaluations} (NFE). For a single forecast step this is tolerable, but operational use cases compound it. An autoregressive 24-hour rollout multiplies the cost by 24. A 50-member ensemble for probabilistic forecasting multiplies it again. A convection-permitting Taiwan-domain forecast with a 50-member ensemble over a 24-hour horizon therefore requires on the order of $50 \times 24 \times 25 = 30{,}000$ forward passes of a large U-Net --- which places the entire class of generative forecasters outside the operational envelope of a regional forecasting centre.
 
-引觴滿酌，頹然就醉，不知日之入，蒼然暮色，自遠而至，至無所見，而猶不欲歸。心凝形釋，與萬化冥合。然後知吾向之未始遊，遊於是乎始，故爲之文以志。是歲，元和四年也。
+This thesis attacks the inference-cost problem directly, through \emph{diffusion distillation}: given a trained teacher diffusion model, learn a student that approximates the teacher's sampling trajectory in far fewer steps. The goal is to compress the 25-NFE teacher into a student that remains forecast-accurate at 1, 2, 4, or 8 NFE, thereby closing the gap between the best-available generative forecaster and what can actually be deployed.
+
+\section{Contributions}
+\label{sec:intro-contributions}
+
+This thesis makes the following contributions:
+\begin{enumerate}
+  \item We adapt \emph{Progressive Distillation} \citep{salimans2022progressive} to the StormCast two-stage regression-plus-residual-diffusion architecture, distilling a 25-step EDM teacher down to 1 through 8 sampling steps on a four-channel Taiwan regional target.
+  \item We adapt \emph{Consistency Distillation} \citep{song2023consistency} to the same setting, with a channel-weighted Pseudo-Huber loss and an auxiliary radial power-spectral-density regulariser on the sparse, heavy-tailed precipitation channel \texttt{qpepre}. The consistency target network uses an EMA schedule matched to the adaptive discretisation $N(k)$, and the teacher operator $\Phi$ is a Heun step rather than an Euler step, matching the sampler the EDM teacher was trained to emulate.
+  \item We adapt \emph{Conditional Flow Matching} \citep{lipman2023flow,tong2024improving,ribeiro2025flowcast} to the StormCast residual pipeline, producing a FlowCast student that is trained from scratch without a teacher and that, by learning a straight-line noise-to-data ODE, is competitive at one or two Euler steps. FlowCast is included as a direct one-training-run baseline against which the distilled students are measured.
+  \item We assemble a precipitation-aware evaluation suite --- per-channel RMSE and MAE, categorical skill scores (CSI, FSS, frequency bias) at operational thresholds, radial log-PSD, and 1-, 3-, 6-, and 12-hour rollout errors --- and run it on the full 2022 hourly validation year of the Taiwan RWRF dataset.
+  \item We present the first empirical three-way comparison on a regional convection-permitting diffusion forecaster between Progressive Distillation, Consistency Distillation, and a FlowCast baseline, with guidance on which method is preferred at which NFE budget.
+  \item Appendix~\ref{app:derivations} provides full line-by-line derivations of DDPM, DDIM, VE-SDE / PF-ODE, EDM preconditioning, and Conditional Flow Matching --- the theoretical machinery all four methods in this thesis rest on --- in a form that should let a reader with a working knowledge of Gaussian algebra and the Fokker--Planck equation reconstruct every identity from scratch.
+\end{enumerate}
+
+\section{Thesis Outline}
+\label{sec:intro-outline}
+
+Chapter~\ref{ch:background} surveys weather-prediction methods, diffusion theory, and diffusion distillation in enough depth to motivate and define every component used later. Chapter~\ref{ch:method} describes the dataset, teacher architecture, and the two distillation pipelines as they are implemented in the accompanying codebase. Chapter~\ref{ch:experiments} presents the experimental protocol and results across NFE budgets and rollout horizons. Chapter~\ref{ch:conclusion} summarises findings, limitations, and future work.

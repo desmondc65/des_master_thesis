@@ -1,5 +1,112 @@
 % !TeX root = ../main.tex
 
-\appendix{A}{Introduction}
-\section{Introduction}
-\section{Further Introduction}
+\appendix{A}{Hyperparameters and Training Configuration}
+\label{app:hyperparams}
+
+\section{EDM Teacher Hyperparameters}
+
+The EDM teacher and all distilled students share the following parameters, copied verbatim from the teacher config:
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Parameter & Value \\
+\midrule
+$\sigma_{\min}$ & 0.002 \\
+$\sigma_{\max}$ & 80 \\
+$\sigma_{\text{data}}$ & 0.5 \\
+$\rho$ & 7 \\
+Teacher sampler & Heun \\
+Teacher $N$ (steps) & $\approx 13$ ($\approx 25$ NFE) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Progressive Distillation}
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Parameter & Value \\
+\midrule
+Phase schedule $N$ & $16 \to 8 \to 4 \to 2 \to 1$ \\
+Iterations per phase & $6 \times 10^4$ \\
+Optimiser & AdamW \\
+Learning rate & $1 \times 10^{-4}$ \\
+Batch size & 32 (per GPU) \\
+Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
+Loss space & Denoised prediction ($D_\theta$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Consistency Distillation}
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Parameter & Value \\
+\midrule
+$N_0$ & 2 \\
+$N_{\text{total}}$ & 150 \\
+$\mu_0$ & 0.95 \\
+Pseudo-Huber $c_{\text{h}}$ & $5.4 \times 10^{-4}$ \\
+Teacher operator $\Phi$ & Heun (1 step) \\
+Total iterations & $6 \times 10^{5}$ \\
+Optimiser & AdamW \\
+Learning rate & $1 \times 10^{-4}$ \\
+Batch size & 32 (per GPU) \\
+Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
+Spectral weight $\lambda_{\text{spec}}$ & $0.1$ \\
+Spectral channels & $\{\texttt{qpepre}\}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{FlowCast (Conditional Flow Matching)}
+
+Hyperparameters copied from \texttt{stormcast/config/model/flowcast.yaml} and \texttt{stormcast/config/training/flowcast.yaml}:
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Parameter & Value \\
+\midrule
+$\sigma_{\text{data}}$ & 0.5 \\
+$\sigma_{\text{path}}$ (I-CFM path std) & 0.01 \\
+$t_\varepsilon$ (time clamp) & $10^{-5}$ \\
+Time embedding scale $\tau$ & 1000 \\
+\texttt{diffusion\_conditions} & \texttt{[state, regression, invariant]} \\
+\texttt{regression\_conditions} & \texttt{[state, background, invariant]} \\
+Optimiser & AdamW \\
+Adam $(\beta_1, \beta_2)$ & $(0.9, 0.999)$ \\
+Learning rate & $5 \times 10^{-4}$ \\
+Weight decay & $1 \times 10^{-4}$ \\
+Warmup steps (linear) & 4{,}000 \\
+Min LR ratio (cosine floor) & $10^{-2}$ \\
+Total training steps & $4 \times 10^{5}$ \\
+Global batch size & 64 \\
+Gradient clip (global L2) & 1.0 \\
+EMA decay (fixed) & 0.999 \\
+Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
+Spectral weight $\lambda_{\text{spec}}$ & $0.1$ \\
+Spectral channels & $\{\texttt{qpepre}\}$ \\
+Validation sampler & Euler, $K=10$ \\
+Inference solvers & \texttt{euler} \,/\, \texttt{midpoint} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Per-Channel Dataset Statistics}
+
+High-resolution target statistics computed on the 2019-08 -- 2021-12 training split:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Channel & Mean & Std \\
+\midrule
+\texttt{t2m} (K)          & 295.98 & 5.61 \\
+\texttt{u10} (m\,s$^{-1}$) & $-1.58$ & 3.84 \\
+\texttt{v10} (m\,s$^{-1}$) & $-2.65$ & 5.66 \\
+\texttt{qpepre} (mm)       & 0.182  & 9.12 \\
+\bottomrule
+\end{tabular}
+\end{center}

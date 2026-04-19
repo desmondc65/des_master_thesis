@@ -1,224 +1,231 @@
-@book{IEEE-1363,
-  author =       {{IEEE Std 1363-2000}},
-  title =        {{IEEE} Standard Specifications for Public-Key Cryptography},
-  address =      {New York},
-  publisher =    {IEEE},
-  year =         2000
+% References for: Few-Step Distillation of a Regional StormCast Diffusion Model
+
+% ==================================================
+% Diffusion model foundations
+% ==================================================
+
+@inproceedings{ho2020ddpm,
+  author    = {Jonathan Ho and Ajay Jain and Pieter Abbeel},
+  title     = {Denoising Diffusion Probabilistic Models},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2020},
 }
 
-@inproceedings{kocher99,
-  author =       {C. Kocher and J. Jaffe and B. Jun},
-  title =        {Differential Power Analysis},
-  editor =       {M. Wiener},
-  booktitle =    {Advances in Cryptology ({CRYPTO}~'99)},
-  series =       {Lecture Notes in Computer Science},
-  volume =       1666,
-  pages =        {388-397},
-  publisher =    {Springer-Verlag},
-  month =        {August},
-  year =         1999
+@inproceedings{song2021scoresde,
+  author    = {Yang Song and Jascha Sohl-Dickstein and Diederik P. Kingma and Abhishek Kumar and Stefano Ermon and Ben Poole},
+  title     = {Score-Based Generative Modeling through Stochastic Differential Equations},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2021},
 }
 
-@incollection{Krasnogor2004e,
-  author =       {N. Krasnogor},
-  title =        {Towards robust memetic algorithms},
-  booktitle =    {Recent Advances in Memetic Algorithms},
-  publisher =    {Springer Berlin Heidelberg},
-  year =         2004,
-  pages =        {185-207},
-  editor =       {W.E. Hart and N. Krasnogor and J.E. Smith},
-  volume =       166,
-  series =       {Studies in Fuzziness and Soft Computing},
-  address =      {New York},
+@inproceedings{song2021ddim,
+  author    = {Jiaming Song and Chenlin Meng and Stefano Ermon},
+  title     = {Denoising Diffusion Implicit Models},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2021},
 }
 
-@incollection{zjsw,
-  author =       {班固},
-  title =        {苏武传},
-  booktitle =    {传记散文英华},
-  publisher =    {湖北人民出版社},
-  year =         1998,
-  pages =        {65-69},
-  editor =       {郑在瀛 and 汪超宏 and 周文复},
-  volume =       2,
-  series =       {新古文观止丛书},
-  address =      {武汉},
-  language =     "chinese",
+@inproceedings{karras2022elucidating,
+  author    = {Tero Karras and Miika Aittala and Timo Aila and Samuli Laine},
+  title     = {Elucidating the Design Space of Diffusion-Based Generative Models},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2022},
 }
 
-@inbook{clzs,
-  author =       {阎真},
-  title =        {沧浪之水},
-  chapter =      {大人物还是讲人情的},
-  pages =        {185-207},
-  publisher =    {人民文学出版社},
-  year =         2001,
-  language =     "chinese",
+@article{ho2022cfg,
+  author  = {Jonathan Ho and Tim Salimans},
+  title   = {Classifier-Free Diffusion Guidance},
+  journal = {arXiv preprint arXiv:2207.12598},
+  year    = {2022},
 }
 
-@book{tex,
-  author =       "Donald E. Knuth",
-  title =        "The {\TeX} Book",
-  publisher =    "Addison-Wesley Publishing Company",
-  address =      "Reading, MA",
-  year =         1989,
-  edition =      "15th",
+@inproceedings{lu2022dpmsolver,
+  author    = {Cheng Lu and Yuhao Zhou and Fan Bao and Jianfei Chen and Chongxuan Li and Jun Zhu},
+  title     = {{DPM-Solver}: A Fast {ODE} Solver for Diffusion Probabilistic Model Sampling in Around 10 Steps},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2022},
 }
 
-@book{companion,
-  author =       "Michel Goosens and Frank Mittelbach and Alexander Samarin",
-  title =        "The {\LaTeX} Companion",
-  publisher =    "Addison-Wesley Publishing Company",
-  address =      "Reading, MA",
-  PAGES =        "112--125",
-  year =         1994,
+@inproceedings{liu2022rectifiedflow,
+  author    = {Xingchao Liu and Chengyue Gong and Qiang Liu},
+  title     = {Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023},
 }
 
-@article{ELIDRISSI94,
-  author =       "{Chafik El Idrissi}, M. and {Roney}, A. and {Frigon}, C. and
-                  {Larzilli{\`e}re}, M.",
-  title =        "Measurements of total kinetic-energy released to the {$N=2$}
-                  dissociation limit of {H}$_2$ --- evidence of the dissociation
-                  of very high vibrational {R}ydberg states of {H}$_2$ by
-                  doubly-excited states",
-  journal =      "Chemical Physics Letters",
-  pages =        "260-266",
-  volume =       224,
-  number =       10,
-  year =         1994,
+% ==================================================
+% Diffusion distillation
+% ==================================================
+
+@inproceedings{salimans2022progressive,
+  author    = {Tim Salimans and Jonathan Ho},
+  title     = {Progressive Distillation for Fast Sampling of Diffusion Models},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2022},
 }
 
-@article{MELLINGER96,
-  author =       "Mellinger, A. and Vidal, C. R. and Jungen, Ch.",
-  title =        "Laser reduced fluorescence study of the carbon-monoxide nd
-                  triplet {R}ydberg series-experimental results and multichannel
-                  quantum-defect analysis",
-  journal =      "J. Chem. Phys.",
-  pages =        "8913-8921",
-  volume =       104,
-  number =       5,
-  year =         1996,
+@inproceedings{song2023consistency,
+  author    = {Yang Song and Prafulla Dhariwal and Mark Chen and Ilya Sutskever},
+  title     = {Consistency Models},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2023},
 }
 
-@article{SHELL02,
-  author =       "Michael Shell",
-  title =        "How to Use the {IEEEtran \LaTeX} Class",
-  journal =      "Journal of {\LaTeX} Class Files",
-  year =         2002,
-  volume =       12,
-  number =       4,
-  pages =        "100--120"
+@article{song2023improved,
+  author  = {Yang Song and Prafulla Dhariwal},
+  title   = {Improved Techniques for Training Consistency Models},
+  journal = {arXiv preprint arXiv:2310.14189},
+  year    = {2023},
 }
 
-@TechReport{NPB2,
-  title =        {The {NAS} Parallel Benchmarks 2.0},
-  author =       {Alex Woo and David Bailey and Maurice Yarrow and Wijngaart
-                  Wijngaart and Tim Harris and William Saphir},
-  year =         1995,
-  month =        dec # "~05",
-  institution =  "The Pennsylvania State University CiteSeer Archives",
-  url =          "http://www.nasa.org/"
+@article{sauer2023add,
+  author  = {Axel Sauer and Dominik Lorenz and Andreas Blattmann and Robin Rombach},
+  title   = {Adversarial Diffusion Distillation},
+  journal = {arXiv preprint arXiv:2311.17042},
+  year    = {2023},
 }
 
-@inproceedings{DPMG,
-  author =       {Kim, Sangbum and Woo, Namyoon and Yeom, Heon Y. and Park,
-                  Taesoon and Park, Hyoungwoo},
-  title =        {Design and {I}mplementation of {D}ynamic {P}rocess
-                  {M}anagement for {G}rid-enabled {MPICH}},
-  booktitle =    {the 10th European PVM/MPI Users' Group Conference},
-  year =         2003,
-  address =      {Venice, Italy},
-  month =        sep,
+% ==================================================
+% Reanalysis and observational datasets
+% ==================================================
+
+@article{hersbach2020era5,
+  author  = {Hans Hersbach and Bill Bell and Paul Berrisford and Shoji Hirahara and Andr{\'a}s Hor{\'a}nyi and Joaqu{\'\i}n Mu{\~n}oz-Sabater and Julien Nicolas and Carole Peubey and Raluca Radu and Dinand Schepers and Adrian Simmons and Cornel Soci and Saleh Abdalla and Xavier Abellan and Gianpaolo Balsamo and Peter Bechtold and Gionata Biavati and Jean Bidlot and Massimo Bonavita and Giovanna De Chiara and Per Dahlgren and Dick Dee and Michail Diamantakis and Rossana Dragani and Johannes Flemming and Richard Forbes and Manuel Fuentes and Alan Geer and Leo Haimberger and Sean Healy and Robin J. Hogan and El{\'\i}as H{\'o}lm and Marta Janiskov{\'a} and Sarah Keeley and Patrick Laloyaux and Philippe Lopez and Cristina Lupu and Gabor Radnoti and Patricia de Rosnay and Iryna Rozum and Freja Vamborg and S{\'e}bastien Villaume and Jean-No{\"e}l Th{\'e}paut},
+  title   = {The {ERA5} Global Reanalysis},
+  journal = {Quarterly Journal of the Royal Meteorological Society},
+  volume  = {146},
+  number  = {730},
+  pages   = {1999--2049},
+  year    = {2020},
 }
 
-@inproceedings{cnproceed,
-  author =       {王重阳 and 黄药师 and 欧阳峰 and 洪七公 and 段皇帝},
-  title =        {武林高手从入门到精通},
-  booktitle =    {第~$N$~次华山论剑},
-  year =         2006,
-  address =      {西安, 中国},
-  month =        sep,
-  language =     "chinese",
+% ==================================================
+% Data-driven weather models
+% ==================================================
+
+@article{pathak2022fourcastnet,
+  author  = {Jaideep Pathak and Shashank Subramanian and Peter Harrington and Sanjeev Raja and Ashesh Chattopadhyay and Morteza Mardani and Thorsten Kurth and David Hall and Zongyi Li and Kamyar Azizzadenesheli and Pedram Hassanzadeh and Karthik Kashinath and Animashree Anandkumar},
+  title   = {{FourCastNet}: A Global Data-driven High-resolution Weather Model using Adaptive {Fourier} Neural Operators},
+  journal = {arXiv preprint arXiv:2202.11214},
+  year    = {2022},
 }
 
-@article{cnarticle,
-  author =       "贾宝玉 and 林黛玉 and 薛宝钗 and 贾探春",
-  title =        "论刘姥姥食量大如牛之现实意义",
-  journal =      "红楼梦杂谈",
-  pages =        "260--266",
-  volume =       224,
-  year =         1800,
-  language =     "chinese",
+@article{bi2023pangu,
+  author  = {Kaifeng Bi and Lingxi Xie and Hengheng Zhang and Xin Chen and Xiaotao Gu and Qi Tian},
+  title   = {Accurate Medium-Range Global Weather Forecasting with 3{D} Neural Networks},
+  journal = {Nature},
+  volume  = {619},
+  pages   = {533--538},
+  year    = {2023},
 }
 
-@mastersthesis{zhubajie,
-  author =       {猪八戒},
-  title =        {论流体食物的持久保存},
-  school =       {广寒宫大学},
-  year =         2005,
-  address =      {北京},
-  language =     "chinese",
+@article{lam2023graphcast,
+  author  = {Remi Lam and Alvaro Sanchez-Gonzalez and Matthew Willson and Peter Wirnsberger and Meire Fortunato and Ferran Alet and Suman Ravuri and Timo Ewalds and Zach Eaton-Rosen and Weihua Hu and Alexander Merose and Stephan Hoyer and George Holland and Oriol Vinyals and Jacklynn Stott and Alexander Pritzel and Shakir Mohamed and Peter Battaglia},
+  title   = {Learning Skillful Medium-Range Global Weather Forecasting},
+  journal = {Science},
+  volume  = {382},
+  number  = {6677},
+  pages   = {1416--1421},
+  year    = {2023},
 }
 
-@phdthesis{shaheshang,
-  author =       {沙和尚},
-  title =        {论流沙河的综合治理},
-  school =       {清华大学},
-  year =         2005,
-  address =      {北京},
-  language =     "chinese",
+@article{sonderby2020metnet,
+  author  = {Casper Kaae S{\o}nderby and Lasse Espeholt and Jonathan Heek and Mostafa Dehghani and Avital Oliver and Tim Salimans and Shreya Agrawal and Jason Hickey and Nal Kalchbrenner},
+  title   = {{MetNet}: A Neural Weather Model for Precipitation Forecasting},
+  journal = {arXiv preprint arXiv:2003.12140},
+  year    = {2020},
 }
 
-@mastersthesis{metamori2004,
-  author =       {Ashwin Raju Jeyakumar},
-  title =        {Metamori: A library for Incremental File Checkpointing},
-  school =       {Virgina Tech},
-  year =         2004,
-  month =        jun # "~21",
-  address =      {Blacksburg},
+@article{espeholt2022metnet2,
+  author  = {Lasse Espeholt and Shreya Agrawal and Casper Kaae S{\o}nderby and Manoj Kumar and Jonathan Heek and Carla Bromberg and Cenk Gazen and Rob Carver and Marcin Andrychowicz and Jason Hickey and Aaron Bell and Nal Kalchbrenner},
+  title   = {Deep Learning for Twelve Hour Precipitation Forecasts},
+  journal = {Nature Communications},
+  volume  = {13},
+  year    = {2022},
 }
 
-@phdthesis{FistSystem01,
-  author =       "Erez Zadok",
-  title =        "{FiST: A System for Stackable File System Code Generation}",
-  year =         2001,
-  month =        "May",
-  school =       "Computer Science Department, Columbia University",
-  address =      "USA"
+@article{andrychowicz2023metnet3,
+  author  = {Marcin Andrychowicz and Lasse Espeholt and Di Li and Samier Merchant and Alexander Merose and Fred Zyda and Shreya Agrawal and Nal Kalchbrenner},
+  title   = {Deep Learning for Day Forecasts from Sparse Observations},
+  journal = {arXiv preprint arXiv:2306.06079},
+  year    = {2023},
 }
 
-@inbook{ColdSources,
-  author =       {P. Gr{\"o}ning and L. Nilsson and P. Ruffieux and R.
-                  Clergereaux and O. Gr{\"o}ning},
-  title =        {Encyclopedia of Nanoscience and Nanotechnology},
-  pages =        {547--579},
-  publisher =    {American Scientific Publishers},
-  year =         2004,
-  volume =       1,
+@article{ravuri2021dgmr,
+  author  = {Suman Ravuri and Karel Lenc and Matthew Willson and Dmitry Kangin and Remi Lam and Piotr Mirowski and Megan Fitzsimons and Maria Athanassiadou and Sheleem Kashem and Sam Madge and Rachel Prudden and Amol Mandhane and Aidan Clark and Andrew Brock and Karen Simonyan and Raia Hadsell and Niall Robinson and Ellen Clancy and Alberto Arribas and Shakir Mohamed},
+  title   = {Skilful Precipitation Nowcasting using Deep Generative Models of Radar},
+  journal = {Nature},
+  volume  = {597},
+  pages   = {672--677},
+  year    = {2021},
 }
 
-@online{chuban2001,
-  author =      {萧钰},
-  title =       {出版业信息化迈入快车道},
-  modifydate =  {2001-12-19},
-  citedate =    {2002-04-15},
-  url =         {http://www.creader.com/news/200112190019.htm},
-  language =    "chinese",
+@article{pathak2024stormcast,
+  author  = {Jaideep Pathak and Yair Cohen and Piyush Garg and Peter Harrington and Noah Brenowitz and Dale Durran and Morteza Mardani and Arash Vahdat and Shaoming Xu and Karthik Kashinath and Michael Pritchard},
+  title   = {Kilometer-Scale Convection Allowing Model Emulation using Generative Diffusion Modeling},
+  journal = {arXiv preprint arXiv:2408.10958},
+  year    = {2024},
 }
 
-@online{oclc2000,
-  author =      {{Online Computer Library Center, Inc.}},
-  title =       {History of {OCLC}},
-  citedate =    {2000-01-08},
-  url =         {http://www.oclc.org/about/history/default.htm},
+@article{price2024gencast,
+  author  = {Ilan Price and Alvaro Sanchez-Gonzalez and Ferran Alet and Tom R. Andersson and Andrew El-Kadi and Dominic Masters and Timo Ewalds and Jacklynn Stott and Shakir Mohamed and Peter Battaglia and Remi Lam and Matthew Willson},
+  title   = {Probabilistic Weather Forecasting with Machine Learning},
+  journal = {Nature},
+  year    = {2024},
 }
 
+% ==================================================
+% Evaluation metrics
+% ==================================================
 
-@online{thuthesis,
-  author =      {薛瑞尼},
-  title =       {\thuthesis: 清华大学学位论文模板},
-  citedate =    {2017-12-02},
-  url =         {https://github.com/xueruini/thuthesis},
-  language =    "chinese",
-  year =        2017,
+@article{roberts2008fss,
+  author  = {Nigel M. Roberts and Humphrey W. Lean},
+  title   = {Scale-Selective Verification of Rainfall Accumulations from High-Resolution Forecasts of Convective Events},
+  journal = {Monthly Weather Review},
+  volume  = {136},
+  number  = {1},
+  pages   = {78--97},
+  year    = {2008},
+}
+
+@article{schaefer1990csi,
+  author  = {Joseph T. Schaefer},
+  title   = {The Critical Success Index as an Indicator of Warning Skill},
+  journal = {Weather and Forecasting},
+  volume  = {5},
+  number  = {4},
+  pages   = {570--575},
+  year    = {1990},
+}
+
+% ==================================================
+% Flow matching and continuous normalising flows
+% ==================================================
+
+@inproceedings{chen2018node,
+  author    = {Ricky T. Q. Chen and Yulia Rubanova and Jesse Bettencourt and David K. Duvenaud},
+  title     = {Neural Ordinary Differential Equations},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2018},
+}
+
+@inproceedings{lipman2023flow,
+  author    = {Yaron Lipman and Ricky T. Q. Chen and Heli Ben-Hamu and Maximilian Nickel and Matthew Le},
+  title     = {Flow Matching for Generative Modeling},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2023},
+}
+
+@article{tong2024improving,
+  author  = {Alexander Tong and Kilian Fatras and Nikolay Malkin and Guillaume Huguet and Yanlei Zhang and Jarrid Rector-Brooks and Guy Wolf and Yoshua Bengio},
+  title   = {Improving and Generalizing Flow-Based Generative Models with Minibatch Optimal Transport},
+  journal = {Transactions on Machine Learning Research},
+  year    = {2024},
+}
+
+@article{ribeiro2025flowcast,
+  author  = {Bernardo Perrone Ribeiro and Jana Faganeli Pucer},
+  title   = {{FlowCast}: Advancing Precipitation Nowcasting with Conditional Flow Matching},
+  journal = {arXiv preprint},
+  year    = {2025},
 }

@@ -1,26 +1,316 @@
 % !TeX root = ../main.tex
 
-\chapter{中國文學}
+\chapter{Background and Related Work}
+\label{ch:background}
 
-\section{出師表}
+This chapter assembles the theoretical background needed to understand the remainder of the thesis. It is organised in four parts: a survey of weather-prediction methods from NWP to data-driven models (Sections~\ref{sec:bg-nwp}--\ref{sec:bg-gencast}); the theory of score-based diffusion models, starting from the discrete-time DDPM construction, proceeding through DDIM and the continuous variance-exploding SDE / probability-flow ODE, and culminating in the EDM formulation used by our teacher (Sections~\ref{sec:bg-diffusion-primer}--\ref{sec:bg-conditioning}); the theory of diffusion distillation, covering Progressive Distillation, Consistency Distillation, and Conditional Flow Matching as a one-training-run alternative (Sections~\ref{sec:bg-why-distill}--\ref{sec:bg-prior-weather-distill}); and an overview of precipitation-aware evaluation metrics (Section~\ref{sec:bg-metrics}). Throughout the chapter we state the key identities in the main text and defer line-by-line derivations to Appendix~\ref{app:derivations}, which the reader may consult for any step marked ``(see Appendix~\ref{app:derivations})''.
 
-臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州疲弊，此誠危急存亡之秋也。然侍衛之臣，不懈於內；忠志之士，忘身於外者，蓋追先帝之殊遇，欲報之於陛下也。誠宜開張聖聽，以光先帝遺德，恢弘志士之氣；不宜妄自菲薄，引喻失義，以塞忠諫之路也。宮中府中，俱為一體，陟罰臧否，不宜異同。若有作姦犯科，及為忠善者，宜付有司，論其刑賞，以昭陛下平明之治，不宜篇私，使內外異法也。\par
+% ==================================================
+\section{Numerical Weather Prediction}
+\label{sec:bg-nwp}
 
-侍中、侍郎郭攸之、費褘、董允等，此皆良實，志慮忠純，是以先帝簡拔以遺陛下。愚以為宮中之事，事無大小，悉以咨之，然後施行，必能裨補闕漏，有所廣益。將軍向寵，性行淑均，曉暢軍事，試用於昔日，先帝稱之曰「能」，是以眾議舉寵為督。愚以為營中之事，悉以咨之，必能使行陣和睦，優劣得所。親賢臣，遠小人，此先漢所以興隆也；親小人，遠賢臣，此後漢所以傾頹也。先帝在時，每與臣論此事，未嘗不歎息痛恨於桓、靈也。侍中、尚書、長史；參軍，此悉貞良死節之臣也，願陛下親之信之，則漢室之隆，可計日而待也。
+Numerical weather prediction discretises the primitive equations of atmospheric motion --- continuity, momentum (Navier--Stokes on a rotating sphere), thermodynamic energy, and water-vapour conservation --- onto a three-dimensional grid and advances the state forward in time via explicit or semi-implicit integration. Sub-grid processes not captured by the dynamical core (convection, microphysics, boundary-layer turbulence, radiation, land-surface exchange) are closed through physical parameterisations. Operational systems include ECMWF's IFS (global spectral, \ang{0.1} horizontal resolution), NCEP's GFS, and regional limited-area models such as WRF and its Taiwan-tuned variant RWRF, which provide the high-resolution targets used in this thesis.
 
-臣本布衣，躬耕於南陽，苟全性命於亂世，不求聞達於諸侯。先帝不以臣卑鄙，猥自枉屈，三顧臣於草廬之中，諮臣以當世之事，由是感激，遂許先帝以驅馳。後值傾覆，受任於敗軍之際，奉命於危難之間，爾來二十有一年矣！先帝知臣謹慎，故臨崩寄臣以大事也。受命以來，夙夜憂勤，恐託付不效，以傷先帝之明。故五月渡瀘，深入不毛。今南方已定，兵甲已足，當獎率三軍，北定中原，庶竭駑鈍，攘除奸凶，興復漢室，還於舊都；此臣所以報先帝而忠陛下之職分也。至於斟酌損益，進盡忠言，則攸之、褘、允之任也。
+Uncertainty is quantified by ensemble prediction systems that perturb initial conditions (e.g.\ via singular-vector or ensemble Kalman methods) and model physics. A convection-permitting (sub-\SI{4}{\kilo\metre}) ensemble with a few tens of members and a 24-hour forecast horizon requires hours of dedicated supercomputer time. The practical consequence is that NWP ensemble size and spatial resolution are traded off against operational latency.
 
-願陛下託臣以討賊興復之效；不效，則治臣之罪，以告先帝之靈。若無興德之言，則戮允等，以彰其慢。陛下亦宜自課，以諮諏善道，察納雅言，深追先帝遺詔，臣不勝受恩感激。
+% ==================================================
+\section{Data-Driven Global Weather Models}
+\label{sec:bg-dl-global}
 
-今當遠離，臨表涕泣，不知所云。
+Starting in 2022, a series of deep-learning models demonstrated that a single neural network, trained on the ERA5 reanalysis, can produce global medium-range forecasts that rival operational NWP on many headline metrics at a fraction of the inference cost.
 
-\section{短歌行}
+\paragraph{FourCastNet.} \citet{pathak2022fourcastnet} used an Adaptive Fourier Neural Operator to produce six-hourly global forecasts at \ang{0.25} resolution. It was the first model to demonstrate that a data-driven system could match IFS on synoptic variables within a plausible compute budget.
 
-對酒當歌，人生幾何！譬如朝露，去日苦多。
-慨當以慷，憂思難忘。何以解憂？唯有杜康。
-青青子衿，悠悠我心。但為君故，沉吟至今。
-呦呦鹿鳴，食野之苹。我有嘉賓，鼓瑟吹笙。
-明明如月，何時可掇？憂從中來，不可斷絕。
-越陌度阡，枉用相存。契闊談宴，心念舊恩。
-月明星稀，烏鵲南飛。繞樹三匝，何枝可依？
-山不厭高，海不厭深。周公吐哺，天下歸心。
+\paragraph{Pangu-Weather.} \citet{bi2023pangu} introduced a hierarchical three-dimensional transformer with a hierarchical time-aggregation scheme and demonstrated medium-range skill competitive with or exceeding IFS on several variables and lead times.
+
+\paragraph{GraphCast.} \citet{lam2023graphcast} adopted a multi-mesh graph neural network defined on an icosahedral discretisation of the sphere. It produces ten-day \ang{0.25} forecasts that are competitive with IFS on the majority of evaluated fields and does so in roughly one minute on a single TPU, compared with hours on a supercomputer for NWP.
+
+These models share an important limitation: because they are trained with deterministic pixelwise losses (typically latitude-weighted MSE), their forecasts become progressively blurrier with lead time and systematically underestimate extreme events. For convection and precipitation, which this thesis cares about most, this is disqualifying.
+
+% ==================================================
+\section{Regional and Convective-Scale Forecasting}
+\label{sec:bg-regional}
+
+Global models operate at resolutions too coarse to resolve convection and orographic rainfall over Taiwan. Three lines of work fill the gap.
+
+\paragraph{Nowcasting models.} MetNet-1/2/3 \citep{sonderby2020metnet,espeholt2022metnet2,andrychowicz2023metnet3} produce high-resolution short-range precipitation forecasts by ingesting ground-based radar and satellite observations through large convolutional/attention backbones. DGMR \citep{ravuri2021dgmr} uses a conditional GAN to produce sharp, ensemble-like radar nowcasts and was the first work to make a strong empirical case that generative modelling is essential for precipitation skill.
+
+\paragraph{StormCast.} \citet{pathak2024stormcast} introduced a convection-permitting regional diffusion forecaster trained on the High-Resolution Rapid Refresh (HRRR) reanalysis over CONUS. StormCast decomposes forecasting into two stages:
+\begin{enumerate}
+  \item A deterministic \emph{regression} network $\Freg$ (a \texttt{StormCastUNet}) takes the previous high-resolution state $X_{t-1}$, a low-resolution conditioning state $S_t$, and time-invariant fields $I$, and predicts the conditional mean $M_t = \Freg(X_{t-1}, S_t, I)$.
+  \item A \emph{residual diffusion} network $\Dteach$ (an EDMPrecond SongUNet) models the residual $R_t = X_t - M_t$ conditionally on $c = \mathrm{concat}(X_{t-1}, S_t, M_t, I)$.
+\end{enumerate}
+At inference time the model is rolled out autoregressively, with the previous diffusion output feeding the next step's regression input. This decomposition has two payoffs: the deterministic network captures what is easy to predict with a single network call, leaving the diffusion model free to focus on the residual uncertainty; and the residual is closer to Gaussian than the raw fields, which stabilises diffusion training.
+
+This thesis uses a Taiwan-adapted StormCast teacher trained on the RWRF dataset. The adaptation reduces the output state from the 99 channels of the CONUS original to just four: two-metre temperature (\texttt{t2m}), ten-metre zonal and meridional winds (\texttt{u10}, \texttt{v10}), and hourly precipitation (\texttt{qpepre}). This channel reduction has a useful side-effect: with only four output channels, per-channel loss engineering becomes cheap, and we exploit this in the distillation losses of Chapter~\ref{ch:method}.
+
+% ==================================================
+\section{GenCast and the Generative Turn}
+\label{sec:bg-gencast}
+
+\citet{price2024gencast} introduced GenCast, a global \ang{0.25} conditional diffusion forecaster that samples ensemble members by varying the initial noise seed. GenCast was the first diffusion forecaster to clearly surpass the leading deterministic model (GraphCast) across the majority of its evaluation suite, on both deterministic scores (RMSE) and probabilistic scores (CRPS). Its success is the strongest empirical argument for the claim that motivates this thesis: generative modelling --- and diffusion in particular --- is the right inductive bias for short-to-medium range weather forecasting, but its operational cost is the obstacle to practical deployment.
+
+% ==================================================
+\section{Score-Based Diffusion: A Primer}
+\label{sec:bg-diffusion-primer}
+
+A diffusion model defines a forward stochastic process that progressively corrupts a data sample $x_0 \sim p_{\text{data}}$ with Gaussian noise until the terminal state is indistinguishable from pure noise, then learns a neural network that reverses the corruption. The apparent difficulty of this programme --- fitting the full generative reverse process of a high-dimensional distribution --- hides a sequence of algebraic identities that together reduce training to a mean-squared-error regression. This section traces those identities in the order in which they were historically discovered: first the discrete-time variance-preserving DDPM construction of \citet{ho2020ddpm}; then the non-Markovian generalisation and deterministic sampler of DDIM \citep{song2021ddim}; then the continuous variance-exploding SDE and the probability-flow ODE that unify both \citep{song2021scoresde}; and finally the elucidated EDM parameterisation used by our teacher \citep{karras2022elucidating}. Detailed line-by-line derivations of every equation in this section are collected in Appendix~\ref{app:derivations}.
+
+\subsection{DDPM: The Discrete-Time Variance-Preserving Construction}
+\label{sec:bg-ddpm}
+
+\paragraph{Forward process.} DDPM defines a $T$-step Markov chain that adds Gaussian noise according to a variance schedule $\{\beta_t\}_{t=1}^{T}$:
+\begin{equation}
+  q(x_t \mid x_{t-1}) = \Nbb\bigl(x_t;\; \sqrt{1 - \beta_t}\,x_{t-1},\; \beta_t I\bigr).
+  \label{eq:ddpm-forward-step}
+\end{equation}
+Setting $\alpha_t = 1 - \beta_t$ and $\bar{\alpha}_t = \prod_{s=1}^{t}\alpha_s$, induction (Appendix~\ref{app:derivations}, \S\ref{app:ddpm-marginal}) gives the closed-form marginal
+\begin{equation}
+  q(x_t \mid x_0) = \Nbb\bigl(\sqrt{\bar\alpha_t}\,x_0,\; (1 - \bar\alpha_t)\,I\bigr),
+  \qquad
+  x_t = \sqrt{\bar\alpha_t}\,x_0 + \sqrt{1 - \bar\alpha_t}\,\epsilon,\;\; \epsilon \sim \Nbb(0, I).
+  \label{eq:ddpm-marginal}
+\end{equation}
+This is the first key tractability result: \emph{the forward process never has to be simulated}. For any training timestep $t$ the corrupted sample $x_t$ is drawn in one line using $x_0$ and a fresh Gaussian $\epsilon$.
+
+\paragraph{Tractable posterior.} The reverse step $q(x_{t-1} \mid x_t)$ is intractable without $x_0$, but the posterior \emph{conditioned on} $x_0$ is Gaussian in closed form:
+\begin{equation}
+  q(x_{t-1} \mid x_t, x_0) = \Nbb\bigl(\tilde\mu_t(x_t, x_0),\; \tilde\beta_t I\bigr),
+  \label{eq:ddpm-posterior}
+\end{equation}
+with
+\begin{equation}
+  \tilde\mu_t(x_t, x_0) = \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1 - \bar\alpha_t}\,x_0 + \frac{\sqrt{\alpha_t}(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t}\,x_t,
+  \qquad
+  \tilde\beta_t = \frac{1 - \bar\alpha_{t-1}}{1 - \bar\alpha_t}\,\beta_t.
+  \label{eq:ddpm-posterior-params}
+\end{equation}
+The full derivation --- combining Equations~\eqref{eq:ddpm-forward-step}--\eqref{eq:ddpm-marginal} with Bayes' rule and matching coefficients of a quadratic in $x_{t-1}$ --- is given in Appendix~\ref{app:derivations}, \S\ref{app:ddpm-posterior}.
+
+\paragraph{Variational bound.} The reverse process $p_\theta(x_{t-1} \mid x_t) = \Nbb(\mu_\theta(x_t, t),\;\Sigma_\theta(x_t, t))$ is trained to match $q$. The evidence lower bound (ELBO) on $\log p_\theta(x_0)$ decomposes into a sum of per-step KL divergences
+\begin{equation}
+  -\log p_\theta(x_0) \leq \underbrace{D_{\text{KL}}\bigl(q(x_T \mid x_0)\,\|\,p(x_T)\bigr)}_{L_T} + \sum_{t=2}^{T}\underbrace{D_{\text{KL}}\bigl(q(x_{t-1} \mid x_t, x_0)\,\|\,p_\theta(x_{t-1} \mid x_t)\bigr)}_{L_{t-1}} - \underbrace{\log p_\theta(x_0 \mid x_1)}_{L_0},
+  \label{eq:ddpm-elbo}
+\end{equation}
+derived from Jensen's inequality on the joint $q(x_{1:T} \mid x_0)$ (Appendix~\ref{app:derivations}, \S\ref{app:ddpm-elbo}). The noise-schedule design ensures $L_T$ is approximately $D_{\text{KL}}(\Nbb(0, I)\|\Nbb(0, I))=0$ for large $T$; $L_0$ is a discretised log-likelihood treated separately; the bulk of the loss is the middle sum, each term of which is a KL between two Gaussians with known variances.
+
+\paragraph{Simplification to MSE.} Because both sides are Gaussians with matched variances $\Sigma_\theta = \tilde\beta_t I$, the KL collapses to the squared distance of means:
+\begin{equation}
+  L_{t-1} = \frac{1}{2\tilde\beta_t}\,\Ebb_{x_0, \epsilon}\bigl[\|\tilde\mu_t(x_t, x_0) - \mu_\theta(x_t, t)\|^2\bigr] + \text{const}.
+  \label{eq:ddpm-gaussian-kl}
+\end{equation}
+Reparameterising $\mu_\theta$ through a noise predictor $\epsilon_\theta$,
+\begin{equation}
+  \mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}\Bigl(x_t - \frac{\beta_t}{\sqrt{1 - \bar\alpha_t}}\,\epsilon_\theta(x_t, t)\Bigr),
+  \label{eq:ddpm-mu-reparam}
+\end{equation}
+and dropping the $\sigma$-dependent prefactor (empirically stable), yields the DDPM training loss used in practice:
+\begin{equation}
+  \mathcal{L}_{\text{simple}} = \Ebb_{t, x_0, \epsilon}\Bigl[\bigl\|\epsilon - \epsilon_\theta\bigl(\sqrt{\bar\alpha_t}\,x_0 + \sqrt{1 - \bar\alpha_t}\,\epsilon,\; t\bigr)\bigr\|^2\Bigr].
+  \label{eq:ddpm-simple}
+\end{equation}
+Equation~\eqref{eq:ddpm-simple} is the punchline: the intractable log-likelihood has been replaced, without approximation on its upper bound and without approximation in the Gaussian-KL collapse, by a supervised regression of the added noise. A line-by-line derivation that keeps every constant and justifies the dropped weighting is in Appendix~\ref{app:derivations}, \S\ref{app:ddpm-simple}.
+
+\subsection{DDIM: Non-Markovian Forward and Deterministic Sampling}
+\label{sec:bg-ddim}
+
+DDPM's sampler draws $T = 1000$ stochastic reverse steps, which is too slow for deployment. \citet{song2021ddim} observed that the DDPM training loss~\eqref{eq:ddpm-simple} depends on the marginals $q(x_t \mid x_0)$ but \emph{not} on the particular Markov chain used to produce them. Any \emph{non-Markovian} forward process with the same marginals yields the same trained network, but admits a different --- potentially deterministic --- sampler. DDIM parameterises such a family by
+\begin{equation}
+  q_\sigma(x_{t-1} \mid x_t, x_0) = \Nbb\!\left(\sqrt{\bar\alpha_{t-1}}\,x_0 + \sqrt{1 - \bar\alpha_{t-1} - \sigma_t^2}\;\frac{x_t - \sqrt{\bar\alpha_t}\,x_0}{\sqrt{1 - \bar\alpha_t}},\; \sigma_t^2 I\right),
+  \label{eq:ddim-posterior}
+\end{equation}
+parameterised by a free noise scale $\sigma_t \in [0, \tilde\beta_t]$. Setting $\sigma_t = 0$ yields a \emph{deterministic} update
+\begin{equation}
+  x_{t-1} = \sqrt{\bar\alpha_{t-1}}\,\hat{x}_0(x_t, t) + \sqrt{1 - \bar\alpha_{t-1}}\,\frac{x_t - \sqrt{\bar\alpha_t}\,\hat{x}_0(x_t, t)}{\sqrt{1 - \bar\alpha_t}},
+  \label{eq:ddim-deterministic}
+\end{equation}
+where $\hat{x}_0(x_t, t) = (x_t - \sqrt{1 - \bar\alpha_t}\,\epsilon_\theta(x_t, t))/\sqrt{\bar\alpha_t}$ is the implied clean-data prediction. Equation~\eqref{eq:ddim-deterministic} defines an integrator of an ODE: the same network, trained once, can be sampled with arbitrary sub-schedules and in far fewer steps (typically 20--50 NFE with comparable quality). A derivation in the equivalent variance-exploding form appears in Appendix~\ref{app:derivations}, \S\ref{app:ddim}. Because DDIM is the simplest first-order integrator of the underlying PF-ODE, it reappears as the building block of the distillation methods in Sections~\ref{sec:bg-pd} and \ref{sec:bg-cd}.
+
+\subsection{Continuous-Time View: VE-SDE and PF-ODE}
+\label{sec:bg-vesde}
+
+\citet{song2021scoresde} unified DDPM, noise-conditional score matching, and their continuous-time limits into a single SDE framework. In the variance-exploding (VE) formulation adopted by EDM and inherited by StormCast, the forward SDE is
+\begin{equation}
+  dx = \sqrt{\tfrac{d\sigma^2(t)}{dt}}\,dW_t,
+  \label{eq:ve-sde}
+\end{equation}
+so that the closed-form marginal is the same one-line Gaussian corruption
+\begin{equation}
+  x_\sigma = x_0 + \sigma\,\epsilon, \qquad \epsilon \sim \Nbb(0, I),
+  \label{eq:forward}
+\end{equation}
+now indexed by a continuous noise level $\sigma \in [0, \sigma_{\max}]$. The remarkable structural fact is that every diffusion SDE admits a deterministic \emph{probability-flow ordinary differential equation} (PF-ODE) whose marginals coincide with those of the SDE at every time:
+\begin{equation}
+  \frac{dx}{d\sigma} = -\sigma\,\nabla_x \log p_\sigma(x),
+  \label{eq:pfode}
+\end{equation}
+where $\nabla_x \log p_\sigma(x)$ is the (Stein) score of the noised marginal. Equation~\eqref{eq:pfode} is derived in Appendix~\ref{app:derivations}, \S\ref{app:pfode} by matching the Fokker--Planck equation of the SDE against the continuity equation of the deterministic flow. The PF-ODE plays a central role in distillation: it defines a deterministic trajectory $\sigma \mapsto x(\sigma)$ that links a pure-noise sample $x(\sigma_{\max})$ to its corresponding clean sample $x(\sigma_{\min})$, and any method that shortens the number of sampling steps is, one way or another, trying to approximate this trajectory with fewer function evaluations.
+
+\paragraph{Score--denoiser equivalence (Tweedie).} Training a diffusion model amounts to learning the score, typically \emph{indirectly} through a denoiser $D(x_\sigma; \sigma)$ whose output predicts $\Ebb[x_0 \mid x_\sigma]$. The score and the denoiser are related by Tweedie's formula,
+\begin{equation}
+  \nabla_x \log p_\sigma(x) = \frac{D(x; \sigma) - x}{\sigma^2},
+  \label{eq:tweedie}
+\end{equation}
+which we derive from the MMSE-denoiser identity in Appendix~\ref{app:derivations}, \S\ref{app:tweedie}. The practical consequence is that \emph{denoising-score matching} reduces to an $\ell_2$ regression of the clean data from its noised version:
+\begin{equation}
+  \mathcal{L}_{\text{DSM}}(\sigma) = \Ebb_{x_0, \epsilon}\bigl[\|D_\theta(x_0 + \sigma\epsilon;\sigma) - x_0\|^2\bigr].
+  \label{eq:dsm}
+\end{equation}
+Equation~\eqref{eq:dsm} is the continuous-time counterpart of Equation~\eqref{eq:ddpm-simple}: the tractable training objective is a weighted mean-squared error over the noise scale, and the network can equivalently predict the clean data $x_0$, the noise $\epsilon$, or the $v = \alpha_t\epsilon - \sigma_t x_0$ target of \citet{salimans2022progressive}. The three parameterisations are interconvertible linearly and differ only in which pair of quantities the network sees as inputs and outputs; see Appendix~\ref{app:derivations}, \S\ref{app:param-equivalence}.
+
+% ==================================================
+\section{EDM: The Elucidated Formulation}
+\label{sec:bg-edm}
+
+\citet{karras2022elucidating} proposed a unified parameterisation of diffusion training and sampling that cleans up a number of ad-hoc choices in earlier DDPM-style models. Our teacher, and by extension the students we distil, uses this formulation in full. The EDM preconditioning scalings are not heuristics: they are the \emph{unique} one-parameter family that makes the denoiser's input statistics, target statistics, and per-$\sigma$ loss scale simultaneously uniform across $\sigma$. A line-by-line derivation of the $c_{\text{skip}}, c_{\text{out}}, c_{\text{in}}, c_{\text{noise}}, \lambda(\sigma)$ formulas below is given in Appendix~\ref{app:derivations}, \S\ref{app:edm-preconditioning}.
+
+\paragraph{Noise schedule.} EDM uses a $\rho$-spaced discretisation of noise levels between $\sigma_{\min}$ and $\sigma_{\max}$:
+\begin{equation}
+  \sigma_i = \left(\sigma_{\max}^{1/\rho} + \frac{i}{N-1}\bigl(\sigma_{\min}^{1/\rho} - \sigma_{\max}^{1/\rho}\bigr)\right)^{\rho},
+  \label{eq:karras-schedule}
+\end{equation}
+for $i = 0, \ldots, N-1$, with $\sigma_{\min} = 0.002$, $\sigma_{\max} = 80$, and $\rho = 7$. The schedule concentrates noise levels near $\sigma_{\min}$, which is where most of the useful signal is generated.
+
+\paragraph{Preconditioning.} A naive denoiser $F_\theta(x_\sigma, \sigma)$ must cope with inputs whose magnitudes vary by orders of magnitude. EDM addresses this by wrapping the inner network in skip, input, output, and noise scalings:
+\begin{equation}
+  D_\theta(x_\sigma; \sigma) = c_{\text{skip}}(\sigma)\,x_\sigma + c_{\text{out}}(\sigma)\,F_\theta\bigl(c_{\text{in}}(\sigma)\,x_\sigma,\;c_{\text{noise}}(\sigma)\bigr),
+  \label{eq:edm-precond}
+\end{equation}
+where
+\begin{align*}
+  c_{\text{skip}}(\sigma) &= \sigma_{\text{data}}^2 / (\sigma^2 + \sigma_{\text{data}}^2), &
+  c_{\text{out}}(\sigma) &= \sigma \cdot \sigma_{\text{data}} / \sqrt{\sigma^2 + \sigma_{\text{data}}^2}, \\
+  c_{\text{in}}(\sigma) &= 1 / \sqrt{\sigma^2 + \sigma_{\text{data}}^2}, &
+  c_{\text{noise}}(\sigma) &= \tfrac{1}{4}\log \sigma.
+\end{align*}
+These scalings ensure that $F_\theta$ always sees inputs of unit variance and predicts an unnormalised residual, which is numerically stable across the full range of $\sigma$.
+
+\paragraph{Training loss.} EDM trains with a weighted denoising-score-matching loss:
+\begin{equation}
+  \mathcal{L}_{\text{EDM}} = \Ebb_{x_0, \sigma, \epsilon}\Bigl[\lambda(\sigma)\,\|D_\theta(x_0 + \sigma\epsilon; \sigma) - x_0\|^2\Bigr],
+  \label{eq:edm-loss}
+\end{equation}
+with a log-normal distribution over $\sigma$ and a Karras-specified weighting $\lambda(\sigma)$.
+
+\paragraph{Heun sampler.} EDM samples via a second-order Heun integrator of the PF-ODE. Given $x_i$ at noise level $\sigma_i$, the next sample is
+\begin{align}
+  d_i &= (x_i - D_\theta(x_i; \sigma_i)) / \sigma_i, \\
+  x_{i+1}^{(\text{euler})} &= x_i + (\sigma_{i+1} - \sigma_i)\,d_i, \\
+  d_i' &= (x_{i+1}^{(\text{euler})} - D_\theta(x_{i+1}^{(\text{euler})}; \sigma_{i+1})) / \sigma_{i+1}, \\
+  x_{i+1} &= x_i + (\sigma_{i+1} - \sigma_i)\,\tfrac{1}{2}(d_i + d_i').
+\end{align}
+Each step uses two denoiser evaluations except the final step where the correction is skipped. With $N = 18$ steps this yields roughly $2N-1 = 35$ NFE; StormCast uses a shorter $N \approx 13$ schedule giving $\approx 25$ NFE. Because the Heun step is what the teacher's denoiser was trained to support, it must also be the teacher operator used by any distillation method that samples along the PF-ODE --- a subtle but load-bearing point we return to in Section~\ref{sec:bg-cd}.
+
+% ==================================================
+\section{Conditioning in Diffusion Models}
+\label{sec:bg-conditioning}
+
+Conditional diffusion models can be implemented either by concatenating the condition $c$ along the channel axis of the denoiser's input, or by classifier-free guidance (CFG) \citep{ho2022cfg}, which trains the network jointly on conditional and unconditional tasks and linearly combines their outputs at inference time. StormCast uses the simpler concatenation approach: the conditioning bundle $c = \mathrm{concat}(X_{t-1}, S_t, M_t, I)$ is stacked with the noised target along the channel dimension and fed to the SongUNet. No classifier-free guidance is used, so the distillation methods we inherit do not need to handle the two-branch evaluation that CFG would require.
+
+% ==================================================
+\section{Flow Matching and FlowCast}
+\label{sec:bg-flowmatching}
+
+Conditional Flow Matching (CFM) is a recently-proposed alternative to score-based diffusion that learns the \emph{same} kind of noise-to-data generative model --- a deterministic flow integrated from a simple prior to the data distribution --- but with a training objective that bypasses score matching entirely. Because the method is adopted as a third training route in this thesis (Section~\ref{sec:method-flowcast}) we give it the same theoretical treatment as DDPM, DDIM, and EDM.
+
+\paragraph{Continuous normalising flows, simulation-free training.} A continuous normalising flow (CNF; \citealp{chen2018node}) parameterises a deterministic velocity field $v_\theta(x, t)$, $t \in [0, 1]$, and pushes a prior sample $x_0 \sim \Nbb(0, I)$ along the ODE $\dot{x}_t = v_\theta(x_t, t)$ to obtain $x_1$, which we would like to distribute as $p_{\text{data}}$. Classical maximum-likelihood CNF training requires evaluating $\log p_\theta(x_1)$ via the Jacobian trace over the whole trajectory --- a prohibitive cost at image or video scale. \citet{lipman2023flow} and \citet{tong2024improving} instead train $v_\theta$ by direct regression against a \emph{target vector field} $u_t(x \mid z)$ associated with a tractable \emph{conditional probability path} $p_t(x \mid z)$ indexed by a latent $z$:
+\begin{equation}
+  \mathcal{L}_{\text{CFM}} = \Ebb_{t \sim \mathcal{U}(0, 1),\; z \sim q(z),\; x \sim p_t(x \mid z)}\Bigl[\|v_\theta(x, t) - u_t(x \mid z)\|^2\Bigr].
+  \label{eq:cfm-loss}
+\end{equation}
+The key theoretical result \citep[Thm.~2]{lipman2023flow} is that the gradient of~\eqref{eq:cfm-loss} with respect to $\theta$ equals the gradient of the \emph{marginal} flow-matching loss with the intractable marginal target field --- so training the network against a \emph{conditional} target yields an unbiased estimator of the true field. A derivation of this identity, along with the constants that are dropped because they do not depend on $\theta$, is given in Appendix~\ref{app:derivations}, \S\ref{app:cfm-theorem}.
+
+\paragraph{Independent CFM (I-CFM) and the straight-line path.} The simplest instantiation, \emph{Independent CFM} \citep{tong2024improving}, takes $z = (x_0, x_1)$ with $x_0 \sim \Nbb(0, I)$ independent of $x_1 \sim p_{\text{data}}$, and defines the straight-line Gaussian probability path
+\begin{equation}
+  p_t(x \mid x_0, x_1) = \Nbb\bigl((1 - t)\,x_0 + t\,x_1,\; \sigma_{\text{path}}^2 I\bigr),
+  \qquad
+  x_t = (1 - t)\,x_0 + t\,x_1 + \sigma_{\text{path}}\,\eta,\;\eta \sim \Nbb(0, I).
+  \label{eq:icfm-path}
+\end{equation}
+Differentiating the conditional mean with respect to $t$ gives the corresponding \emph{target vector field}
+\begin{equation}
+  u_t(x \mid x_0, x_1) = x_1 - x_0,
+  \label{eq:icfm-target}
+\end{equation}
+which is independent of $x$ --- exactly the straight-line constant-velocity interpolation between the noise sample and the data sample. The training objective becomes
+\begin{equation}
+  \mathcal{L}_{\text{I-CFM}} = \Ebb_{t, x_0, x_1, \eta}\Bigl[\bigl\|v_\theta\bigl((1 - t) x_0 + t x_1 + \sigma_{\text{path}}\eta,\; t\bigr) - (x_1 - x_0)\bigr\|^2\Bigr].
+  \label{eq:icfm-loss}
+\end{equation}
+The path noise $\sigma_{\text{path}} > 0$ ``thickens'' the otherwise-singular conditional paths and regularises the vector-field fit, following \citet{tong2024improving}; FlowCast uses $\sigma_{\text{path}} = 0.01$. A derivation of~\eqref{eq:icfm-target} from~\eqref{eq:icfm-path} and an explicit comparison with the curved probability flow of DDPM are in Appendix~\ref{app:derivations}, \S\ref{app:icfm}.
+
+\paragraph{FlowCast.} \citet{ribeiro2025flowcast} introduced FlowCast, the first fully probabilistic application of I-CFM to precipitation nowcasting. FlowCast trains a single U-Net backbone --- in the original paper an Earthformer-style cuboid-attention network operating in a VAE latent space --- to regress the straight-line vector field $v_\theta(x_t, t, c)$ conditioned on a past-observation bundle $c$. Sampling uses a 10-step Euler integrator of $\dot{x}_t = v_\theta(x_t, t, c)$. In a direct ablation on the SEVIR benchmark, FlowCast at 1 ODE step beat DDIM at 100 steps on CRPS and CSI, and matched or exceeded the state-of-the-art probabilistic nowcasting baselines CasCast and PreDiff at a fraction of the inference cost. Two features make the method relevant to this thesis: (i) the straight-line ODE is by construction the trajectory any one-step sampler is trying to approximate, so the performance gap between 1-step and 10-step sampling is much smaller than for curved diffusion ODEs; and (ii) training is \emph{simulation-free} and requires no teacher --- FlowCast is an alternative to distillation rather than a distillation method. In Section~\ref{sec:method-flowcast} we adapt FlowCast to the StormCast residual pipeline and compare it directly to the distilled students on the same 2022 Taiwan validation year.
+
+% ==================================================
+\section{Why Distill?}
+\label{sec:bg-why-distill}
+
+Given a well-trained diffusion teacher, there are three broad ways to reduce the NFE budget at inference time.
+
+\begin{enumerate}
+  \item \textbf{Higher-order and adaptive samplers.} DDIM \citep{song2021ddim}, DPM-Solver \citep{lu2022dpmsolver}, and the EDM Heun sampler itself reduce NFE by integrating the PF-ODE with better quadrature. These methods push NFE from thousands (ancestral sampling) down to 20--50. Below that the approximation error of the ODE integrator becomes visible.
+  \item \textbf{Distillation.} A student network is trained to match the teacher's sampling output in fewer steps. Progressive Distillation and Consistency Distillation both fall in this category and are the focus of this thesis.
+  \item \textbf{One-step generators.} Rectified flow \citep{liu2022rectifiedflow} and shortcut models transform the probability path so that straight-line integration suffices. These methods are less mature for conditional forecasting and are not considered further.
+\end{enumerate}
+
+% ==================================================
+\section{Progressive Distillation}
+\label{sec:bg-pd}
+
+\citet{salimans2022progressive} introduced progressive distillation as a scheme to halve the number of sampling steps of a trained diffusion model. The core idea is to train a student to match, in one step, the result of two consecutive teacher steps. Specifically, fix a student-teacher pair at a target schedule with $N$ steps. Sample a noised point $x_t$ at noise level $\sigma_t$; apply two teacher DDIM (or Heun) steps to obtain $x_{t-2}$ at $\sigma_{t-2}$; derive the implied denoised target $\tilde{x}$ by algebraically back-solving a one-step DDIM update from $x_t$ to $x_{t-2}$; and train the student denoiser to predict $\tilde{x}$ from $(x_t, \sigma_t)$. Once training converges, the student is promoted to be the new teacher, the schedule is halved again, and the procedure iterates. The original paper reports successful distillation down to as few as four and even a single sampling step on unconditional image benchmarks. Salimans and Ho also advocate a $v$-prediction parameterisation, which they find more numerically stable than $\epsilon$-prediction in the low-NFE regime.
+
+Progressive distillation makes no architectural changes and requires only that the student start from a copy of the teacher. It has the operational advantage of producing usable intermediate students at every schedule halving. The EDM variant of the same algorithm that we use is implemented in the denoised-prediction space (rather than $v$-space), which is more natural for the $D_\theta$ parameterisation of Section~\ref{sec:bg-edm} and is the loss formulation already present in our codebase.
+
+% ==================================================
+\section{Consistency Models and Consistency Distillation}
+\label{sec:bg-cd}
+
+\citet{song2023consistency} introduced a different family of few-step samplers based on a \emph{consistency function} $f(x_\sigma, \sigma)$ with the defining property that, for any two noise levels $\sigma \geq \sigma' \geq \sigma_{\min}$ on the same PF-ODE trajectory,
+\begin{equation}
+  f(x_\sigma, \sigma) \;=\; f(x_{\sigma'}, \sigma') \;=\; x_{\sigma_{\min}}.
+\end{equation}
+The function is required to satisfy the boundary condition $f(x, \sigma_{\min}) = x$, which is enforced in practice by parameterising $f$ through a skip connection --- essentially an analogue of the EDM $c_{\text{skip}}, c_{\text{out}}$ scalings --- so that the learned denoiser collapses to the identity at the smallest noise level.
+
+\paragraph{Consistency distillation (CD).} Given a teacher denoiser $\Dteach$, CD trains the student to satisfy the above identity along teacher-generated PF-ODE trajectories. Concretely, at each training step we sample $x_0 \sim p_{\text{data}}$ and two adjacent noise levels $\sigma_n, \sigma_{n+1}$ from a discretisation $\{\sigma_0, \ldots, \sigma_{N-1}\}$. We form the noised sample $x_{\sigma_{n+1}} = x_0 + \sigma_{n+1}\epsilon$, apply one teacher step $\Phi$ (a Heun update using $\Dteach$) to obtain an estimate of $x_{\sigma_n}$, and enforce
+\begin{equation}
+  \mathrm{dist}\bigl(f_\theta(x_{\sigma_{n+1}}, \sigma_{n+1}),\; f_{\theta^-}(\Phi(x_{\sigma_{n+1}}, \sigma_{n+1} \!\to\! \sigma_n), \sigma_n)\bigr) \to 0,
+\end{equation}
+where $\theta^-$ is an EMA copy of the student weights and $\mathrm{dist}$ is a robust distance --- typically a Pseudo-Huber loss $\mathrm{dist}(a,b) = \sqrt{\|a-b\|^2 + c_{\text{h}}^2} - c_{\text{h}}$ with a small constant $c_{\text{h}}$.
+
+\paragraph{Adaptive discretisation.} \citet{song2023improved} show that the trade-off between bias (from the teacher step) and variance (from the Monte-Carlo estimator) is best handled by growing the number of discretisation steps over training:
+\begin{equation}
+  N(k) = \left\lceil \sqrt{\frac{k}{K}\bigl(N_{\text{total}}^2 - N_0^2\bigr) + N_0^2} \right\rceil,
+\end{equation}
+where $k$ is the current training iteration, $K$ is the total, and $N_0$ and $N_{\text{total}}$ are the starting and final discretisation sizes. The EMA decay is tied to $N(k)$ via $\mu_k = \mu_0^{N_0/N(k)}$, so that as the grid becomes finer the target network becomes tighter. Our CD implementation uses $N_0 = 2$ and $N_{\text{total}} = 150$.
+
+\paragraph{Heun, not Euler, for $\Phi$.} The teacher operator $\Phi$ should be the same integrator that the teacher was trained to support. Because our EDM teacher uses the Heun sampler, $\Phi$ in our CD implementation is a single Heun step rather than the Euler step of the original consistency-model paper. Using Euler would introduce a systematic integration error proportional to $(\sigma_{n+1} - \sigma_n)^2$ that the student would learn to reproduce as a bias.
+
+\paragraph{One-step and multi-step sampling.} Once trained, the consistency model supports one-step sampling by drawing $x \sim \Nbb(0, \sigma_{\max}^2 I)$ and computing $f_\theta(x, \sigma_{\max})$. Quality can be further improved by multi-step sampling, which re-noises the output at an intermediate $\sigma$ and applies $f_\theta$ again, at the cost of one additional NFE per pass.
+
+% ==================================================
+\section{Adversarial Diffusion Distillation (Future Work)}
+\label{sec:bg-add}
+
+A parallel line of work, Adversarial Diffusion Distillation (ADD) \citep{sauer2023add}, combines a hinge GAN loss with a stop-gradient teacher-matching term to obtain high-quality one-to-four-step samplers for image synthesis. ADD requires a discriminator and is empirically sensitive to mode collapse, which is particularly dangerous for sparse heavy-tailed precipitation fields. An ADD scaffold exists in our codebase but is deferred to future work; we mention it here for completeness.
+
+% ==================================================
+\section{Prior Applications of Distillation to Weather}
+\label{sec:bg-prior-weather-distill}
+
+The literature on diffusion distillation applied specifically to weather forecasting is thin. Most existing work focuses on image synthesis and audio generation. Related efforts include distilled variants of DGMR for radar nowcasting, CorrDiff downscaling distillation experiments reported in NVIDIA PhysicsNeMo technical notes, and a small number of unpublished preprints on ensemble post-processing with few-step diffusion samplers. To the best of our knowledge, the present thesis is the first systematic study of progressive and consistency distillation applied to a regional convection-permitting diffusion forecaster, and the first to report precipitation-specific evaluation results under few-step sampling.
+
+% ==================================================
+\section{Evaluation of Precipitation Forecasts}
+\label{sec:bg-metrics}
+
+Pixelwise RMSE alone is a poor measure of precipitation-forecast quality because it rewards smooth, low-amplitude predictions that miss extreme events. We adopt a suite of complementary metrics, each introduced briefly here and defined formally in Chapter~\ref{ch:experiments}.
+
+\paragraph{Categorical skill scores.} For a precipitation threshold $\tau$, every pixel in the forecast and observation is classified as wet ($\geq \tau$) or dry, producing a $2\times 2$ contingency table with hits $H$, misses $M$, false alarms $F$, and correct negatives. The \emph{Critical Success Index} $\mathrm{CSI} = H/(H+M+F)$ is the standard operational score. The \emph{frequency bias} $(H+F)/(H+M)$ diagnoses over- or under-prediction.
+
+\paragraph{Fractions Skill Score.} \citet{roberts2008fss} introduced FSS to handle the double-penalty problem: a forecast that is slightly displaced in space but correct in structure should not be penalised as heavily as one that is wrong everywhere. FSS computes the fraction of pixels exceeding $\tau$ in a neighbourhood of radius $n$ around each point and compares forecast and observation fractions.
+
+\paragraph{Spectral diagnostics.} The radially averaged logarithmic power spectral density (log-PSD) of the forecast and observation fields quantifies sharpness. A deterministic model that produces blurry outputs will have a log-PSD that drops off too quickly at high wavenumbers; a generative model that matches the data distribution will track the observation spectrum.
+
+\paragraph{Rollout error growth.} For an autoregressive forecaster, single-step error understates the operational risk. We therefore report errors at rollout horizons of 1, 3, 6, and 12 hours, which captures the cumulative effect of distilled-student error on autoregressive predictions.
+
+\paragraph{Probabilistic scores (optional).} For ensemble forecasts we additionally report the continuous ranked probability score (CRPS) and rank histograms for \texttt{qpepre}.

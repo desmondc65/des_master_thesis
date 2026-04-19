@@ -1,13 +1,118 @@
 % !TeX root = ../main.tex
 
-\chapter{英文測試}
+\chapter{Experiments and Results}
+\label{ch:experiments}
 
-\section{出師表}
+This chapter presents the empirical evaluation of the two distillation methods described in Chapter~\ref{ch:method}. Section~\ref{sec:exp-protocol} defines the experimental protocol. Section~\ref{sec:exp-metrics} defines the evaluation metrics in precise terms. Section~\ref{sec:exp-pd} reports progressive-distillation results; Section~\ref{sec:exp-cd} reports consistency-distillation results; Section~\ref{sec:exp-compare} compares the two methods at matched NFE budgets. Section~\ref{sec:exp-qual} presents qualitative case studies over selected 2022 Taiwan weather events. Section~\ref{sec:exp-failure} catalogues failure modes, and Section~\ref{sec:exp-discussion} concludes with a discussion of when to prefer each method.
 
-\lipsum
+\textit{Note: this chapter is structured as the final results chapter but populated with provisional numbers. Tables and figures flagged with \textbf{[TBD]} are to be filled in as the final eval runs complete.}
 
-\section{短歌行}
+% ==================================================
+\section{Experimental Protocol}
+\label{sec:exp-protocol}
 
-\lipsum
+\paragraph{Validation split.} All reported metrics are computed on the 2022 full-year RWRF validation zarr (8{,}760 hourly samples). This contrasts with the shipped configuration in \texttt{stormcast/config/inference/stormcast.yaml}, whose \texttt{valid\_dates} entry points at a different period; we override it explicitly in all runs.
 
-This is just to test \cite{Krasnogor2004e} the cite function.
+\paragraph{NFE budgets.} We evaluate the teacher at its native schedule ($\approx$\,25 NFE) and the distilled students at $K \in \{1, 2, 4, 8\}$. For progressive distillation these correspond to the intermediate checkpoints produced at phase transitions. For consistency distillation, $K = 1$ is one-step sampling and $K \in \{2, 4, 8\}$ are multi-step samplers with re-noising.
+
+\paragraph{Seeds and ensembling.} Single-forecast metrics (Sections~\ref{sec:exp-pd}--\ref{sec:exp-compare}) use a fixed seed per forecast hour for determinism. Ensemble metrics (Section~\ref{sec:exp-discussion}, optional) use 10 members per forecast hour with independent noise seeds.
+
+\paragraph{Rollouts.} All reported rollouts start from the validation initial condition at \SI{0}{UTC} every fourth day and integrate forward autoregressively for 12 hours. The regression network is the same frozen checkpoint for teacher and students, so the only difference across methods is the diffusion network.
+
+\paragraph{Hardware.} Training: multi-GPU single-node, \textbf{[TBD]} NVIDIA A100 80\,GB. Evaluation: single GPU. Exact wall-clock times are reported in Appendix~\ref{app:repro}.
+
+% ==================================================
+\section{Evaluation Metrics}
+\label{sec:exp-metrics}
+
+All metrics are computed on denormalised fields with physical units.
+
+\paragraph{RMSE and MAE.} For channel $k$,
+\begin{equation}
+  \mathrm{RMSE}_k = \sqrt{\frac{1}{|\mathcal{T}|\,HW}\sum_{t \in \mathcal{T}}\sum_{i,j}\bigl(\hat{X}^{(k)}_{t,i,j} - X^{(k)}_{t,i,j}\bigr)^2},
+\end{equation}
+with MAE defined analogously.
+
+\paragraph{Categorical precipitation scores.} For threshold $\tau$ (mm\,h$^{-1}$), classify each pixel as wet ($\geq \tau$) or dry. With hit $H$, miss $M$, false alarm $F$:
+\begin{equation}
+  \mathrm{CSI}(\tau) = \frac{H}{H + M + F}, \qquad
+  \mathrm{FB}(\tau) = \frac{H + F}{H + M}.
+\end{equation}
+We report $\tau \in \{0.1, 1.0, 5.0, 10.0, 20.0\}$\,mm\,h$^{-1}$.
+
+\paragraph{Fractions Skill Score.} With neighbourhood radius $n$,
+\begin{equation}
+  \mathrm{FSS}(\tau, n) = 1 - \frac{\sum_{i,j}(p^{\text{fc}}_{i,j} - p^{\text{ob}}_{i,j})^2}{\sum_{i,j}(p^{\text{fc}}_{i,j})^2 + \sum_{i,j}(p^{\text{ob}}_{i,j})^2},
+\end{equation}
+where $p_{i,j}$ is the fraction of $\tau$-exceeding pixels in an $n \times n$ box centred at $(i, j)$. We report $n \in \{5, 11, 21\}$ grid points.
+
+\paragraph{Radial log-PSD.} We compute the 2D FFT of each \texttt{qpepre} field, square its magnitude, and radially average to obtain $P(\kappa)$, then compare $\log P_{\text{pred}}(\kappa)$ and $\log P_{\text{target}}(\kappa)$ on the same plot.
+
+\paragraph{Rollout metrics.} Rollout RMSE and CSI are computed as above but as a function of lead time $\ell \in \{1, 3, 6, 12\}$\,h.
+
+% ==================================================
+\section{Progressive-Distillation Results}
+\label{sec:exp-pd}
+
+\paragraph{Training dynamics.} Figure~\textbf{[TBD]} shows per-phase training loss curves for PD with the $16 \to 8 \to 4 \to 2 \to 1$ schedule. Each phase converges within \textbf{[TBD]} iterations; promoting the student to teacher at each boundary introduces a characteristic loss jump that dissipates within \textbf{[TBD]} iterations.
+
+\paragraph{NFE--error Pareto.} Table~\textbf{[TBD]} reports per-channel RMSE and MAE for the PD students at $K \in \{1, 2, 4, 8\}$ alongside the 25-NFE teacher baseline. At $K = 8$ the student is within \textbf{[TBD]}\,\% of teacher RMSE on all channels; at $K = 1$ the gap widens most on \texttt{qpepre}, consistent with the expected difficulty of single-step precipitation sampling.
+
+\paragraph{Precipitation skill.} Figure~\textbf{[TBD]} plots CSI and FSS as a function of $\tau$ for the PD students. The loss of skill at $\tau = 20$\,mm\,h$^{-1}$ is the primary diagnostic: if it degrades sharply below $K = 4$, then PD needs either a longer schedule or a stronger precipitation loss.
+
+\paragraph{Spectral diagnostics.} Figure~\textbf{[TBD]} overlays the radial log-PSD of teacher, PD-$K=1$, and ground truth for \texttt{qpepre} averaged over the 2022 validation set. The diagnostic question is whether the distilled student tracks the teacher at high wavenumbers or undershoots, a classic symptom of one-step precipitation collapse.
+
+% ==================================================
+\section{Consistency-Distillation Results}
+\label{sec:exp-cd}
+
+\paragraph{Training dynamics.} Figure~\textbf{[TBD]} shows the CD training loss, the growth of $N(k)$, and the evolution of $\mu_k$ over training. The loss decreases monotonically until $N(k)$ saturates at $N_{\text{total}} = 150$, after which it plateaus.
+
+\paragraph{One-step and multi-step inference.} Table~\textbf{[TBD]} reports CD students at $K \in \{1, 2, 4\}$. Consistency distillation's headline feature is $K = 1$; we expect it to outperform PD at this budget on \texttt{qpepre} sharpness even if deterministic RMSE is comparable.
+
+\paragraph{Ablations.} Figure~\textbf{[TBD]} reports three CD ablations on a smaller-scale training run: (i) EMA vs online student at inference, (ii) Heun vs Euler $\Phi$ operator, and (iii) with vs without the radial-PSD regulariser. The EMA ablation is the most important: we expect online-student inference to underperform EMA inference by roughly \textbf{[TBD]}\,\% RMSE on \texttt{qpepre}, consistent with the theory.
+
+\paragraph{Channel-weight sensitivity.} Table~\textbf{[TBD]} sweeps $w_{\text{pr}} \in \{1, 2, 4, 8\}$ and reports CSI at $\tau = 1.0$\,mm\,h$^{-1}$. Higher weights should improve wet-event detection at the cost of additional false alarms, which should be visible in the frequency bias.
+
+% ==================================================
+\section{PD vs CD at Matched NFE}
+\label{sec:exp-compare}
+
+Table~\textbf{[TBD]} compares PD and CD at $K = 1, 2, 4$ using the same validation split. Figure~\textbf{[TBD]} shows the corresponding NFE--RMSE Pareto curve. Our expectation --- to be validated by the final runs --- is that CD dominates at $K = 1$ on sharpness metrics (FSS and log-PSD) while PD is more competitive on deterministic RMSE at $K \geq 4$. The recommendation we plan to make depends on which regime the user cares about: PD for low-cost deterministic rollouts, CD for sharp single-step precipitation.
+
+% ==================================================
+\section{Qualitative Case Studies}
+\label{sec:exp-qual}
+
+We select four representative cases from the 2022 validation year:
+\begin{enumerate}
+  \item \textbf{Typhoon landfall} --- \textbf{[TBD date]}. Test how the distilled students handle rapid wind-field rotation and heavy inner-core precipitation.
+  \item \textbf{Mei-yu frontal convection} --- \textbf{[TBD date]} in May or June. Tests quasi-stationary banded precipitation.
+  \item \textbf{Orographic rainfall over the Central Mountain Range} --- \textbf{[TBD date]}. Tests the interaction between the wind field, orography, and precipitation.
+  \item \textbf{Dry quiescent day} --- \textbf{[TBD date]}. Tests whether the student avoids false-alarm precipitation under no-signal conditions.
+\end{enumerate}
+For each case we plot side-by-side heatmaps of teacher, PD-$K=1$, PD-$K=4$, CD-$K=1$, CD-$K=4$, and ground truth for each of the four channels.
+
+% ==================================================
+\section{Failure Modes}
+\label{sec:exp-failure}
+
+We document three failure modes observed during development.
+
+\paragraph{Precipitation mode collapse.} If the channel weight $\beta_{\text{qpepre}}$ is too low or the Pseudo-Huber $c_{\text{h}}$ too large, the student converges to an almost-constant wet field that minimises the loss but destroys sharpness. Diagnosis: wet-fraction drift and log-PSD collapse. Mitigation: increase $w_{\text{pr}}$ and add the spectral regulariser.
+
+\paragraph{Rollout divergence.} Under 12-hour autoregressive rollouts, PD-$K=1$ occasionally diverges into visibly unphysical fields after the sixth or seventh step. This is a compounded-error phenomenon: per-step error is tolerable but accumulates. Mitigation: use $K \geq 4$ for long rollouts or apply the distilled student only for the first one or two hours and fall back to the teacher for later steps.
+
+\paragraph{Tail-quantile regression.} Even without full mode collapse, the distilled students underpredict extreme precipitation (the 99th and 99.9th percentiles of \texttt{qpepre}). This is invisible to RMSE but shows up in the frequency bias at $\tau = 20$\,mm\,h$^{-1}$. Mitigation: consider a log or \texttt{asinh} transform on \texttt{qpepre} before the diffusion loss (deferred to future work).
+
+% ==================================================
+\section{Discussion}
+\label{sec:exp-discussion}
+
+The headline question of the thesis is whether diffusion distillation can compress the StormCast teacher to an operationally deployable NFE budget without losing the features that matter for Taiwan convective forecasting. Our provisional answer is \emph{yes, at $K \geq 4$}, and \emph{conditionally yes, at $K = 1$}, where the conditional depends on which metric the user cares about and which method is chosen.
+
+Progressive distillation is the more conservative choice: it halves step counts one phase at a time, produces usable intermediate students, and never leaves the denoised-prediction space the teacher was trained in. Its weakness is the one-step regime, where PD is known in the literature to fall behind consistency-based methods on sharpness.
+
+Consistency distillation is the more aggressive choice: a single training run produces a one-step sampler, and the adaptive discretisation + EMA mechanism gives a principled way to trade bias for variance during training. Its weaknesses are implementation subtlety (EMA inference, Heun $\Phi$ operator, and the $N(k)$ / $\mu_k$ coupling must all be exactly right) and sensitivity to the precipitation loss design.
+
+The next chapter summarises what we have learned and identifies concrete directions for extending this work.

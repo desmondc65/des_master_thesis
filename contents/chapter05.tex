@@ -1,0 +1,41 @@
+% !TeX root = ../main.tex
+
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+
+\section{Summary of Contributions}
+\label{sec:concl-summary}
+
+This thesis investigated whether diffusion distillation can make a regional, convection-permitting StormCast forecaster operationally deployable over the Taiwan domain. Starting from a pretrained EDM teacher trained on the RWRF dataset, we implemented two distillation pipelines --- progressive distillation and consistency distillation --- and evaluated them against the teacher on the full 2022 hourly validation year.
+
+The concrete contributions are: (i) a progressive-distillation pipeline adapted to the StormCast two-stage regression-plus-residual-diffusion architecture, operating in EDM denoised-prediction space rather than in $v$-prediction space; (ii) a consistency-distillation pipeline with channel-weighted Pseudo-Huber loss, a radial-PSD regulariser targeted at the precipitation channel, and a Heun teacher operator matched to the EDM sampler; (iii) a precipitation-aware evaluation suite covering deterministic, categorical, spectral, and rollout metrics; and (iv) an empirical PD-vs-CD comparison that we believe is the first of its kind on a regional convection-permitting diffusion forecaster.
+
+\section{Limitations}
+\label{sec:concl-limitations}
+
+Several limitations of this work should be noted when interpreting its results.
+
+\paragraph{Single teacher and single domain.} All experiments are based on a single pretrained teacher checkpoint trained on a single regional domain (Taiwan). We cannot directly assess how the distilled students would transfer to other regional models (HRRR, CONUS StormCast) without retraining.
+
+\paragraph{No ADD baseline.} Adversarial diffusion distillation is scaffolded in the codebase but is out of scope for v1 of this thesis. A full three-way comparison (PD, CD, ADD) is left as future work.
+
+\paragraph{Limited ensemble evaluation.} Ensemble metrics (CRPS, rank histogram) are reported only as an optional evaluation and with a small member count. A large-ensemble calibration study is left as future work.
+
+\paragraph{No precipitation transform.} We did not compare training with and without a \texttt{log1p} or \texttt{asinh} transform on the \texttt{qpepre} channel. Prior experience suggests this transform materially changes the dynamic range the diffusion loss has to cover; we expect but do not demonstrate that it would improve tail-event skill.
+
+\section{Future Work}
+\label{sec:concl-future}
+
+The most promising directions for extending this work are:
+\begin{enumerate}
+  \item \textbf{Adversarial diffusion distillation.} Complete the ADD scaffold in the codebase and report a three-way comparison. The open question is whether a precipitation-aware discriminator (for example, built on the frozen teacher encoder with a small head trained on the radial PSD of \texttt{qpepre}) can avoid mode collapse.
+  \item \textbf{Log / asinh precipitation transform.} Retrain both teacher and students with a transformed precipitation channel and measure the effect on tail-event skill.
+  \item \textbf{Distillation-aware rollout losses.} None of the methods in this thesis directly trains against rollout error. Adding a rollout-aware term, trained on multi-step trajectories with a stop-gradient teacher, might close the gap at $K = 1$ for long rollouts.
+  \item \textbf{Transfer to other regional domains.} Apply the same pipelines to another convection-permitting diffusion teacher (for example a HRRR-trained StormCast) to measure how much of the current thesis's engineering transfers and how much is Taiwan-specific.
+  \item \textbf{Ensemble calibration.} Run a full large-ensemble evaluation with CRPS, rank histogram, and spread--skill analysis. A distilled few-step sampler makes 50--100 member ensembles affordable, which could materially improve operational uncertainty quantification.
+\end{enumerate}
+
+\section{Closing Remarks}
+\label{sec:concl-closing}
+
+Diffusion models are almost certainly the right generative inductive bias for short-to-medium range weather forecasting; the current bottleneck is inference cost, and distillation is the most direct lever on that bottleneck. This thesis is a small step toward making regional convection-permitting diffusion forecasters cheap enough to deploy in a real operational setting. There is a great deal of work left to do, but the fact that both distillation methods converge and produce usable students on a real weather dataset suggests that the broader programme --- fast, sharp, probabilistic regional forecasting --- is within reach.

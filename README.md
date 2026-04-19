@@ -61,6 +61,56 @@
 └── ...
 ```
 
+## Building on Linux
+
+This template uses **XeLaTeX** (required for the CJK fonts bundled under `fonts/`) together with **BibTeX** for the bibliography. On Debian/Ubuntu, install a TeX Live distribution that includes XeTeX, `latexmk`, and the usual font/graphics packages:
+
+```bash
+sudo apt update
+sudo apt install -y \
+    texlive-xetex \
+    texlive-latex-extra \
+    texlive-fonts-extra \
+    texlive-lang-chinese \
+    texlive-publishers \
+    texlive-science \
+    texlive-bibtex-extra \
+    biber \
+    latexmk \
+    fonts-noto-cjk
+```
+
+On Fedora:
+
+```bash
+sudo dnf install -y texlive-scheme-full latexmk
+```
+
+On Arch:
+
+```bash
+sudo pacman -S texlive-most texlive-lang biber
+```
+
+If you prefer the upstream TeX Live installer (recommended if your distro ships an old version), follow <https://www.tug.org/texlive/quickinstall.html> and make sure `tlmgr` is on your `PATH`.
+
+### Compile
+
+From inside the template directory:
+
+```bash
+# one-shot
+latexmk -xelatex -bibtex main.tex
+
+# or the manual four-pass sequence
+xelatex main.tex
+bibtex  main
+xelatex main.tex
+xelatex main.tex
+```
+
+`latexmk -c` cleans auxiliary files; `latexmk -C` also removes the final PDF.
+
 ## License
 
 Licensed under the MIT License, Copyright © 2017-present Hsins.
