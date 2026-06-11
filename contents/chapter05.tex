@@ -6,36 +6,39 @@
 \section{Summary of Contributions}
 \label{sec:concl-summary}
 
-This thesis investigated whether diffusion distillation can make a regional, convection-permitting StormCast forecaster operationally deployable over the Taiwan domain. Starting from a pretrained EDM teacher trained on the RWRF dataset, we implemented two distillation pipelines --- progressive distillation and consistency distillation --- and evaluated them against the teacher on the full 2022 hourly validation year.
+This thesis asked whether a single-run, teacher-free flow-matching residual can replace the EDM diffusion residual in a regional, convection-permitting StormCast forecaster over the Taiwan domain --- delivering the speed a curved diffusion ODE cannot, without sacrificing the sharpness and probabilistic calibration that motivated generative forecasting in the first place. Starting from the StormCast two-stage decomposition (a frozen deterministic regression mean plus a generative residual head) trained on the Taiwan RWRF dataset, we adapted Conditional Flow Matching into \textbf{FlowCast}, a residual head that learns a straight-line noise-to-data velocity field and samples it with a handful of explicit Euler steps, and we compared it head-to-head against the EDM diffusion residual on the full 2022 hourly validation year.
 
-The concrete contributions are: (i) a progressive-distillation pipeline adapted to the StormCast two-stage regression-plus-residual-diffusion architecture, operating in EDM denoised-prediction space rather than in $v$-prediction space; (ii) a consistency-distillation pipeline with channel-weighted Pseudo-Huber loss, a radial-PSD regulariser targeted at the precipitation channel, and a Heun teacher operator matched to the EDM sampler; (iii) a precipitation-aware evaluation suite covering deterministic, categorical, spectral, and rollout metrics; and (iv) an empirical PD-vs-CD comparison that we believe is the first of its kind on a regional convection-permitting diffusion forecaster.
+The concrete contributions are: (i) a single-training-run FlowCast residual pipeline, anchored to exactly the same frozen regression mean, backbone, and $\sigma_{\text{data}}$ as the diffusion baseline so that the comparison isolates the generative trajectory; (ii) a precipitation-aware loss --- channel-weighted L2 plus a radial log-PSD regulariser on \texttt{qpepre} --- together with \texttt{log1p}-encoding and precipitation-weight ablations; (iii) a precipitation-aware evaluation suite spanning deterministic (RMSE/MAE), probabilistic (CRPS), categorical (CSI/FSS/HSS/FAR), spectral, and rollout metrics; and (iv) the resulting head-to-head finding that, at a matched $\approx 2\,\text{M}$-sample budget, FlowCast at 10 Euler steps matches the diffusion baseline's CRPS, beats it on wind and precipitation RMSE and on false-alarm ratio, and runs $\approx 2.9\times$ faster, while conceding some pixel-exact heavy-rain hit rate and some \texttt{t2m} accuracy.
 
 \section{Limitations}
 \label{sec:concl-limitations}
 
-Several limitations of this work should be noted when interpreting its results.
+Several limitations should be kept in mind when interpreting these results.
 
-\paragraph{Single teacher and single domain.} All experiments are based on a single pretrained teacher checkpoint trained on a single regional domain (Taiwan). We cannot directly assess how the distilled students would transfer to other regional models (HRRR, CONUS StormCast) without retraining.
+\paragraph{Single training snapshot.} The headline comparison is taken at a single $\approx 2\,\text{M}$-sample checkpoint, where single-snapshot validation noise is $10$--$30\,\%$. The canonical FlowCast run continues to $\approx 13.4\,\text{M}$ samples, and the diffusion baseline likewise has more training available; a converged-budget comparison is not yet in hand.
 
-\paragraph{No ADD baseline.} Adversarial diffusion distillation is scaffolded in the codebase but is out of scope for v1 of this thesis. A full three-way comparison (PD, CD, ADD) is left as future work.
+\paragraph{Single regression mean and single domain.} Both heads are anchored to one frozen regression mean trained on one regional domain (Taiwan RWRF). We cannot assess transfer to other convection-permitting domains (HRRR/CONUS StormCast) without retraining, nor disentangle how much of FlowCast's behaviour depends on the specific quality of this regression mean.
 
-\paragraph{Limited ensemble evaluation.} Ensemble metrics (CRPS, rank histogram) are reported only as an optional evaluation and with a small member count. A large-ensemble calibration study is left as future work.
+\paragraph{Heavy-rain detection.} FlowCast's conservative, low-false-alarm behaviour costs pixel-exact hits at the heavier rainfall thresholds. The neighbourhood FSS recovers part of this, suggesting a displacement rather than a pure miss, but the deterministic heavy-rain CSI is a genuine weakness at the current budget.
 
-\paragraph{No precipitation transform.} We did not compare training with and without a \texttt{log1p} or \texttt{asinh} transform on the \texttt{qpepre} channel. Prior experience suggests this transform materially changes the dynamic range the diffusion loss has to cover; we expect but do not demonstrate that it would improve tail-event skill.
+\paragraph{Limited probabilistic evaluation.} CRPS is computed from a small per-hour ensemble. A large-ensemble calibration study (rank histograms, spread--skill) --- which a cheap few-step sampler makes affordable --- has not been run.
+
+\paragraph{No few-step diffusion comparator.} We compare FlowCast against the full $\approx 25$-NFE diffusion sampler, not against a distilled few-step diffusion student. Whether a distilled diffusion model could close FlowCast's speed gap while keeping the diffusion baseline's heavy-rain CSI is an open question this thesis does not answer.
 
 \section{Future Work}
 \label{sec:concl-future}
 
-The most promising directions for extending this work are:
+The most promising directions, several of which are scoped concretely in the accompanying project to-do, are:
 \begin{enumerate}
-  \item \textbf{Adversarial diffusion distillation.} Complete the ADD scaffold in the codebase and report a three-way comparison. The open question is whether a precipitation-aware discriminator (for example, built on the frozen teacher encoder with a small head trained on the radial PSD of \texttt{qpepre}) can avoid mode collapse.
-  \item \textbf{Log / asinh precipitation transform.} Retrain both teacher and students with a transformed precipitation channel and measure the effect on tail-event skill.
-  \item \textbf{Distillation-aware rollout losses.} None of the methods in this thesis directly trains against rollout error. Adding a rollout-aware term, trained on multi-step trajectories with a stop-gradient teacher, might close the gap at $K = 1$ for long rollouts.
-  \item \textbf{Transfer to other regional domains.} Apply the same pipelines to another convection-permitting diffusion teacher (for example a HRRR-trained StormCast) to measure how much of the current thesis's engineering transfers and how much is Taiwan-specific.
-  \item \textbf{Ensemble calibration.} Run a full large-ensemble evaluation with CRPS, rank histogram, and spread--skill analysis. A distilled few-step sampler makes 50--100 member ensembles affordable, which could materially improve operational uncertainty quantification.
+  \item \textbf{Train to convergence and re-score.} Run both heads to a matched, converged sample budget and repeat the full metric suite, smoothing over several validation snapshots to beat down the $10$--$30\,\%$ noise. This is the single most important step to turn the provisional headline into a defensible claim.
+  \item \textbf{Close the heavy-rain gap.} Test an explicit tail-quantile or focal loss on \texttt{qpepre}, a higher $w_{\text{pr}}$ paired with the spectral term, and a stronger \texttt{asinh}/\texttt{log1p} dynamic-range transform, targeting the $5$--$10$\,mm\,h$^{-1}$ CSI deficit without inflating false alarms.
+  \item \textbf{One- and two-step FlowCast.} Push the NFE sweep to $K \in \{1, 2\}$ and quantify exactly how much quality the straight-line path retains at the extreme low-step limit, where the operational payoff is largest.
+  \item \textbf{Stochastic-interpolant / bridge variants.} Generalise the straight-line flow to an anchored stochastic-interpolant bridge that starts from the regression mean rather than white noise, which may shorten the effective transport distance and further sharpen precipitation.
+  \item \textbf{Large-ensemble calibration.} Exploit FlowCast's low per-sample cost to run 50--100-member ensembles and report CRPS, rank histograms, and spread--skill --- the uncertainty-quantification payoff that cheap sampling unlocks.
+  \item \textbf{Transfer to other domains.} Apply the same single-run FlowCast recipe to another convection-permitting regression mean (e.g.\ an HRRR-trained StormCast) to measure how much of the pipeline is Taiwan-specific.
 \end{enumerate}
 
 \section{Closing Remarks}
 \label{sec:concl-closing}
 
-Diffusion models are almost certainly the right generative inductive bias for short-to-medium range weather forecasting; the current bottleneck is inference cost, and distillation is the most direct lever on that bottleneck. This thesis is a small step toward making regional convection-permitting diffusion forecasters cheap enough to deploy in a real operational setting. There is a great deal of work left to do, but the fact that both distillation methods converge and produce usable students on a real weather dataset suggests that the broader programme --- fast, sharp, probabilistic regional forecasting --- is within reach.
+Generative modelling is almost certainly the right inductive bias for short-range convective-scale forecasting; the obstacle to deploying it has been the multi-step diffusion sampler. This thesis shows that, on a real regional dataset, a straight-line flow-matching residual can recover most of the diffusion baseline's skill --- and exceed it on winds, precipitation RMSE, and false alarms --- at roughly a third of the inference cost, trained in a single run with no teacher. The remaining gaps (heavy-rain hits, \texttt{t2m} drift, convergence at a larger budget) are concrete and addressable. Making sharp, probabilistic, regional convective forecasting fast enough to run between radar volumes is within reach, and a single-stage flow-matching residual is a credible path to it.

@@ -5,16 +5,18 @@
 \item[NWP]{Numerical Weather Prediction}
 \item[RWRF]{Regional Weather Research and Forecasting (Taiwan domain reanalysis)}
 \item[EDM]{Elucidated Diffusion Model (Karras et al., 2022)}
+\item[CFM]{Conditional Flow Matching}
+\item[I-CFM]{Independent Conditional Flow Matching}
+\item[ODE]{Ordinary Differential Equation}
 \item[PF-ODE]{Probability-Flow Ordinary Differential Equation}
 \item[SDE]{Stochastic Differential Equation}
 \item[NFE]{Number of Function Evaluations (neural-net forward passes per sample)}
-\item[PD]{Progressive Distillation}
-\item[CD]{Consistency Distillation}
-\item[ADD]{Adversarial Diffusion Distillation}
 \item[EMA]{Exponential Moving Average}
 \item[PSD]{Power Spectral Density}
 \item[CSI]{Critical Success Index}
 \item[FSS]{Fractions Skill Score}
+\item[HSS]{Heidke Skill Score}
+\item[FAR]{False-Alarm Ratio}
 \item[CRPS]{Continuous Ranked Probability Score}
 
 \item[$X_t$]{High-resolution atmospheric state at time $t$ (target). Channels: \texttt{t2m}, \texttt{u10}, \texttt{v10}, \texttt{qpepre}.}
@@ -22,18 +24,21 @@
 \item[$I$]{Time-invariant fields (land--sea mask, orography).}
 \item[$\Freg$]{Deterministic regression network producing mean $M_t = \Freg(X_{t-1}, S_t, I)$.}
 \item[$M_t$]{Regression mean prediction.}
-\item[$R_t$]{Residual $R_t = X_t - M_t$ learned by the diffusion model.}
-\item[$c$]{Conditioning bundle $c = \mathrm{concat}(X_{t-1}, S_t, M_t, I)$.}
-\item[$\Dteach$]{Frozen diffusion teacher (EDMPrecond SongUNet).}
-\item[$\Dnet$]{Distilled diffusion student.}
+\item[$R_t$]{Residual $R_t = X_t - M_t$ learned by the generative head.}
+\item[$c$]{Conditioning bundle (EDM: $\mathrm{concat}(X_{t-1}, S_t, M_t, I)$; FlowCast: $\mathrm{concat}(X_{t-1}, M_t, I)$).}
+\item[$\Dedm$]{EDM diffusion baseline denoiser (EDMPrecond SongUNet).}
+\item[$\vnet$]{FlowCast velocity field (FlowCastPrecond SongUNet).}
 \item[$\sigma$]{EDM noise level.}
-\item[$\sigma_{\min},\sigma_{\max}$]{Minimum and maximum noise levels (0.002 and 80).}
-\item[$\sigma_{\text{data}}$]{EDM data standard-deviation hyperparameter (0.5).}
+\item[$\sigma_{\min},\sigma_{\max}$]{Minimum and maximum EDM noise levels (0.002 and 80).}
+\item[$\sigma_{\text{data}}$]{Data standard-deviation hyperparameter shared by EDM and FlowCast (0.5).}
 \item[$\rho$]{Karras schedule exponent (7).}
-\item[$N, N(k)$]{Number of discretization steps (fixed or adaptive at training iter $k$).}
-\item[$\mu_k$]{EMA decay for the consistency target network at iter $k$.}
-\item[$c_{\text{h}}$]{Pseudo-Huber constant.}
-\item[$\beta_k$]{Per-channel loss weight.}
+\item[$t$]{FlowCast flow time, $t \in [0, 1]$ (noise at $t=0$, data at $t=1$).}
+\item[$x_0, x_1$]{Flow endpoints: prior sample $x_0 \sim \Nbb(0,I)$ and standardised residual $x_1 = R_t/\sigma_{\text{data}}$.}
+\item[$u_t$]{Target velocity field of Independent CFM, $u_t = x_1 - x_0$.}
+\item[$\sigma_{\text{path}}$]{I-CFM conditional-path standard deviation (0.01).}
+\item[$K$]{Number of ODE sampling steps (Euler), equal to the NFE of FlowCast.}
+\item[$\beta_k$]{Per-channel loss weight; $w_{\text{pr}} = \beta_{\texttt{qpepre}}$ is the precipitation weight.}
+\item[$\lambda_{\text{spec}}$]{Weight of the radial log-PSD spectral regulariser.}
 \item[$P(\kappa)$]{Radial power spectral density at wavenumber $\kappa$.}
 
 \end{denotation}

@@ -11,8 +11,8 @@
   college*      = {College of Engineering},
   institute     = {工業工程學研究所},
   institute*    = {Department of Industrial Engineering},
-  title         = {區域尺度 StormCast 擴散模型之少步驟蒸餾：應用於臺灣對流尺度天氣預報},
-  title*        = {Few-Step Distillation of a Regional StormCast Diffusion Model \\ for Taiwan Convective-Scale Weather Forecasting},
+  title         = {以條件流匹配加速區域尺度 StormCast：應用於臺灣對流尺度天氣預報的單階段流匹配殘差生成模型},
+  title*        = {Accelerating Regional StormCast with Conditional Flow Matching: \\ A Single-Run Flow-Matching Residual Forecaster for \\ Taiwan Convective-Scale Weather Prediction},
   author        = {Desmond Cheong},
   author*       = {Desmond Cheong},
   ID            = {R00000000},
@@ -21,8 +21,8 @@
   % date          = {2026-06-01},
   % oral-date     = {2026-06-01},
   DOI           = {10.5566/NTU2026XXXXX},
-  keywords      = {擴散模型, 知識蒸餾, 一致性模型, 漸進式蒸餾, 對流尺度預報, StormCast},
-  keywords*     = {Diffusion Models, Knowledge Distillation, Consistency Models, Progressive Distillation, Convective-Scale Forecasting, StormCast},
+  keywords      = {流匹配, 條件流匹配, 擴散模型, 生成式天氣預報, 對流尺度預報, 降水臨近預報, StormCast},
+  keywords*     = {Flow Matching, Conditional Flow Matching, Diffusion Models, Generative Weather Forecasting, Convective-Scale Forecasting, Precipitation Nowcasting, StormCast},
 }
 
 % --------------------------------------------------
@@ -55,5 +55,7 @@
 \newcommand{\Rbb}{\mathbb{R}}
 \newcommand{\Nbb}{\mathcal{N}}
 \newcommand{\Dnet}{D_{\theta}}
-\newcommand{\Dteach}{D_{\psi}}
+\newcommand{\Dedm}{D_{\psi}}          % EDM diffusion baseline denoiser
+\newcommand{\Dteach}{D_{\psi}}        % legacy alias, kept for back-compat
+\newcommand{\vnet}{v_{\theta}}        % FlowCast velocity field
 \newcommand{\Freg}{F_{\xi}}

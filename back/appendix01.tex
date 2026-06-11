@@ -3,9 +3,9 @@
 \appendix{A}{Hyperparameters and Training Configuration}
 \label{app:hyperparams}
 
-\section{EDM Teacher Hyperparameters}
+\section{EDM Diffusion Baseline Hyperparameters}
 
-The EDM teacher and all distilled students share the following parameters, copied verbatim from the teacher config:
+The EDM diffusion baseline uses the following parameters. FlowCast shares the data scale $\sigma_{\text{data}}$ verbatim so that the standardised-residual statistics and per-channel loss scaling are identical across the two heads (Section~\ref{sec:method-baseline}):
 \begin{center}
 \begin{tabular}{lc}
 \toprule
@@ -15,49 +15,10 @@ $\sigma_{\min}$ & 0.002 \\
 $\sigma_{\max}$ & 80 \\
 $\sigma_{\text{data}}$ & 0.5 \\
 $\rho$ & 7 \\
-Teacher sampler & Heun \\
-Teacher $N$ (steps) & $\approx 13$ ($\approx 25$ NFE) \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\section{Progressive Distillation}
-
-\begin{center}
-\begin{tabular}{lc}
-\toprule
-Parameter & Value \\
-\midrule
-Phase schedule $N$ & $16 \to 8 \to 4 \to 2 \to 1$ \\
-Iterations per phase & $6 \times 10^4$ \\
+Sampler & Heun \\
+$N$ (steps) & $\approx 13$ ($\approx 25$ NFE) \\
+Global batch size & 64 \\
 Optimiser & AdamW \\
-Learning rate & $1 \times 10^{-4}$ \\
-Batch size & 32 (per GPU) \\
-Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
-Loss space & Denoised prediction ($D_\theta$) \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\section{Consistency Distillation}
-
-\begin{center}
-\begin{tabular}{lc}
-\toprule
-Parameter & Value \\
-\midrule
-$N_0$ & 2 \\
-$N_{\text{total}}$ & 150 \\
-$\mu_0$ & 0.95 \\
-Pseudo-Huber $c_{\text{h}}$ & $5.4 \times 10^{-4}$ \\
-Teacher operator $\Phi$ & Heun (1 step) \\
-Total iterations & $6 \times 10^{5}$ \\
-Optimiser & AdamW \\
-Learning rate & $1 \times 10^{-4}$ \\
-Batch size & 32 (per GPU) \\
-Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
-Spectral weight $\lambda_{\text{spec}}$ & $0.1$ \\
-Spectral channels & $\{\texttt{qpepre}\}$ \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -76,6 +37,7 @@ $t_\varepsilon$ (time clamp) & $10^{-5}$ \\
 Time embedding scale $\tau$ & 1000 \\
 \texttt{diffusion\_conditions} & \texttt{[state, regression, invariant]} \\
 \texttt{regression\_conditions} & \texttt{[state, background, invariant]} \\
+Backbone \texttt{channel\_mult} & $[1, 2, 2, 2, 2]$ \\
 Optimiser & AdamW \\
 Adam $(\beta_1, \beta_2)$ & $(0.9, 0.999)$ \\
 Learning rate & $5 \times 10^{-4}$ \\
@@ -83,10 +45,10 @@ Weight decay & $1 \times 10^{-4}$ \\
 Warmup steps (linear) & 4{,}000 \\
 Min LR ratio (cosine floor) & $10^{-2}$ \\
 Total training steps & $4 \times 10^{5}$ \\
-Global batch size & 64 \\
+Global batch size & 96 \\
 Gradient clip (global L2) & 1.0 \\
 EMA decay (fixed) & 0.999 \\
-Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
+Channel weights $\beta$ & $(1, 1, 1, w_{\text{pr}})$, $w_{\text{pr}} = 2$ (headline) \\
 Spectral weight $\lambda_{\text{spec}}$ & $0.1$ \\
 Spectral channels & $\{\texttt{qpepre}\}$ \\
 Validation sampler & Euler, $K=10$ \\
@@ -95,9 +57,24 @@ Inference solvers & \texttt{euler} \,/\, \texttt{midpoint} \\
 \end{tabular}
 \end{center}
 
+\section{Ablation Grids}
+
+The two ablations of Chapter~\ref{ch:experiments} vary a single knob each, holding the rest of the FlowCast config fixed:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Ablation & Values swept \\
+\midrule
+Precipitation encoding (Section~\ref{sec:exp-log1p}) & \texttt{log1p} \,/\, raw mm\,h$^{-1}$ \\
+Precipitation weight $w_{\text{pr}}$ (Section~\ref{sec:exp-qpw}) & $\{1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4\}$ \\
+Inference steps $K$ (Section~\ref{sec:exp-nfe}) & $\{1, 2, 4, 8, 10, 15, 20\}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \section{Per-Channel Dataset Statistics}
 
-High-resolution target statistics computed on the 2019-08 -- 2021-12 training split:
+High-resolution target statistics computed on the 2019-08 -- 2021-12 training split (original store; the cleaned store re-derives statistics after the \texttt{log1p} encoding of \texttt{qpepre}):
 \begin{center}
 \begin{tabular}{lcc}
 \toprule
@@ -106,7 +83,8 @@ Channel & Mean & Std \\
 \texttt{t2m} (K)          & 295.98 & 5.61 \\
 \texttt{u10} (m\,s$^{-1}$) & $-1.58$ & 3.84 \\
 \texttt{v10} (m\,s$^{-1}$) & $-2.65$ & 5.66 \\
-\texttt{qpepre} (mm)       & 0.182  & 9.12 \\
+\texttt{qpepre} (mm\,h$^{-1}$, raw) & 0.182  & 9.12 \\
+\texttt{qpepre} ($\log(1+x)$ space) & --- & $\approx 0.37$ \\
 \bottomrule
 \end{tabular}
 \end{center}
