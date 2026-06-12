@@ -25,7 +25,7 @@
 \item[$\Freg$]{Deterministic regression network producing mean $M_t = \Freg(X_{t-1}, S_t, I)$.}
 \item[$M_t$]{Regression mean prediction.}
 \item[$R_t$]{Residual $R_t = X_t - M_t$ learned by the generative head.}
-\item[$c$]{Conditioning bundle (EDM: $\mathrm{concat}(X_{t-1}, S_t, M_t, I)$; FlowCast: $\mathrm{concat}(X_{t-1}, M_t, I)$).}
+\item[$c$]{Conditioning bundle for the generative head. Both the EDM baseline and FlowCast use $\mathrm{concat}(X_{t-1}, M_t, I)$; the original StormCast additionally concatenates the low-resolution background $S_t$.}
 \item[$\Dedm$]{EDM diffusion baseline denoiser (EDMPrecond SongUNet).}
 \item[$\vnet$]{FlowCast velocity field (FlowCastPrecond SongUNet).}
 \item[$\sigma$]{EDM noise level.}

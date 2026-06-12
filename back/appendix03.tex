@@ -208,7 +208,7 @@ which is the form that first-order (Euler / DDIM) and second-order (Heun) integr
 \begin{equation*}
   q_\sigma(x_{t-1} \mid x_t, x_0) = \Nbb\Bigl(\mu_\sigma(x_t, x_0),\; \sigma_t^2 I\Bigr),
 \end{equation*}
-with $\sigma_t \in [0, \tilde\beta_t]$ a free parameter and $\mu_\sigma$ to be determined.
+with $\sigma_t \in [0, \sqrt{\tilde\beta_t}]$ a free parameter (a standard deviation; $\sigma_t = \sqrt{\tilde\beta_t}$ recovers DDPM) and $\mu_\sigma$ to be determined.
 
 \paragraph{Determining $\mu_\sigma$.} Require that the induced $q_\sigma(x_t \mid x_0)$ matches the DDPM marginal $\Nbb(\sqrt{\bar\alpha_t}x_0,(1-\bar\alpha_t)I)$. The ansatz
 \begin{equation*}
@@ -276,9 +276,9 @@ For the $F_\theta$-regression loss to remain well-conditioned across $\sigma$, $
 \end{align*}
 Setting this equal to 1 is \emph{one equation in two unknowns} $(c_{\text{skip}}, c_{\text{out}})$; we need the third requirement to pin them down.
 
-\paragraph{Requirement 3: minimise $F^\star$'s sensitivity to $x$.} \citet{karras2022elucidating} choose $c_{\text{skip}}$ to minimise the expected squared magnitude of $F^\star$:
+\paragraph{Requirement 3: minimise the error amplification $c_{\text{out}}$.} Requirement 2 fixed $c_{\text{out}}^2$ as a function of $c_{\text{skip}}$; \citet{karras2022elucidating} pin $c_{\text{skip}}$ down by minimising $c_{\text{out}}$, so the inner network's prediction error is amplified as little as possible on the way to $D_\theta$:
 \begin{equation*}
-  \Ebb\|F^\star\|^2 \propto (1 - c_{\text{skip}})^2\sigma_{\text{data}}^2 + c_{\text{skip}}^2\sigma^2.
+  c_{\text{out}}^2 = (1 - c_{\text{skip}})^2\sigma_{\text{data}}^2 + c_{\text{skip}}^2\sigma^2.
 \end{equation*}
 Differentiating in $c_{\text{skip}}$ and setting to zero,
 \begin{equation*}
@@ -307,7 +307,7 @@ Substituting $D_\theta = c_{\text{skip}}x + c_{\text{out}}F_\theta(\cdot)$ and t
   \lambda(\sigma) = \frac{1}{c_{\text{out}}(\sigma)^2} = \frac{\sigma^2 + \sigma_{\text{data}}^2}{\sigma^2\,\sigma_{\text{data}}^2}.
   \label{eq:app-edm-weight}
 \end{equation}
-With the Karras log-normal sampling $\log\sigma \sim \Nbb(P_{\text{mean}}, P_{\text{std}}^2)$, the training-time distribution of $\sigma$ combined with~\eqref{eq:app-edm-weight} concentrates the learning signal at mid-range $\sigma$, which is where the denoiser has the highest leverage on the final sample quality. This concludes the derivation; the five preconditioning scalars $(c_{\text{skip}}, c_{\text{in}}, c_{\text{out}}, c_{\text{noise}}, \lambda)$ of Equation~(2.3) of the main text are now all justified from first principles.
+With the Karras log-normal sampling $\log\sigma \sim \Nbb(P_{\text{mean}}, P_{\text{std}}^2)$, the training-time distribution of $\sigma$ combined with~\eqref{eq:app-edm-weight} concentrates the learning signal at mid-range $\sigma$, which is where the denoiser has the highest leverage on the final sample quality. This concludes the derivation; the five preconditioning scalars $(c_{\text{skip}}, c_{\text{in}}, c_{\text{out}}, c_{\text{noise}}, \lambda)$ of Equation~\eqref{eq:edm-precond} of the main text are now all justified from first principles.
 
 % ==================================================
 \section{Karras $\rho$-Spaced Noise Schedule}

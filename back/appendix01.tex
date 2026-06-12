@@ -5,7 +5,7 @@
 
 \section{EDM Diffusion Baseline Hyperparameters}
 
-The EDM diffusion baseline uses the following parameters. FlowCast shares the data scale $\sigma_{\text{data}}$ verbatim so that the standardised-residual statistics and per-channel loss scaling are identical across the two heads (Section~\ref{sec:method-baseline}):
+The EDM diffusion baseline uses the following parameters. FlowCast and MeanFlow share the data scale $\sigma_{\text{data}}$ verbatim so that the standardised-residual statistics and per-channel loss scaling are identical across all three heads (Section~\ref{sec:method-baseline}):
 \begin{center}
 \begin{tabular}{lc}
 \toprule
@@ -16,7 +16,7 @@ $\sigma_{\max}$ & 80 \\
 $\sigma_{\text{data}}$ & 0.5 \\
 $\rho$ & 7 \\
 Sampler & Heun \\
-$N$ (steps) & $\approx 13$ ($\approx 25$ NFE) \\
+$N$ (steps) & 18 ($2N{-}1 = 35$ NFE) \\
 Global batch size & 64 \\
 Optimiser & AdamW \\
 \bottomrule
@@ -57,9 +57,44 @@ Inference solvers & \texttt{euler} \,/\, \texttt{midpoint} \\
 \end{tabular}
 \end{center}
 
+\section{MeanFlow (Average-Velocity Flow Matching)}
+
+Hyperparameters copied from \texttt{stormcast/config/model/meanflow.yaml} and \texttt{stormcast/config/training/meanflow.yaml}. Everything shared with FlowCast (optimiser, schedule, conditioning, backbone, channel/spectral weights, EMA) is kept \emph{identical} so the FlowCast-versus-MeanFlow comparison isolates the objective; only the rows below the divider are MeanFlow-specific:
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Parameter & Value \\
+\midrule
+$\sigma_{\text{data}}$ & 0.5 \\
+$t_\varepsilon$ (time clamp) & $10^{-5}$ \\
+State-time embedding scale $\tau$ (on $r$) & 1000 \\
+\texttt{diffusion\_conditions} & \texttt{[state, regression, invariant]} \\
+\texttt{regression\_conditions} & \texttt{[state, background, invariant]} \\
+Backbone \texttt{channel\_mult} & $[1, 2, 2, 2, 2]$ \\
+Optimiser / Adam $(\beta_1, \beta_2)$ & AdamW / $(0.9, 0.999)$ \\
+Learning rate / weight decay & $5 \times 10^{-4}$ / $1 \times 10^{-4}$ \\
+Warmup steps (linear) / min-LR ratio & 4{,}000 / $10^{-2}$ \\
+Gradient clip (global L2) & 1.0 \\
+EMA decay (fixed) & 0.999 \\
+Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
+Spectral weight $\lambda_{\text{spec}}$ / channels & $0.1$ / $\{\texttt{qpepre}\}$ \\
+\midrule
+$(r, t)$ sampler & two i.i.d.\ $\mathcal{U}(t_\varepsilon, 1 - t_\varepsilon)$, sorted $r \le t$ \\
+MeanFlow ratio $\rho_{\text{MF}}$ ($r < t$ fraction) & 0.25 \\
+Adaptive weight exponent $p$ & 1.0 \\
+Adaptive weight stabiliser $\varepsilon_w$ & $10^{-3}$ \\
+Interval embedding (on $t - r$) & 32-dim $\sin/\cos$ Fourier, freqs $\in [1, 10^{3}]$ \\
+$\sigma_{\text{path}}$ & 0 (pure interpolant) \\
+Global batch size & 112 (7 GPUs) \\
+Validation sampler & average-velocity, $K = 2$ \\
+Inference NFE (headline) & $K \in \{1, 2\}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \section{Ablation Grids}
 
-The two ablations of Chapter~\ref{ch:experiments} vary a single knob each, holding the rest of the FlowCast config fixed:
+The two ablations of Chapter~\ref{ch:experiments} vary a single knob each, holding the rest of the FlowCast config fixed (the $w_{\text{pr}}$ and encoding grids are FlowCast/EDM-only; MeanFlow adopts the winning settings, Sections~\ref{sec:exp-log1p}--\ref{sec:exp-qpw}):
 \begin{center}
 \begin{tabular}{ll}
 \toprule
@@ -67,7 +102,7 @@ Ablation & Values swept \\
 \midrule
 Precipitation encoding (Section~\ref{sec:exp-log1p}) & \texttt{log1p} \,/\, raw mm\,h$^{-1}$ \\
 Precipitation weight $w_{\text{pr}}$ (Section~\ref{sec:exp-qpw}) & $\{1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4\}$ \\
-Inference steps $K$ (Section~\ref{sec:exp-nfe}) & $\{1, 2, 4, 8, 10, 15, 20\}$ \\
+Inference steps $K$, both flow heads (Section~\ref{sec:exp-nfe}) & $\{1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25, 32, 40, 50\}$; scoreboard at $\{10, 15, 20\}$ (FlowCast), $\{1, 2\}$ (MeanFlow) \\
 \bottomrule
 \end{tabular}
 \end{center}

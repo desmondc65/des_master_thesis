@@ -9,12 +9,14 @@ The full training and evaluation code for this thesis lives in the \texttt{Storm
 \begin{itemize}
   \item \texttt{stormcast/train.py} --- regression and EDM diffusion baseline training (Hydra config selects the mode).
   \item \texttt{stormcast/train\_flowcast.py} --- FlowCast (Conditional Flow Matching) training.
-  \item \texttt{stormcast/utils/trainer\_flowcast.py} --- FlowCast training loop (\texttt{flowcast\_training\_loop}) with EMA.
+  \item \texttt{stormcast/train\_meanflow.py} --- MeanFlow (average-velocity flow matching) training.
+  \item \texttt{stormcast/utils/trainer\_flowcast.py} / \texttt{trainer\_meanflow.py} --- the two students' training loops with EMA.
   \item \texttt{stormcast/utils/flowcast\_loss.py} --- \texttt{FlowCastLoss} (I-CFM + per-channel weights + radial log-PSD).
-  \item \texttt{stormcast/utils/flowcast\_precond.py} --- \texttt{FlowCastPrecond} velocity wrapper.
-  \item \texttt{stormcast/utils/nn.py} --- \texttt{get\_preconditioned\_architecture}, \texttt{build\_network\_condition\_and\_target}, and the samplers \texttt{diffusion\_model\_forward} / \texttt{flowcast\_model\_forward}.
-  \item \texttt{experiment\_scripts/compare\_diffusion\_vs\_flowcast.py} --- the head-to-head rollout scoreboard harness used for Chapter~\ref{ch:experiments}.
-  \item \texttt{experiment\_scripts/flowcast\_nfe\_sweep.py} --- the NFE Pareto sweep behind Figure~\ref{fig:nfe} and Table~\ref{tab:nfe}.
+  \item \texttt{stormcast/utils/meanflow\_loss.py} --- \texttt{MeanFlowLoss} (MeanFlow identity with JVP-bootstrapped stop-gradient target, adaptive weighting, same per-channel weights + log-PSD term on the $t = r$ subset).
+  \item \texttt{stormcast/utils/flowcast\_precond.py} / \texttt{meanflow\_precond.py} --- \texttt{FlowCastPrecond} velocity wrapper and \texttt{MeanFlowPrecond} two-time average-velocity wrapper.
+  \item \texttt{stormcast/utils/nn.py} --- \texttt{get\_preconditioned\_architecture}, \texttt{build\_network\_condition\_and\_target}, and the samplers \texttt{diffusion\_model\_forward} / \texttt{flowcast\_model\_forward} / \texttt{meanflow\_model\_forward}.
+  \item \texttt{experiment\_scripts/compare\_diffusion\_vs\_flowcast.py} --- the head-to-head rollout scoreboard harness used for Chapter~\ref{ch:experiments} (the MeanFlow leg is enabled with \texttt{--meanflow-checkpoint}).
+  \item \texttt{experiment\_scripts/flowcast\_nfe\_sweep.py} --- the NFE Pareto sweep behind Figure~\ref{fig:nfe} and Table~\ref{tab:nfe}; \texttt{--method meanflow} runs the identical sweep for the MeanFlow head.
   \item \texttt{experiment\_scripts/thesis\_style.py} --- the single source of truth for figure colour: \texttt{viridis} for all two-dimensional fields (matching the trainer-time validation plots), a diverging map for signed error fields, and a categorical per-method palette sampled from the viridis ramp.
   \item \texttt{experiment\_scripts/make\_thesis\_figures.py} / \texttt{make\_thesis\_qualitative.sh} / \texttt{export\_results\_md.py} --- regenerate every result figure of Chapter~\ref{ch:experiments} and the consolidated \texttt{results.md} (see the regeneration commands below).
 \end{itemize}
@@ -29,9 +31,10 @@ with sub-groups \texttt{LowRes/}, \texttt{HighRes/}, and \texttt{invariants/}, a
 
 \paragraph{Checkpoints (cleaned, log1p, $\approx 2\,\text{M}$-sample anchor).}
 \begin{itemize}
-  \item Regression mean: \texttt{StormCastUNet.0.8000.mdlus} (shared by both heads).
+  \item Regression mean: \texttt{StormCastUNet.0.8000.mdlus} (shared by all three heads).
   \item EDM diffusion baseline: \texttt{EDMPrecond.0.31000.mdlus}.
-  \item FlowCast: \texttt{FlowCastPrecond.0.20000.mdlus} \emph{plus} its \texttt{ema\_state.pt} (inference uses the EMA shadow, never the online checkpoint). The canonical FlowCast run continues to \texttt{FlowCastPrecond.0.140000.mdlus}.
+  \item FlowCast: \texttt{FlowCastPrecond.0.20000.mdlus}; the sibling \texttt{ema\_state.pt} holds the EMA shadow used by the in-training validation sampler. The canonical FlowCast run continues to \texttt{FlowCastPrecond.0.140000.mdlus}.
+  \item MeanFlow: \texttt{MeanFlowPrecond.0.20000.mdlus} ($\approx 2.24$\,M samples at batch 112) with its sibling \texttt{ema\_state.pt}. The Chapter~\ref{ch:experiments} harness loads the FlowCast and MeanFlow online checkpoints symmetrically.
 \end{itemize}
 
 \section{Commands}
@@ -61,26 +64,38 @@ python train_flowcast.py \
     training.experiment_name=flowcast_main
 \end{verbatim}
 
-\paragraph{Auto-resume.} Re-running the same command picks up from the latest checkpoint; FlowCast restores both \texttt{checkpoints\_flowcast/checkpoint\_latest.pt} and \texttt{ema\_state.pt}.
+\paragraph{MeanFlow.}
+\begin{verbatim}
+python train_meanflow.py \
+    model.regression_weights=.../StormCastUNet.0.8000.mdlus \
+    dataset.location=.../zarr_..._cleaned_4_27_2026 \
+    training.experiment_name=meanflow_main
+\end{verbatim}
+
+\paragraph{Auto-resume.} Re-running the same command picks up from the latest checkpoint; FlowCast and MeanFlow restore both \texttt{checkpoints\_\{flowcast,meanflow\}/checkpoint\_latest.pt} and \texttt{ema\_state.pt}.
 
 \paragraph{Head-to-head evaluation.} The scoreboard, per-threshold, FSS, CRPS, rollout, and qualitative-panel outputs of Chapter~\ref{ch:experiments} are produced by
 \begin{verbatim}
 bash experiment_scripts/run_main_experiment.sh
 \end{verbatim}
-which runs \texttt{compare\_diffusion\_vs\_flowcast.py} and writes \texttt{scoreboard.\{md,csv\}}, \texttt{per\_threshold.csv}, \texttt{fss\_p16.csv}, \texttt{rmse\_per\_step.csv}, \texttt{crps\_per\_channel.csv}, and a \texttt{panels/} tree in physical units (qpepre in mm\,h$^{-1}$ after inverse-\texttt{log1p}). FlowCast evaluation loads \texttt{ema\_state.pt} by default.
+which runs \texttt{compare\_diffusion\_vs\_flowcast.py} (with the MeanFlow leg at \texttt{MEANFLOW\_NFES="1 2"} by default) and writes \texttt{scoreboard.\{md,csv\}}, \texttt{per\_threshold.csv}, \texttt{fss\_p16.csv}, \texttt{rmse\_per\_step.csv}, \texttt{crps\_per\_channel.csv}, and a \texttt{panels/} tree in physical units (qpepre in mm\,h$^{-1}$ after inverse-\texttt{log1p}).
 
-\paragraph{NFE Pareto sweep.} The data behind Figure~\ref{fig:nfe} and Table~\ref{tab:nfe} come from
+\paragraph{NFE Pareto sweeps.} The data behind Figure~\ref{fig:nfe} and Tables~\ref{tab:nfe}--\ref{tab:nfe-meanflow} come from
 \begin{verbatim}
 python experiment_scripts/flowcast_nfe_sweep.py \
     --flowcast-checkpoint .../FlowCastPrecond.0.20000.mdlus \
     --nfes 1 2 3 4 5 6 8 10 12 16 20 25 32 40 50 \
-    --n-sequences 12 --n-steps 1 --ensemble 4 --seed 0
+    --n-sequences 12 --n-steps 1 --ensemble 10 --seed 0
+python experiment_scripts/flowcast_nfe_sweep.py --method meanflow \
+    --meanflow-checkpoint .../MeanFlowPrecond.0.20000.mdlus \
+    --nfes 1 2 3 4 5 6 8 10 12 16 20 25 32 40 50 \
+    --n-sequences 12 --n-steps 1 --ensemble 10 --seed 0
 \end{verbatim}
-The matched $\approx 2\,\text{M}$-sample checkpoint (step 20{,}000) is passed explicitly --- the script's default points at the longer-trained step-140{,}000 checkpoint, which would not be comparable to the Chapter~\ref{ch:experiments} scoreboard.
+The matched $\approx 2\,\text{M}$-sample checkpoints (step 20{,}000) are passed explicitly --- the script's FlowCast default points at the longer-trained step-140{,}000 checkpoint, which would not be comparable to the Chapter~\ref{ch:experiments} scoreboard. \texttt{run\_flowcast\_nfe\_sweep.sh} wraps both invocations (\texttt{METHODS="flowcast meanflow"}).
 
 \paragraph{Figure and results regeneration.} Every result figure of Chapter~\ref{ch:experiments} and the consolidated results document are regenerated end-to-end by two commands:
 \begin{verbatim}
 bash experiment_scripts/make_thesis_figures.sh      # CPU only
 bash experiment_scripts/make_thesis_qualitative.sh  # one GPU, ~2 min
 \end{verbatim}
-The first rebuilds the data-driven figures (scoreboard, per-channel RMSE/CRPS, CSI/FAR/HSS by threshold, heavy-rain FSS, rollout RMSE, NFE Pareto) directly from the harness CSVs --- no inference --- writing them into the thesis \texttt{figures/results/} tree, and then re-exports \texttt{experiment\_scripts/results.md}, a single Markdown document collecting every scoreboard with its provenance. The second re-runs the cleaned-leg models for one generative step and re-renders the qualitative truth/diffusion/FlowCast field panels. All plotting reads its colours from \texttt{thesis\_style.py}, so the entire figure set stays on one palette by construction.
+The first rebuilds the data-driven figures (scoreboard, per-channel RMSE/CRPS, CSI/FAR/HSS by threshold, heavy-rain FSS, rollout RMSE, NFE Pareto with both flow heads) directly from the harness CSVs --- no inference --- writing them into the thesis \texttt{figures/results/} tree, and then re-exports \texttt{experiment\_scripts/results.md}, a single Markdown document collecting every scoreboard with its provenance. The second re-runs the cleaned-leg models for one generative step and re-renders the qualitative truth/diffusion/FlowCast/MeanFlow field panels. All plotting reads its colours from \texttt{thesis\_style.py}, so the entire figure set stays on one palette by construction.
