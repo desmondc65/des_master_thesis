@@ -7,8 +7,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC="$HERE/src"; BUILD="$HERE/build"; DPI="${DPI:-600}"
 mkdir -p "$BUILD"
 export TEXINPUTS="$SRC:${TEXINPUTS:-}"
-FIGS=("${@:-meanflow_training meanflow_inference}")
-# allow space-separated default
+# figures to build: CLI args, else both by default
 read -r -a FIGS <<< "${*:-meanflow_training meanflow_inference}"
 for name in "${FIGS[@]}"; do
   echo "==> $name"

@@ -1,0 +1,217 @@
+\begin{thebibliography}{28}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Andrychowicz et~al.(2023)Andrychowicz, Espeholt, Li, Merchant, Merose,
+  Zyda, Agrawal, and Kalchbrenner]{andrychowicz2023metnet3}
+M.~Andrychowicz, L.~Espeholt, D.~Li, S.~Merchant, A.~Merose, F.~Zyda,
+  S.~Agrawal, and N.~Kalchbrenner.
+\newblock Deep learning for day forecasts from sparse observations.
+\newblock \emph{arXiv preprint arXiv:2306.06079}, 2023.
+
+\bibitem[Bi et~al.(2023)Bi, Xie, Zhang, Chen, Gu, and Tian]{bi2023pangu}
+K.~Bi, L.~Xie, H.~Zhang, X.~Chen, X.~Gu, and Q.~Tian.
+\newblock Accurate medium-range global weather forecasting with 3{D} neural
+  networks.
+\newblock \emph{Nature}, 619:\penalty0 533--538, 2023.
+
+\bibitem[Chen et~al.(2018)Chen, Rubanova, Bettencourt, and
+  Duvenaud]{chen2018node}
+R.~T.~Q. Chen, Y.~Rubanova, J.~Bettencourt, and D.~K. Duvenaud.
+\newblock Neural ordinary differential equations.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2018.
+
+\bibitem[Espeholt et~al.(2022)Espeholt, Agrawal, S{\o}nderby, Kumar, Heek,
+  Bromberg, Gazen, Carver, Andrychowicz, Hickey, Bell, and
+  Kalchbrenner]{espeholt2022metnet2}
+L.~Espeholt, S.~Agrawal, C.~K. S{\o}nderby, M.~Kumar, J.~Heek, C.~Bromberg,
+  C.~Gazen, R.~Carver, M.~Andrychowicz, J.~Hickey, A.~Bell, and
+  N.~Kalchbrenner.
+\newblock Deep learning for twelve hour precipitation forecasts.
+\newblock \emph{Nature Communications}, 13, 2022.
+
+\bibitem[Geng et~al.(2025)Geng, Deng, Bai, Kolter, and He]{geng2025meanflow}
+Z.~Geng, M.~Deng, X.~Bai, J.~Z. Kolter, and K.~He.
+\newblock Mean flows for one-step generative modeling.
+\newblock \emph{arXiv preprint arXiv:2505.13447}, 2025.
+
+\bibitem[Hersbach et~al.(2020)Hersbach, Bell, Berrisford, Hirahara,
+  Hor{\'a}nyi, Mu{\~n}oz-Sabater, Nicolas, Peubey, Radu, Schepers, Simmons,
+  Soci, Abdalla, Abellan, Balsamo, Bechtold, Biavati, Bidlot, Bonavita, Chiara,
+  Dahlgren, Dee, Diamantakis, Dragani, Flemming, Forbes, Fuentes, Geer,
+  Haimberger, Healy, Hogan, H{\'o}lm, Janiskov{\'a}, Keeley, Laloyaux, Lopez,
+  Lupu, Radnoti, de~Rosnay, Rozum, Vamborg, Villaume, and
+  Th{\'e}paut]{hersbach2020era5}
+H.~Hersbach, B.~Bell, P.~Berrisford, S.~Hirahara, A.~Hor{\'a}nyi,
+  J.~Mu{\~n}oz-Sabater, J.~Nicolas, C.~Peubey, R.~Radu, D.~Schepers,
+  A.~Simmons, C.~Soci, S.~Abdalla, X.~Abellan, G.~Balsamo, P.~Bechtold,
+  G.~Biavati, J.~Bidlot, M.~Bonavita, G.~D. Chiara, P.~Dahlgren, D.~Dee,
+  M.~Diamantakis, R.~Dragani, J.~Flemming, R.~Forbes, M.~Fuentes, A.~Geer,
+  L.~Haimberger, S.~Healy, R.~J. Hogan, E.~H{\'o}lm, M.~Janiskov{\'a},
+  S.~Keeley, P.~Laloyaux, P.~Lopez, C.~Lupu, G.~Radnoti, P.~de~Rosnay,
+  I.~Rozum, F.~Vamborg, S.~Villaume, and J.-N. Th{\'e}paut.
+\newblock The {ERA5} global reanalysis.
+\newblock \emph{Quarterly Journal of the Royal Meteorological Society},
+  146\penalty0 (730):\penalty0 1999--2049, 2020.
+
+\bibitem[Ho and Salimans(2022)]{ho2022cfg}
+J.~Ho and T.~Salimans.
+\newblock Classifier-free diffusion guidance.
+\newblock \emph{arXiv preprint arXiv:2207.12598}, 2022.
+
+\bibitem[Ho et~al.(2020)Ho, Jain, and Abbeel]{ho2020ddpm}
+J.~Ho, A.~Jain, and P.~Abbeel.
+\newblock Denoising diffusion probabilistic models.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2020.
+
+\bibitem[Karras et~al.(2022)Karras, Aittala, Aila, and
+  Laine]{karras2022elucidating}
+T.~Karras, M.~Aittala, T.~Aila, and S.~Laine.
+\newblock Elucidating the design space of diffusion-based generative models.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2022.
+
+\bibitem[Lam et~al.(2023)Lam, Sanchez-Gonzalez, Willson, Wirnsberger,
+  Fortunato, Alet, Ravuri, Ewalds, Eaton-Rosen, Hu, Merose, Hoyer, Holland,
+  Vinyals, Stott, Pritzel, Mohamed, and Battaglia]{lam2023graphcast}
+R.~Lam, A.~Sanchez-Gonzalez, M.~Willson, P.~Wirnsberger, M.~Fortunato, F.~Alet,
+  S.~Ravuri, T.~Ewalds, Z.~Eaton-Rosen, W.~Hu, A.~Merose, S.~Hoyer, G.~Holland,
+  O.~Vinyals, J.~Stott, A.~Pritzel, S.~Mohamed, and P.~Battaglia.
+\newblock Learning skillful medium-range global weather forecasting.
+\newblock \emph{Science}, 382\penalty0 (6677):\penalty0 1416--1421, 2023.
+
+\bibitem[Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le]{lipman2023flow}
+Y.~Lipman, R.~T.~Q. Chen, H.~Ben-Hamu, M.~Nickel, and M.~Le.
+\newblock Flow matching for generative modeling.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
+\bibitem[Liu et~al.(2023)Liu, Gong, and Liu]{liu2022rectifiedflow}
+X.~Liu, C.~Gong, and Q.~Liu.
+\newblock Flow straight and fast: Learning to generate and transfer data with
+  rectified flow.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
+\bibitem[Lu et~al.(2022)Lu, Zhou, Bao, Chen, Li, and Zhu]{lu2022dpmsolver}
+C.~Lu, Y.~Zhou, F.~Bao, J.~Chen, C.~Li, and J.~Zhu.
+\newblock {DPM-Solver}: A fast {ODE} solver for diffusion probabilistic model
+  sampling in around 10 steps.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2022.
+
+\bibitem[Pathak et~al.(2022)Pathak, Subramanian, Harrington, Raja,
+  Chattopadhyay, Mardani, Kurth, Hall, Li, Azizzadenesheli, Hassanzadeh,
+  Kashinath, and Anandkumar]{pathak2022fourcastnet}
+J.~Pathak, S.~Subramanian, P.~Harrington, S.~Raja, A.~Chattopadhyay,
+  M.~Mardani, T.~Kurth, D.~Hall, Z.~Li, K.~Azizzadenesheli, P.~Hassanzadeh,
+  K.~Kashinath, and A.~Anandkumar.
+\newblock {FourCastNet}: A global data-driven high-resolution weather model
+  using adaptive {Fourier} neural operators.
+\newblock \emph{arXiv preprint arXiv:2202.11214}, 2022.
+
+\bibitem[Pathak et~al.(2024)Pathak, Cohen, Garg, Harrington, Brenowitz, Durran,
+  Mardani, Vahdat, Xu, Kashinath, and Pritchard]{pathak2024stormcast}
+J.~Pathak, Y.~Cohen, P.~Garg, P.~Harrington, N.~Brenowitz, D.~Durran,
+  M.~Mardani, A.~Vahdat, S.~Xu, K.~Kashinath, and M.~Pritchard.
+\newblock Kilometer-scale convection allowing model emulation using generative
+  diffusion modeling.
+\newblock \emph{arXiv preprint arXiv:2408.10958}, 2024.
+
+\bibitem[Price et~al.(2024)Price, Sanchez-Gonzalez, Alet, Andersson, El-Kadi,
+  Masters, Ewalds, Stott, Mohamed, Battaglia, Lam, and
+  Willson]{price2024gencast}
+I.~Price, A.~Sanchez-Gonzalez, F.~Alet, T.~R. Andersson, A.~El-Kadi,
+  D.~Masters, T.~Ewalds, J.~Stott, S.~Mohamed, P.~Battaglia, R.~Lam, and
+  M.~Willson.
+\newblock Probabilistic weather forecasting with machine learning.
+\newblock \emph{Nature}, 2024.
+
+\bibitem[Ravuri et~al.(2021)Ravuri, Lenc, Willson, Kangin, Lam, Mirowski,
+  Fitzsimons, Athanassiadou, Kashem, Madge, Prudden, Mandhane, Clark, Brock,
+  Simonyan, Hadsell, Robinson, Clancy, Arribas, and Mohamed]{ravuri2021dgmr}
+S.~Ravuri, K.~Lenc, M.~Willson, D.~Kangin, R.~Lam, P.~Mirowski, M.~Fitzsimons,
+  M.~Athanassiadou, S.~Kashem, S.~Madge, R.~Prudden, A.~Mandhane, A.~Clark,
+  A.~Brock, K.~Simonyan, R.~Hadsell, N.~Robinson, E.~Clancy, A.~Arribas, and
+  S.~Mohamed.
+\newblock Skilful precipitation nowcasting using deep generative models of
+  radar.
+\newblock \emph{Nature}, 597:\penalty0 672--677, 2021.
+
+\bibitem[Ribeiro and Pucer(2025)]{ribeiro2025flowcast}
+B.~P. Ribeiro and J.~F. Pucer.
+\newblock {FlowCast}: Advancing precipitation nowcasting with conditional flow
+  matching.
+\newblock \emph{arXiv preprint}, 2025.
+
+\bibitem[Roberts and Lean(2008)]{roberts2008fss}
+N.~M. Roberts and H.~W. Lean.
+\newblock Scale-selective verification of rainfall accumulations from
+  high-resolution forecasts of convective events.
+\newblock \emph{Monthly Weather Review}, 136\penalty0 (1):\penalty0 78--97,
+  2008.
+
+\bibitem[Salimans and Ho(2022)]{salimans2022progressive}
+T.~Salimans and J.~Ho.
+\newblock Progressive distillation for fast sampling of diffusion models.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2022.
+
+\bibitem[Sauer et~al.(2023)Sauer, Lorenz, Blattmann, and Rombach]{sauer2023add}
+A.~Sauer, D.~Lorenz, A.~Blattmann, and R.~Rombach.
+\newblock Adversarial diffusion distillation.
+\newblock \emph{arXiv preprint arXiv:2311.17042}, 2023.
+
+\bibitem[Schaefer(1990)]{schaefer1990csi}
+J.~T. Schaefer.
+\newblock The critical success index as an indicator of warning skill.
+\newblock \emph{Weather and Forecasting}, 5\penalty0 (4):\penalty0 570--575,
+  1990.
+
+\bibitem[S{\o}nderby et~al.(2020)S{\o}nderby, Espeholt, Heek, Dehghani, Oliver,
+  Salimans, Agrawal, Hickey, and Kalchbrenner]{sonderby2020metnet}
+C.~K. S{\o}nderby, L.~Espeholt, J.~Heek, M.~Dehghani, A.~Oliver, T.~Salimans,
+  S.~Agrawal, J.~Hickey, and N.~Kalchbrenner.
+\newblock {MetNet}: A neural weather model for precipitation forecasting.
+\newblock \emph{arXiv preprint arXiv:2003.12140}, 2020.
+
+\bibitem[Song et~al.(2021{\natexlab{a}})Song, Meng, and Ermon]{song2021ddim}
+J.~Song, C.~Meng, and S.~Ermon.
+\newblock Denoising diffusion implicit models.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2021{\natexlab{a}}.
+
+\bibitem[Song and Dhariwal(2023)]{song2023improved}
+Y.~Song and P.~Dhariwal.
+\newblock Improved techniques for training consistency models.
+\newblock \emph{arXiv preprint arXiv:2310.14189}, 2023.
+
+\bibitem[Song et~al.(2021{\natexlab{b}})Song, Sohl-Dickstein, Kingma, Kumar,
+  Ermon, and Poole]{song2021scoresde}
+Y.~Song, J.~Sohl-Dickstein, D.~P. Kingma, A.~Kumar, S.~Ermon, and B.~Poole.
+\newblock Score-based generative modeling through stochastic differential
+  equations.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2021{\natexlab{b}}.
+
+\bibitem[Song et~al.(2023)Song, Dhariwal, Chen, and
+  Sutskever]{song2023consistency}
+Y.~Song, P.~Dhariwal, M.~Chen, and I.~Sutskever.
+\newblock Consistency models.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2023.
+
+\bibitem[Tong et~al.(2024)Tong, Fatras, Malkin, Huguet, Zhang, Rector-Brooks,
+  Wolf, and Bengio]{tong2024improving}
+A.~Tong, K.~Fatras, N.~Malkin, G.~Huguet, Y.~Zhang, J.~Rector-Brooks, G.~Wolf,
+  and Y.~Bengio.
+\newblock Improving and generalizing flow-based generative models with
+  minibatch optimal transport.
+\newblock \emph{Transactions on Machine Learning Research}, 2024.
+
+\end{thebibliography}
