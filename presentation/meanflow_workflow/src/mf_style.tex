@@ -1,0 +1,45 @@
+% Shared MeanFlow-StormCast workflow style.
+% Palette = thesis viridis convention (mirrors make_method_figures.py /
+% build_formulas.py): borders at viridis ramp positions, fills tinted to white.
+\usepackage{amsmath,amssymb,bm}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds,shapes.geometric}
+
+% --- viridis-sampled palette (border / light fill) -------------------------
+\definecolor{cFrozen}{HTML}{481D6F}\definecolor{cFrozenF}{HTML}{EDE8F1} % frozen nets
+\definecolor{cSamp}{HTML}{355F8D}\definecolor{cSampF}{HTML}{EBEFF4}     % flow-space / sampler
+\definecolor{cFlow}{HTML}{287D8E}\definecolor{cFlowF}{HTML}{E9F2F4}     % trained MeanFlow net
+\definecolor{cLoss}{HTML}{1E9C89}\definecolor{cLossF}{HTML}{E9F5F3}     % loss terms
+\definecolor{cOut}{HTML}{26AD81}\definecolor{cOutF}{HTML}{E9F7F2}       % composition / output
+\definecolor{cData}{HTML}{737373}\definecolor{cDataF}{HTML}{F1F1F1}     % data / tensors
+\definecolor{cEdge}{HTML}{5A5A5A}
+
+\tikzset{
+  base/.style   ={rounded corners=3pt, draw, line width=0.9pt, align=center,
+                  inner sep=5pt, font=\small, text=black!88},
+  data/.style   ={base, draw=cData,   fill=cDataF},
+  frozen/.style ={base, draw=cFrozen, fill=cFrozenF},
+  trained/.style={base, draw=cFlow,   fill=cFlowF},
+  sampler/.style={base, draw=cSamp,   fill=cSampF},
+  loss/.style   ={base, draw=cLoss,   fill=cLossF},
+  output/.style ={base, draw=cOut,    fill=cOutF},
+  total/.style  ={base, draw=black!80, fill=black!7, line width=1.1pt},
+  flow/.style   ={-{Stealth[length=2.4mm]}, line width=0.9pt, draw=cEdge},
+  thin flow/.style={-{Stealth[length=2.0mm]}, line width=0.7pt, draw=cData},
+  feedback/.style={-{Stealth[length=2.4mm]}, line width=0.9pt, draw=cData,
+                  dashed, dash pattern=on 4pt off 3pt},
+  emaedge/.style={-{Stealth[length=2.2mm]}, line width=0.8pt, draw=cData,
+                  dashed, dash pattern=on 3pt off 2.5pt},
+  container/.style={rounded corners=6pt, draw=black!35, line width=0.8pt,
+                  dashed, dash pattern=on 3pt off 2.5pt, fill=black!2,
+                  inner sep=8pt},
+  ttl/.style    ={font=\bfseries\large, text=black!85},
+  sub/.style    ={font=\itshape\footnotesize, text=black!55},
+  lg/.style     ={font=\scriptsize, text=black!60},
+}
+
+% legend swatch helper
+\newcommand{\swatch}[2]{%
+  \tikz[baseline=-0.5ex]\node[rounded corners=1.5pt, draw=#1, fill=#1!12,
+    line width=0.9pt, minimum width=3.4mm, minimum height=2.6mm, inner sep=0]{};\;#2}
