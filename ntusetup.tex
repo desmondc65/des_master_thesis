@@ -11,8 +11,8 @@
   college*      = {College of Electrical Engineering and Computer Science},
   institute     = {資訊網路與多媒體研究所},
   institute*    = {Graduate Institute of Networking and Multimedia},
-  title         = {以條件流匹配加速區域尺度 StormCast：應用於臺灣對流尺度天氣預報的單階段流匹配殘差生成模型},
-  title*        = {Accelerating Regional StormCast with Conditional Flow Matching: \\ A Single-Run Flow-Matching Residual Forecaster for \\ Taiwan Convective-Scale Weather Prediction},
+  title         = {以平均速度流匹配（MeanFlow）進行公里尺度容許對流模式之生成式模擬：應用於臺灣對流尺度天氣預報的一至二步殘差生成},
+  title*        = {Kilometer-Scale Convection-Allowing Model Emulation \\ using Average-Velocity Flow Matching: \\ One- to Two-Step MeanFlow Residual Generation for \\ Taiwan Convective-Scale Weather Prediction},
   author        = {鍾鎮嶸},
   author*       = {Desmond Cheong Zheng Yong},
   ID            = {R13944064},
@@ -21,8 +21,8 @@
   % date          = {2026-06-01},
   % oral-date     = {2026-06-01},
   DOI           = {10.6342/NTU202601285},
-  keywords      = {流匹配, 條件流匹配, 擴散模型, 生成式天氣預報, 對流尺度預報, 降水臨近預報, StormCast},
-  keywords*     = {Flow Matching, Conditional Flow Matching, Diffusion Models, Generative Weather Forecasting, Convective-Scale Forecasting, Precipitation Nowcasting, StormCast},
+  keywords      = {平均速度流匹配, MeanFlow, 流匹配, 擴散模型, 單步生成, 生成式天氣預報, 對流尺度預報, 降水臨近預報, StormCast},
+  keywords*     = {MeanFlow, Average-Velocity Flow Matching, Flow Matching, Diffusion Models, One-Step Generation, Generative Weather Forecasting, Convective-Scale Forecasting, Precipitation Nowcasting, StormCast},
 }
 
 % --------------------------------------------------
@@ -57,5 +57,6 @@
 \newcommand{\Dnet}{D_{\theta}}
 \newcommand{\Dedm}{D_{\psi}}          % EDM diffusion baseline denoiser
 \newcommand{\Dteach}{D_{\psi}}        % legacy alias, kept for back-compat
-\newcommand{\vnet}{v_{\theta}}        % FlowCast velocity field
+\newcommand{\vnet}{v_{\theta}}        % FlowCast (I-CFM baseline) instantaneous velocity field
+\newcommand{\unet}{u_{\theta}}        % MeanFlow average-velocity field
 \newcommand{\Freg}{F_{\xi}}

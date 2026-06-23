@@ -4,9 +4,11 @@
 
 \item[NWP]{Numerical Weather Prediction}
 \item[RWRF]{Regional Weather Research and Forecasting (Taiwan domain reanalysis)}
-\item[EDM]{Elucidated Diffusion Model (Karras et al., 2022)}
+\item[EDM]{Elucidated Diffusion Model (Karras et al., 2022); the reference diffusion baseline}
 \item[CFM]{Conditional Flow Matching}
-\item[I-CFM]{Independent Conditional Flow Matching}
+\item[I-CFM]{Independent Conditional Flow Matching (the FlowCast baseline objective)}
+\item[MeanFlow]{Average-velocity flow matching (Geng et al., 2025); the method of this thesis}
+\item[JVP]{Jacobian--vector product (forward-mode, used for the MeanFlow target)}
 \item[ODE]{Ordinary Differential Equation}
 \item[PF-ODE]{Probability-Flow Ordinary Differential Equation}
 \item[SDE]{Stochastic Differential Equation}
@@ -25,18 +27,21 @@
 \item[$\Freg$]{Deterministic regression network producing mean $M_t = \Freg(X_{t-1}, S_t, I)$.}
 \item[$M_t$]{Regression mean prediction.}
 \item[$R_t$]{Residual $R_t = X_t - M_t$ learned by the generative head.}
-\item[$c$]{Conditioning bundle for the generative head. Both the EDM baseline and FlowCast use $\mathrm{concat}(X_{t-1}, M_t, I)$; the original StormCast additionally concatenates the low-resolution background $S_t$.}
+\item[$c$]{Conditioning bundle for the generative head. All three heads (EDM diffusion, FlowCast, MeanFlow) use $\mathrm{concat}(X_{t-1}, M_t, I)$; the original StormCast additionally concatenates the low-resolution background $S_t$.}
 \item[$\Dedm$]{EDM diffusion baseline denoiser (EDMPrecond SongUNet).}
-\item[$\vnet$]{FlowCast velocity field (FlowCastPrecond SongUNet).}
+\item[$\vnet$]{FlowCast (I-CFM baseline) instantaneous velocity field (FlowCastPrecond SongUNet).}
+\item[$\unet$]{MeanFlow average-velocity field $u_\theta(z, r, t, c)$ (MeanFlowPrecond SongUNet); the network of this thesis.}
 \item[$\sigma$]{EDM noise level.}
 \item[$\sigma_{\min},\sigma_{\max}$]{Minimum and maximum EDM noise levels (0.002 and 80).}
-\item[$\sigma_{\text{data}}$]{Data standard-deviation hyperparameter shared by EDM and FlowCast (0.5).}
+\item[$\sigma_{\text{data}}$]{Data standard-deviation hyperparameter shared by all three heads (0.5).}
 \item[$\rho$]{Karras schedule exponent (7).}
-\item[$t$]{FlowCast flow time, $t \in [0, 1]$ (noise at $t=0$, data at $t=1$).}
+\item[$t$ (or $r,t$)]{Flow time, in $[0, 1]$ (noise at $0$, data at $1$). MeanFlow uses an interval $[r, t]$ with state time $r \le t$.}
 \item[$x_0, x_1$]{Flow endpoints: prior sample $x_0 \sim \Nbb(0,I)$ and standardised residual $x_1 = R_t/\sigma_{\text{data}}$.}
-\item[$u_t$]{Target velocity field of Independent CFM, $u_t = x_1 - x_0$.}
-\item[$\sigma_{\text{path}}$]{I-CFM conditional-path standard deviation (0.01).}
-\item[$K$]{Number of ODE sampling steps (Euler), equal to the NFE of FlowCast.}
+\item[$v$]{Instantaneous (I-CFM) velocity field; conditional target $v = x_1 - x_0$.}
+\item[$u(z_r, r, t)$]{Average velocity of the flow over $[r, t]$; the field MeanFlow learns. $\lim_{t\to r} u = v$.}
+\item[$\rho_{\text{MF}}$]{MeanFlow ratio: fraction of each batch with $r < t$ (the bootstrapped branch); $0.25$.}
+\item[$\sigma_{\text{path}}$]{I-CFM conditional-path standard deviation (0.01; MeanFlow uses the pure interpolant, $\sigma_{\text{path}}=0$).}
+\item[$K$]{Number of sampling network evaluations (NFE): Euler steps for FlowCast, average-velocity segments for MeanFlow.}
 \item[$\beta_k$]{Per-channel loss weight; $w_{\text{pr}} = \beta_{\texttt{qpepre}}$ is the precipitation weight.}
 \item[$\lambda_{\text{spec}}$]{Weight of the radial log-PSD spectral regulariser.}
 \item[$P(\kappa)$]{Radial power spectral density at wavenumber $\kappa$.}

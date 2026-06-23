@@ -3,151 +3,7 @@
 \appendix{C}{Detailed Derivations}
 \label{app:derivations}
 
-This appendix collects full line-by-line derivations of every identity used in Chapter~\ref{ch:background} without passing through to the literature. The goal is that any reader with a working knowledge of multivariate Gaussians, Jensen's inequality, and basic It\^o calculus can reconstruct the tractable training objective of DDPM, DDIM, EDM, and Flow Matching from scratch. Notation in each section is local; all symbols have the same meaning as in Chapter~\ref{ch:background} unless otherwise specified.
-
-% ==================================================
-\section{DDPM Forward-Process Marginals}
-\label{app:ddpm-marginal}
-
-The DDPM forward process is a Markov chain with Gaussian transitions
-\begin{equation*}
-  q(x_t \mid x_{t-1}) = \Nbb\bigl(\sqrt{1 - \beta_t}\,x_{t-1},\; \beta_t I\bigr),
-  \qquad t = 1, \ldots, T,
-\end{equation*}
-with $\{\beta_t\} \in (0, 1)$ a fixed variance schedule. Write $\alpha_t = 1 - \beta_t$ and $\bar\alpha_t = \prod_{s=1}^{t}\alpha_s$. We claim
-\begin{equation}
-  q(x_t \mid x_0) = \Nbb\bigl(\sqrt{\bar\alpha_t}\,x_0,\; (1 - \bar\alpha_t) I\bigr).
-  \label{eq:app-marginal-claim}
-\end{equation}
-
-\paragraph{Proof by induction on $t$.} For $t = 1$, Equation~\eqref{eq:app-marginal-claim} is precisely the definition of $q(x_1 \mid x_0)$. Assume it holds for some $t \geq 1$. One step of the forward chain writes
-\begin{align*}
-  x_{t+1} &= \sqrt{\alpha_{t+1}}\,x_t + \sqrt{\beta_{t+1}}\,\epsilon_{t+1},\\
-  x_t &= \sqrt{\bar\alpha_t}\,x_0 + \sqrt{1 - \bar\alpha_t}\,\bar\epsilon_t,
-\end{align*}
-with $\epsilon_{t+1} \sim \Nbb(0, I)$ independent of $\bar\epsilon_t \sim \Nbb(0, I)$ (the second line is the inductive hypothesis rewritten as a reparameterisation). Substituting,
-\begin{align*}
-  x_{t+1} &= \sqrt{\alpha_{t+1}\bar\alpha_t}\,x_0 + \sqrt{\alpha_{t+1}(1 - \bar\alpha_t)}\,\bar\epsilon_t + \sqrt{\beta_{t+1}}\,\epsilon_{t+1}\\
-  &= \sqrt{\bar\alpha_{t+1}}\,x_0 + \underbrace{\sqrt{\alpha_{t+1}(1 - \bar\alpha_t)}\,\bar\epsilon_t + \sqrt{1 - \alpha_{t+1}}\,\epsilon_{t+1}}_{=: \xi_{t+1}}.
-\end{align*}
-The term $\xi_{t+1}$ is a sum of two independent zero-mean Gaussians, hence Gaussian, with variance
-\begin{equation*}
-  \mathrm{Var}(\xi_{t+1}) = \alpha_{t+1}(1 - \bar\alpha_t) + (1 - \alpha_{t+1}) = 1 - \alpha_{t+1}\bar\alpha_t = 1 - \bar\alpha_{t+1}.
-\end{equation*}
-Therefore $x_{t+1} = \sqrt{\bar\alpha_{t+1}}\,x_0 + \sqrt{1 - \bar\alpha_{t+1}}\,\epsilon$ for some $\epsilon \sim \Nbb(0, I)$, which is~\eqref{eq:app-marginal-claim} at time $t+1$. \qed
-
-This closed form is the first tractability result: the marginals are known analytically at every time, so training can sample $(x_t, x_0, \epsilon)$ in one line rather than simulating the chain.
-
-% ==================================================
-\section{DDPM Posterior $q(x_{t-1} \mid x_t, x_0)$}
-\label{app:ddpm-posterior}
-
-Using Bayes' rule,
-\begin{equation*}
-  q(x_{t-1} \mid x_t, x_0) \propto q(x_t \mid x_{t-1})\,q(x_{t-1} \mid x_0).
-\end{equation*}
-Both factors are Gaussian:
-\begin{align*}
-  \log q(x_t \mid x_{t-1}) &= -\frac{1}{2\beta_t}\,\|x_t - \sqrt{\alpha_t}\,x_{t-1}\|^2 + \text{const},\\
-  \log q(x_{t-1} \mid x_0) &= -\frac{1}{2(1 - \bar\alpha_{t-1})}\,\|x_{t-1} - \sqrt{\bar\alpha_{t-1}}\,x_0\|^2 + \text{const}.
-\end{align*}
-Adding and collecting terms in $x_{t-1}$ produces a quadratic form $-\tfrac{1}{2\tilde\beta_t}\|x_{t-1} - \tilde\mu_t\|^2 + \text{const}$, from which we can read off $\tilde\beta_t$ from the coefficient of $\|x_{t-1}\|^2$ and $\tilde\mu_t$ from the linear term.
-
-\paragraph{Variance.} The coefficient of $\|x_{t-1}\|^2$ is
-\begin{equation*}
-  \frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar\alpha_{t-1}} = \frac{\alpha_t(1 - \bar\alpha_{t-1}) + \beta_t}{\beta_t(1 - \bar\alpha_{t-1})} = \frac{1 - \bar\alpha_t}{\beta_t(1 - \bar\alpha_{t-1})},
-\end{equation*}
-so
-\begin{equation}
-  \tilde\beta_t = \frac{\beta_t(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t}.
-  \label{eq:app-tildebeta}
-\end{equation}
-
-\paragraph{Mean.} The linear-in-$x_{t-1}$ term contributes
-\begin{equation*}
-  \frac{\sqrt{\alpha_t}}{\beta_t}\,x_t\,x_{t-1} + \frac{\sqrt{\bar\alpha_{t-1}}}{1 - \bar\alpha_{t-1}}\,x_0\,x_{t-1},
-\end{equation*}
-from which, equating with $\tilde\mu_t / \tilde\beta_t$,
-\begin{equation}
-  \tilde\mu_t(x_t, x_0) = \frac{\sqrt{\alpha_t}(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t}\,x_t + \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1 - \bar\alpha_t}\,x_0.
-  \label{eq:app-tildemu}
-\end{equation}
-Equations~\eqref{eq:app-tildebeta} and \eqref{eq:app-tildemu} recover Equation~\eqref{eq:ddpm-posterior-params} of the main text.
-
-% ==================================================
-\section{DDPM Variational Bound (ELBO)}
-\label{app:ddpm-elbo}
-
-For any distribution $q(x_{1:T} \mid x_0)$, Jensen's inequality gives
-\begin{equation*}
-  -\log p_\theta(x_0) \leq \Ebb_{q(x_{1:T} \mid x_0)}\!\left[-\log \frac{p_\theta(x_{0:T})}{q(x_{1:T} \mid x_0)}\right] = \Ebb_q\!\left[\log \frac{q(x_{1:T} \mid x_0)}{p_\theta(x_{0:T})}\right].
-\end{equation*}
-Choosing $q(x_{1:T} \mid x_0)$ as the DDPM forward chain and $p_\theta(x_{0:T}) = p(x_T)\prod_{t=1}^{T} p_\theta(x_{t-1} \mid x_t)$ as the learned reverse chain, the ratio factors:
-\begin{equation*}
-  \log \frac{q(x_{1:T} \mid x_0)}{p_\theta(x_{0:T})} = -\log p(x_T) + \sum_{t=1}^{T} \log \frac{q(x_t \mid x_{t-1})}{p_\theta(x_{t-1} \mid x_t)}.
-\end{equation*}
-Using the Markov property $q(x_t \mid x_{t-1}) = q(x_t \mid x_{t-1}, x_0)$ and Bayes' rule,
-\begin{equation*}
-  q(x_t \mid x_{t-1}, x_0) = \frac{q(x_{t-1} \mid x_t, x_0)\,q(x_t \mid x_0)}{q(x_{t-1} \mid x_0)},
-\end{equation*}
-so for $t \geq 2$
-\begin{equation*}
-  \log \frac{q(x_t \mid x_{t-1})}{p_\theta(x_{t-1} \mid x_t)} = \log \frac{q(x_{t-1} \mid x_t, x_0)}{p_\theta(x_{t-1} \mid x_t)} + \log \frac{q(x_t \mid x_0)}{q(x_{t-1} \mid x_0)}.
-\end{equation*}
-Telescoping the second term across $t = 2, \ldots, T$ gives $\log q(x_T \mid x_0) - \log q(x_1 \mid x_0)$. Collecting all the pieces,
-\begin{equation*}
-  -\log p_\theta(x_0) \leq \Ebb_q\!\Big[\underbrace{D_{\text{KL}}\bigl(q(x_T \mid x_0)\,\|\,p(x_T)\bigr)}_{L_T} + \sum_{t=2}^{T}\underbrace{D_{\text{KL}}\bigl(q(x_{t-1} \mid x_t, x_0)\,\|\,p_\theta(x_{t-1} \mid x_t)\bigr)}_{L_{t-1}} - \underbrace{\log p_\theta(x_0 \mid x_1)}_{L_0}\Big],
-\end{equation*}
-which is Equation~\eqref{eq:ddpm-elbo} of the main text.
-
-Two practical simplifications are available:
-\begin{enumerate}
-  \item $L_T$ contains no learnable parameter. Because $\bar\alpha_T \to 0$ for a well-designed schedule, $q(x_T \mid x_0) \to \Nbb(0, I) = p(x_T)$ and $L_T \to 0$.
-  \item $L_0$ is a discrete log-likelihood. \citet{ho2020ddpm} treat it as a separate decoder term, which in practice is subsumed by the common $\epsilon$-MSE loss at $t = 1$.
-\end{enumerate}
-
-% ==================================================
-\section{DDPM Simplified $\epsilon$-Loss}
-\label{app:ddpm-simple}
-
-We now collapse the middle-sum terms of the ELBO into an MSE.
-
-\paragraph{KL between two Gaussians with matched covariance.} For two Gaussians $p = \Nbb(\mu_p, \Sigma)$ and $q = \Nbb(\mu_q, \Sigma)$ with the \emph{same} covariance,
-\begin{equation}
-  D_{\text{KL}}(p \| q) = \tfrac{1}{2}\,(\mu_p - \mu_q)^{\top}\Sigma^{-1}(\mu_p - \mu_q).
-  \label{eq:app-gaussian-kl}
-\end{equation}
-DDPM takes $p_\theta(x_{t-1} \mid x_t) = \Nbb(\mu_\theta(x_t, t),\,\tilde\beta_t I)$, matching the posterior variance~\eqref{eq:app-tildebeta}. Then
-\begin{equation*}
-  L_{t-1} = \frac{1}{2\tilde\beta_t}\,\Ebb_q\!\bigl[\|\tilde\mu_t(x_t, x_0) - \mu_\theta(x_t, t)\|^2\bigr] + \text{const}.
-\end{equation*}
-
-\paragraph{Reparameterisation in $\epsilon$.} From $x_t = \sqrt{\bar\alpha_t}x_0 + \sqrt{1 - \bar\alpha_t}\epsilon$ we have $x_0 = (x_t - \sqrt{1 - \bar\alpha_t}\epsilon)/\sqrt{\bar\alpha_t}$. Substituting into Equation~\eqref{eq:app-tildemu},
-\begin{align*}
-  \tilde\mu_t(x_t, x_0) &= \frac{\sqrt{\alpha_t}(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t}\,x_t + \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1 - \bar\alpha_t}\cdot\frac{x_t - \sqrt{1 - \bar\alpha_t}\epsilon}{\sqrt{\bar\alpha_t}}\\
-  &= \frac{1}{\sqrt{\alpha_t}}\left(\,x_t - \frac{\beta_t}{\sqrt{1 - \bar\alpha_t}}\,\epsilon\,\right),
-\end{align*}
-where the last simplification uses $\bar\alpha_t = \alpha_t \bar\alpha_{t-1}$ and collects the two coefficients of $x_t$. This motivates parameterising $\mu_\theta$ through an \emph{$\epsilon$-predictor} $\epsilon_\theta(x_t, t)$ with the same functional form,
-\begin{equation*}
-  \mu_\theta(x_t, t) = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1 - \bar\alpha_t}}\,\epsilon_\theta(x_t, t)\right).
-\end{equation*}
-Substituting both expressions back into $L_{t-1}$,
-\begin{equation*}
-  L_{t-1} = \frac{\beta_t^2}{2\tilde\beta_t\,\alpha_t(1 - \bar\alpha_t)}\,\Ebb_{x_0, \epsilon}\!\bigl[\|\epsilon - \epsilon_\theta(x_t, t)\|^2\bigr] + \text{const}.
-\end{equation*}
-\citet{ho2020ddpm} report that dropping the $t$-dependent prefactor and averaging over $t \sim \mathcal{U}(\{1, \ldots, T\})$ gives a numerically better-behaved objective empirically, yielding Equation~\eqref{eq:ddpm-simple}:
-\begin{equation}
-  \mathcal{L}_{\text{simple}} = \Ebb_{t, x_0, \epsilon}\bigl[\|\epsilon - \epsilon_\theta(\sqrt{\bar\alpha_t}x_0 + \sqrt{1 - \bar\alpha_t}\epsilon,\;t)\|^2\bigr].
-  \label{eq:app-ddpm-simple}
-\end{equation}
-
-\paragraph{Why this is tractable in one forward pass.} The entire training procedure, given a minibatch $\{x_0^{(i)}\}$, is:
-\begin{enumerate}
-  \item Sample $t \sim \mathcal{U}(\{1, \ldots, T\})$ and $\epsilon \sim \Nbb(0, I)$.
-  \item Form $x_t = \sqrt{\bar\alpha_t}x_0 + \sqrt{1 - \bar\alpha_t}\epsilon$.
-  \item Compute $\|\epsilon - \epsilon_\theta(x_t, t)\|^2$ with one network evaluation.
-\end{enumerate}
-The chain is never simulated; neither the posterior nor the KL is materialised. This is the entire ``tractability'' story for DDPM.
+This appendix collects line-by-line derivations of the identities the method of this thesis rests on, without passing through to the literature. The goal is that any reader with a working knowledge of multivariate Gaussians and basic It\^o calculus can reconstruct, from scratch, the score--denoiser (Tweedie) identity and the probability-flow ODE that define the EDM diffusion baseline, the EDM preconditioning and noise schedule, the Conditional Flow Matching theorem and its straight-line Independent-CFM instantiation (the FlowCast baseline), and finally the MeanFlow average-velocity identity at the centre of the thesis. The discrete-time DDPM/DDIM machinery is omitted, as neither MeanFlow nor the continuous-time EDM baseline relies on it; the condensed summary in Chapter~\ref{ch:background} suffices for context. Notation in each section is local; all symbols have the same meaning as in Chapters~\ref{ch:background}--\ref{ch:method} unless otherwise specified.
 
 % ==================================================
 \section{Tweedie's Formula: Score and Denoiser}
@@ -199,55 +55,6 @@ Combining~\eqref{eq:app-pfode} with Tweedie~\eqref{eq:app-tweedie} gives the \em
   \label{eq:app-pfode-denoiser}
 \end{equation}
 which is the form that first-order (Euler / DDIM) and second-order (Heun) integrators actually evaluate at inference.
-
-% ==================================================
-\section{DDIM: Non-Markovian Forward and Deterministic Sampler}
-\label{app:ddim}
-
-\citet{song2021ddim} parameterise a family of forward processes that share the marginals $q(x_t \mid x_0) = \Nbb(\sqrt{\bar\alpha_t}x_0, (1-\bar\alpha_t)I)$ but are \emph{not} Markov:
-\begin{equation*}
-  q_\sigma(x_{t-1} \mid x_t, x_0) = \Nbb\Bigl(\mu_\sigma(x_t, x_0),\; \sigma_t^2 I\Bigr),
-\end{equation*}
-with $\sigma_t \in [0, \sqrt{\tilde\beta_t}]$ a free parameter (a standard deviation; $\sigma_t = \sqrt{\tilde\beta_t}$ recovers DDPM) and $\mu_\sigma$ to be determined.
-
-\paragraph{Determining $\mu_\sigma$.} Require that the induced $q_\sigma(x_t \mid x_0)$ matches the DDPM marginal $\Nbb(\sqrt{\bar\alpha_t}x_0,(1-\bar\alpha_t)I)$. The ansatz
-\begin{equation*}
-  \mu_\sigma(x_t, x_0) = \sqrt{\bar\alpha_{t-1}}\,x_0 + \sqrt{1 - \bar\alpha_{t-1} - \sigma_t^2}\,\frac{x_t - \sqrt{\bar\alpha_t}\,x_0}{\sqrt{1 - \bar\alpha_t}}
-\end{equation*}
-satisfies this requirement: write $x_{t-1} = \mu_\sigma + \sigma_t \xi$, substitute $x_t = \sqrt{\bar\alpha_t}x_0 + \sqrt{1-\bar\alpha_t}\epsilon$, and compute
-\begin{equation*}
-  x_{t-1} = \sqrt{\bar\alpha_{t-1}}x_0 + \sqrt{1 - \bar\alpha_{t-1} - \sigma_t^2}\,\epsilon + \sigma_t\xi.
-\end{equation*}
-The noise $\sqrt{1-\bar\alpha_{t-1}-\sigma_t^2}\epsilon + \sigma_t\xi$ has variance $1 - \bar\alpha_{t-1}$, matching the DDPM marginal at time $t-1$. The \emph{training objective}~\eqref{eq:app-ddpm-simple} depends only on the marginals, so a model trained under DDPM can be sampled under any member of this non-Markovian family.
-
-\paragraph{Deterministic limit.} Setting $\sigma_t = 0$ removes the per-step noise entirely and gives the DDIM update
-\begin{equation}
-  x_{t-1} = \sqrt{\bar\alpha_{t-1}}\,\hat x_0(x_t, t) + \sqrt{1 - \bar\alpha_{t-1}}\,\frac{x_t - \sqrt{\bar\alpha_t}\,\hat x_0(x_t, t)}{\sqrt{1 - \bar\alpha_t}},
-  \label{eq:app-ddim-vp}
-\end{equation}
-with $\hat x_0(x_t, t) = (x_t - \sqrt{1-\bar\alpha_t}\,\epsilon_\theta(x_t,t))/\sqrt{\bar\alpha_t}$.
-
-\paragraph{Variance-exploding form.} In the VE normalisation $x_\sigma = x_0 + \sigma\epsilon$, the DDPM coefficients become $\sqrt{\bar\alpha_t} \to 1$, $\sqrt{1 - \bar\alpha_t} \to \sigma_t$, and Equation~\eqref{eq:app-ddim-vp} simplifies to
-\begin{equation}
-  x_{\sigma'} = \hat x_0 + \sigma'\,\frac{x_\sigma - \hat x_0}{\sigma} = x_\sigma + (\sigma' - \sigma)\,\frac{x_\sigma - \hat x_0}{\sigma}.
-  \label{eq:app-ddim-ve}
-\end{equation}
-Recognising $(x_\sigma - \hat x_0)/\sigma = -\sigma\,\nabla_x \log p_\sigma$ as the PF-ODE velocity~\eqref{eq:app-pfode-denoiser}, Equation~\eqref{eq:app-ddim-ve} is exactly one step of explicit Euler on the PF-ODE. DDIM is therefore a first-order ODE integrator of the same flow that EDM's Heun sampler integrates to second order --- and the curvature of that flow is exactly what the straight-line FlowCast path of Appendix~\ref{app:icfm} removes.
-
-% ==================================================
-\section{Equivalence of $\epsilon$, $x_0$, and $v$ Parameterisations}
-\label{app:param-equivalence}
-
-Under the noising relation $x_t = \alpha_t x_0 + \sigma_t \epsilon$ (with $\alpha_t^2 + \sigma_t^2 = 1$ in the variance-preserving case and $\alpha_t = 1$ in the VE case), a network predicting one of $\{x_0, \epsilon, v\}$ can be converted linearly to the other two. \citet{salimans2022progressive} define
-\begin{equation}
-  v = \alpha_t\,\epsilon - \sigma_t\,x_0,
-  \label{eq:app-vpred}
-\end{equation}
-which gives the inverse relations
-\begin{equation*}
-  x_0 = \alpha_t\,x_t - \sigma_t\,v, \qquad \epsilon = \sigma_t\,x_t + \alpha_t\,v.
-\end{equation*}
-These linear maps commute with the MSE loss up to a $\sigma$-dependent weighting, so choosing one parameterisation rather than another does not change the optimum, only the conditioning of the optimiser. EDM uses $x_0$-prediction (via the preconditioning below); the $v$-prediction of \citet{salimans2022progressive} improves numerical stability near $\sigma \to 0$ and $\sigma \to \sigma_{\max}$; DDPM's $\mathcal{L}_{\text{simple}}$ uses $\epsilon$-prediction. The EDM diffusion baseline of this thesis (Chapter~\ref{ch:method}) operates on $x_0$-prediction; FlowCast, by contrast, regresses a velocity field directly and does not use any of these denoiser parameterisations.
 
 % ==================================================
 \section{EDM Preconditioning Derivation}
@@ -385,3 +192,51 @@ The adaptation used in Chapter~\ref{ch:method} applies I-CFM to the StormCast re
   \item \textbf{Endpoint clamp.} Training samples $t \sim \mathcal{U}(t_\varepsilon,\, 1 - t_\varepsilon)$ with $t_\varepsilon = 10^{-5}$. At $t = 0$ or $t = 1$ the conditional path collapses to a point mass and the Monte-Carlo loss gradient is unbounded; the clamp prevents numerical blow-ups at negligible bias cost.
 \end{enumerate}
 The resulting training loop differs from I-CFM only in these five bookkeeping details; the underlying theorem (\S\ref{app:cfm-theorem}) and path derivation (\S\ref{app:icfm}) carry over unchanged, and the sampler~\eqref{eq:flowcast-sampler} is the explicit Euler integrator of the straight-line ODE.
+
+% ==================================================
+\section{The MeanFlow Average-Velocity Identity}
+\label{app:meanflow-identity}
+
+This is the derivation behind the method of this thesis: the MeanFlow identity \citep{geng2025meanflow}, transcribed to the noise-at-$0$, data-at-$1$ convention used throughout (Section~\ref{sec:method-meanflow}). It turns an intractable path integral into a pointwise relation the network can be regressed against.
+
+\paragraph{Setup.} Work in the standardised residual space of \S\ref{app:flowcast-adaptation}: $x_1 = R_t/\sigma_{\text{data}}$ is the data endpoint, $x_0 \sim \Nbb(0, I)$ the prior, and the linear interpolant $z_s = (1 - s)\,x_0 + s\,x_1$ runs from noise at $s = 0$ to data at $s = 1$ along the trajectory $\dot z_s = v(z_s, s)$ with $v$ the (marginal) velocity field of \S\ref{app:icfm}. For two times $r \le t$ define the \emph{average velocity}
+\begin{equation}
+  u(z_r, r, t) \;\triangleq\; \frac{1}{t - r}\int_r^t v(z_\tau, \tau)\, d\tau,
+  \label{eq:app-mf-avgvel}
+\end{equation}
+the displacement of the flow over $[r, t]$ per unit time. Two immediate properties follow. First, the limit as $t \to r$ is the instantaneous velocity, $\lim_{t \to r} u(z_r, r, t) = v(z_r, r)$, by the fundamental theorem of calculus. Second, multiplying by $(t-r)$ makes transport across the interval a single algebraic step,
+\begin{equation}
+  z_t = z_r + (t - r)\, u(z_r, r, t),
+  \label{eq:app-mf-displacement}
+\end{equation}
+exactly and with no solver --- one evaluation at $(r, t) = (0, 1)$ maps noise to data. The catch is that~\eqref{eq:app-mf-avgvel} is an intractable integral, so $u$ cannot be regressed directly.
+
+\paragraph{Differentiating away the integral.} Clear the denominator in~\eqref{eq:app-mf-avgvel},
+\begin{equation*}
+  (t - r)\, u(z_r, r, t) \;=\; \int_r^t v(z_\tau, \tau)\, d\tau,
+\end{equation*}
+and differentiate both sides with respect to the \emph{state} time $r$, holding the \emph{horizon} time $t$ fixed. Along the trajectory the state moves with $dz_r/dr = v(z_r, r)$ and $dt/dr = 0$. The left-hand side, by the product rule, is
+\begin{equation*}
+  \frac{d}{dr}\Bigl[(t - r)\, u\Bigr] = -\,u(z_r, r, t) + (t - r)\,\frac{d}{dr}u(z_r, r, t).
+\end{equation*}
+The right-hand side, by the fundamental theorem of calculus applied to the \emph{lower} limit (hence the leading minus sign), is
+\begin{equation*}
+  \frac{d}{dr}\int_r^t v(z_\tau, \tau)\, d\tau = -\,v(z_r, r).
+\end{equation*}
+Equating the two and cancelling the $-u$ against $-v$ rearrangement gives the \emph{MeanFlow identity}
+\begin{equation}
+  \boxed{\;u(z_r, r, t) \;=\; v(z_r, r) \;+\; (t - r)\,\frac{d}{dr}u(z_r, r, t),\;}
+  \label{eq:app-mf-identity}
+\end{equation}
+which is Equation~\eqref{eq:meanflow-identity} of the main text. The total derivative along the trajectory expands through the chain rule into partials,
+\begin{equation}
+  \frac{d}{dr}u(z_r, r, t) \;=\; \partial_z u \cdot \dot z_r + \partial_r u \;=\; v(z_r, r)\,\partial_z u + \partial_r u,
+  \label{eq:app-mf-jvp}
+\end{equation}
+i.e.\ exactly the directional (Jacobian--vector) derivative of $u$ along the tangent $(\dot z_r, \dot r, \dot t) = (v, 1, 0)$.
+
+\paragraph{Why this is trainable.} Equation~\eqref{eq:app-mf-identity} relates the field we want ($u$) to the field we can sample without bias ($v = x_1 - x_0$ along each conditional path, by \S\ref{app:cfm-theorem}) using only quantities available at a \emph{single point of a single trajectory} --- the path integral is gone. A network $u_\theta(z_r, r, t, c)$ is regressed onto the right-hand side of~\eqref{eq:app-mf-identity}, with the derivative term~\eqref{eq:app-mf-jvp} computed by one forward-mode Jacobian--vector product through $u_\theta$ along the tangent $(v, 1, 0)$ and the whole target held under stop-gradient. No higher-order gradients, no teacher, no integration, and no discretisation curriculum are required. A network achieving zero loss satisfies~\eqref{eq:app-mf-identity} everywhere, and therefore reproduces the average velocity of~\eqref{eq:app-mf-avgvel}.
+
+\paragraph{Boundary condition and the FlowCast special case.} At $t = r$ the interval factor $(t - r)$ vanishes and~\eqref{eq:app-mf-identity} collapses to $u(z_r, r, r) = v(z_r, r)$: average velocity over a zero-length interval is instantaneous velocity. This is exactly the I-CFM/FlowCast regression of \S\ref{app:icfm}. MeanFlow therefore \emph{generalises} the FlowCast baseline --- the collapsed ($t = r$) subset of the batch trains the boundary that the $r < t$ subset propagates outward into the interval --- which is what makes the comparison of Chapter~\ref{ch:experiments} an A/B test on the objective alone.
+
+\paragraph{Convention note.} \citet{geng2025meanflow} place data at $s = 0$ and differentiate with respect to the horizon time $t$, obtaining $u = v - (t - r)\,\tfrac{d}{dt}u$. Here data sits at $s = 1$, so the differentiation runs through the lower limit of the integral and the sign of the interval term flips to a plus, as in~\eqref{eq:app-mf-identity}. The two are the same identity in mirrored time; the loss and sampler of Section~\ref{sec:method-meanflow} are internally consistent with the convention used here.
