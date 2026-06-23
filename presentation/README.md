@@ -5,11 +5,13 @@ slide content with speaker scripts, every equation rendered to PNG, and a set of
 explanatory animations. Grounded in the thesis chapters
 ([../contents/chapter01.tex](../contents/chapter01.tex) … `chapter05.tex`).
 
-> **Note:** the talk reflects the *current* thesis — a three-way comparison of an
-> **EDM diffusion** residual against two teacher-free flow-matching residuals,
-> **FlowCast** (straight-line Conditional Flow Matching) and **MeanFlow**
-> (average velocity). It supersedes the older `../slide_content.md`, which still
-> describes the earlier PD/CD distillation framing.
+> **Note:** the talk reflects the *current* thesis — **MeanFlow** (average-velocity
+> flow matching) as the StormCast residual head is **the method**, measured against
+> two reference baselines on a single trajectory axis: the **EDM diffusion** residual
+> it accelerates, and **FlowCast** (straight-line Conditional Flow Matching), the
+> special case MeanFlow generalises. It supersedes the older `../slide_content.md`
+> (earlier PD/CD distillation framing) and the earlier co-equal "FlowCast + MeanFlow"
+> framing.
 
 ## Contents
 
@@ -81,8 +83,10 @@ matching file in `formulas/png_white/`.
 
 ## Key numbers (verified against the thesis chapters)
 
-- Diffusion teacher: 35 NFE/step (18-step Heun) · EDM σ = (0.002, 80, 0.5, ρ=7).
-- Cost blow-up: 50 × 24 × 35 = 42,000 passes/cycle.
-- Scoreboard (2022, 10-member, +12 h): EDM 21.78 s / CRPS 0.6783 · FlowCast K=10 5.88 s / 0.6833 (**3.7×**) · MeanFlow K=2 2.35 s / 0.7265 (**~9×**); MeanFlow K=2 best t2m (0.9999 K).
+- **MeanFlow** = the method (average velocity, 1–2 NFE, teacher-free, single run, first application to weather forecasting). **EDM diffusion** = reference baseline (the model accelerated); **FlowCast** = straight-line flow-matching baseline (the special case MeanFlow generalises).
+- Diffusion baseline: 35 NFE/step (18-step Heun) · EDM σ = (0.002, 80, 0.5, ρ=7).
+- Cost blow-up: 50 × 24 × 35 = 42,000 passes/cycle (diffusion) → ~2,400 (MeanFlow K=2).
+- MeanFlow ↔ FlowCast: objective collapses *exactly* to FlowCast's at zero interval length — 75% of each batch (MeanFlow ratio ρ_MF = 0.25) → A/B on the objective alone.
+- Scoreboard (2022, 10-member, +12 h): EDM 21.78 s / CRPS 0.6783 · FlowCast K=10 5.88 s / 0.6833 (**3.7×**) · MeanFlow K=2 2.35 s / 0.7265 (**~9×**); MeanFlow K=2 best t2m (0.9999 K). **Recommended operating point: MeanFlow K=2.**
 - Losses: β = (1,1,1,2), λ_spec = 0.1, log1p qpepre (σ 9.12 → ≈0.37).
 - Backbone: SongUNet `channel_mult [1,2,2,2,2]`, ≈78.7 M params, shared by all heads.

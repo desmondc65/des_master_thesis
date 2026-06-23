@@ -1,0 +1,48 @@
+% Shared style for the MeanFlow thesis figures.
+% Clean academic grayscale, in the spirit of the nntikz examples
+% (rounded gray!10 blocks, -latex arrows). Self-contained: this does NOT
+% depend on the legacy presentation/meanflow_workflow/src/mf_style.tex.
+\usepackage{amsmath,amssymb,bm}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds,shapes.geometric,chains,decorations.pathmorphing}
+
+\tikzset{
+  % --- generic nodes ---------------------------------------------------
+  base/.style    ={rounded corners=2.5pt, draw, line width=0.8pt, align=center,
+                   inner sep=5pt, font=\small, text=black!88},
+  block/.style   ={base, fill=gray!10},
+  data/.style    ={base, fill=white},                       % data / tensors
+  net/.style     ={base, fill=gray!22, line width=1.0pt},   % trained network
+  frozen/.style  ={base, fill=gray!4, draw=black!60,        % frozen network
+                   dash pattern=on 3pt off 2pt},
+  loss/.style    ={base, fill=gray!10, line width=1.0pt,    % loss / scalar
+                   double, double distance=1.2pt},
+  emph/.style    ={base, fill=gray!10, line width=1.3pt},   % highlighted box
+  % --- operator glyphs -------------------------------------------------
+  op/.style      ={circle, draw, line width=0.8pt, fill=white,
+                   minimum size=4.6mm, inner sep=0, font=\footnotesize},
+  concat/.style  ={rectangle, rounded corners=1pt, draw, fill=black!72,
+                   text=white, font=\scriptsize\bfseries, inner sep=2.5pt},
+  % --- arrows ----------------------------------------------------------
+  arrow/.style   ={-{Latex[length=2.4mm]}, line width=0.8pt, draw=black!82},
+  arrowc/.style  ={arrow, rounded corners=3pt},
+  thinarrow/.style={-{Latex[length=2.0mm]}, line width=0.6pt, draw=black!55},
+  loopback/.style={-{Latex[length=2.4mm]}, line width=0.8pt, draw=black!55,
+                   dashed, dash pattern=on 4pt off 3pt},
+  % --- containers / annotation ----------------------------------------
+  group/.style   ={rounded corners=5pt, draw=black!40, line width=0.7pt,
+                   dashed, dash pattern=on 3pt off 2.5pt, fill=black!2,
+                   inner sep=8pt},
+  ttl/.style     ={font=\bfseries\large, text=black!88},
+  sub/.style     ={font=\itshape\footnotesize, text=black!55},
+  lab/.style     ={font=\scriptsize, text=black!70},
+  tag/.style     ={font=\scriptsize\bfseries, text=black!60},
+  % small sine glyph used to mark Fourier / positional embeddings
+  sinewave/.style={decorate, decoration={snake, amplitude=0.6mm,
+                   segment length=2.2mm}},
+}
+
+% legend swatch helper: \swatch{<style>}{<label>}
+\newcommand{\swatch}[2]{%
+  \tikz[baseline=-0.5ex]\node[#1, minimum width=3.6mm, minimum height=2.8mm,
+    inner sep=0]{};\;#2}

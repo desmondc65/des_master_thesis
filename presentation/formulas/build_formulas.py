@@ -69,7 +69,7 @@ FORMULAS = {
     "icfm_path":
         r"x_t \;=\; (1-t)\,x_0 + t\,x_1 + \sigma_{\mathrm{path}}\,\eta, \qquad x_1 = R_t/\sigma_{\mathrm{data}}, \;\; x_0 \sim \mathcal{N}(0,I)",
     "icfm_target":
-        r"u_t(x \mid x_0, x_1) \;=\; x_1 - x_0 \qquad (\text{constant: a straight line})",
+        r"v(x_t, t \mid x_0, x_1) \;=\; x_1 - x_0 \qquad (\text{constant: a straight line})",
     "icfm_loss":
         r"\mathcal{L}_{\mathrm{CFM}} \;=\; \mathbb{E}_{t,\,x_0,\,x_1,\,\eta}\!\left[\,\big\lVert v_\theta(x_t, t, c_t) - (x_1 - x_0) \big\rVert_{2,\beta}^2\,\right]",
     "flowcast_precond":

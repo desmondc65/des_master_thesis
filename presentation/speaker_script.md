@@ -34,7 +34,7 @@ or 18 (the scoreboard) — those are the slides that earn the degree.
 - **5→6:** "So we want to sample a distribution. The dominant way to do that is diffusion — here's how it works."
 - **8→9:** "Forty-two thousand passes is the wall. Now *why* does diffusion need so many steps?"
 - **9→10:** "If curvature is the problem, the obvious fix is: make the path straight."
-- **11→12:** "Two recipes — but where do they actually plug in? Into StormCast's second stage."
+- **11→12:** "A baseline and the method that generalises it — but where do they actually plug in? Into StormCast's second stage."
 - **13→14:** "That's the experiment. Now the data it runs on."
 - **15→16:** "With the data and losses set, here are the three contenders side by side."
 - **17→18:** "Five metric families, one validation year — here's what they say."
@@ -47,11 +47,13 @@ or 18 (the scoreboard) — those are the slides that earn the degree.
 
 ## 3. Anticipated Q&A bank (rehearse these out loud)
 
-**Q: Why three methods — isn't this just a model zoo?**
-A: They isolate different things. The diffusion baseline is the reference everyone trusts.
-FlowCast isolates the effect of *straightening the path*. MeanFlow isolates the effect of
-*removing the integral*, and because its objective collapses to FlowCast's, it's a clean A/B on
-the training objective alone. Everything else is held fixed, so it's a controlled comparison, not a zoo.
+**Q: Why three heads — isn't this just a model zoo?**
+A: There's one method and two baselines, all on a single axis. MeanFlow is the method. The EDM
+diffusion baseline is the reference everyone trusts — the model I set out to accelerate. FlowCast
+is the straight-line special case MeanFlow generalises, so MeanFlow-vs-FlowCast isolates the effect
+of *removing the integral* and is a clean A/B on the training objective alone (the objectives
+collapse together on 75% of each batch). Everything else is held fixed, so it's a controlled
+comparison, not a zoo.
 
 **Q: FlowCast/MeanFlow don't use the teacher at all — so why call this "distillation"?**
 A: I don't, in the thesis — and that's the point. The standard route to a fast sampler is
@@ -115,7 +117,7 @@ tiny Fourier-feature map for the second time input — negligible against the ba
 - **Lead with the number, then explain.** On the scoreboard say "3.7× faster, same CRPS" *first*,
   then justify. Committees remember the headline number.
 - **Two equations are load-bearing; the rest are reassurance.** Spend real time only on Slide 10
-  (straight-line target \(u_t=x_1-x_0\)) and Slide 11 (the boxed MeanFlow identity). Let the others
+  (straight-line target \(v=x_1-x_0\)) and Slide 11 (the boxed MeanFlow identity). Let the others
   flash by — "the details are standard / in the thesis."
 - **Rehearse the failure-mode slide (22) most.** Confidently owning your weaknesses is what reads as
   mastery in a defense. Don't apologize — diagnose.
@@ -131,9 +133,12 @@ tiny Fourier-feature map for the second time input — negligible against the ba
 
 "Diffusion weather models are sharp and probabilistic but need ~35 network calls per forecast hour —
 forty-two thousand per operational cycle. That's because the path they travel from noise to a forecast
-is curved. I show that if you *straighten* that path with flow matching — FlowCast — you recover the
-diffusion model's skill, and beat it on winds, precipitation error, and false alarms, at a quarter of
-the cost, trained from scratch with no teacher. And if you learn the *average* velocity over the
-interval — MeanFlow — you jump from noise to forecast in one or two calls, a tenth of the cost, with
-the best temperature accuracy in the study. Same backbone, same data, same regression mean — only the
-generative path changes. The path from noise to weather is a dial worth turning twice."
+is curved. My thesis proposes MeanFlow: instead of the instantaneous velocity, learn the *average*
+velocity over the whole noise-to-data interval, so a single network call jumps across it — no
+integration at all. On a Taiwan StormCast forecaster, MeanFlow reaches the diffusion model's skill
+class in one or two calls — a tenth of the cost — with the best temperature accuracy in the study,
+trained from scratch with no teacher. I measure it against two baselines on the same axis: the
+diffusion model it accelerates, and FlowCast, the straight-line special case it generalises, which
+already recovers most of the skill and beats diffusion on winds, precipitation error and false alarms
+at a quarter of the cost. Same backbone, same data, same regression mean — only the generative path
+changes. The path from noise to weather is one you can not just straighten but jump."
