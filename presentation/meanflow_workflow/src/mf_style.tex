@@ -14,6 +14,10 @@
 \definecolor{cOut}{HTML}{26AD81}\definecolor{cOutF}{HTML}{E9F7F2}       % composition / output
 \definecolor{cData}{HTML}{737373}\definecolor{cDataF}{HTML}{F1F1F1}     % data / tensors
 \definecolor{cEdge}{HTML}{5A5A5A}
+% accent for "new vs StormCast" (deliberately outside the viridis data palette,
+% since it is a meta-annotation, not a data category); ghost = replaced block
+\definecolor{cNew}{HTML}{C8791C}\definecolor{cNewF}{HTML}{FCF1DE}
+\definecolor{cGhost}{HTML}{9AA0A6}\definecolor{cGhostF}{HTML}{F4F5F6}
 
 \tikzset{
   base/.style   ={rounded corners=3pt, draw, line width=0.9pt, align=center,
@@ -37,6 +41,21 @@
   ttl/.style    ={font=\bfseries\large, text=black!85},
   sub/.style    ={font=\itshape\footnotesize, text=black!55},
   lg/.style     ={font=\scriptsize, text=black!60},
+  % --- StormCast-comparison elements ---
+  ghost/.style  ={base, draw=cGhost, fill=cGhostF, text=black!45,
+                  dashed, dash pattern=on 3pt off 2pt},
+  newbox/.style ={rounded corners=6pt, draw=cNew, line width=1.5pt,
+                  fill=cNew!4, inner sep=9pt},
+  sharedbox/.style={rounded corners=6pt, draw=black!30, line width=0.8pt,
+                  dashed, dash pattern=on 3pt off 2.5pt, fill=black!2, inner sep=9pt},
+  badge/.style  ={rounded corners=2pt, fill=cNew, text=white,
+                  font=\scriptsize\bfseries, inner sep=3pt},
+  % StormCast operator glyphs (mirror Fig. 1b legend)
+  concat/.style ={circle, fill=black, draw=black, minimum size=3.6mm, inner sep=0},
+  addop/.style  ={circle, draw=black!75, line width=0.9pt, fill=white,
+                  minimum size=4.8mm, inner sep=0, font=\footnotesize},
+  replaced/.style={-{Stealth[length=2.4mm]}, line width=1.1pt, draw=cNew,
+                  dashed, dash pattern=on 3pt off 2pt},
 }
 
 % legend swatch helper
