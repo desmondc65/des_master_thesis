@@ -423,13 +423,13 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
 INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf
-INPUT ./figures/seal.pdf
-INPUT ./figures/seal.pdf
 INPUT ./front/acknowledgement.tex
 INPUT ./front/acknowledgement.tex
 INPUT ./front/acknowledgement.tex
 INPUT ./front/acknowledgement.tex
 INPUT front/acknowledgement.tex
+INPUT ./figures/seal.pdf
+INPUT ./figures/seal.pdf
 INPUT ./front/abstract.tex
 INPUT ./front/abstract.tex
 INPUT ./front/abstract.tex

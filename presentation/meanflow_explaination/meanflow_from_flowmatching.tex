@@ -1,0 +1,231 @@
+\documentclass[11pt]{article}
+%======================================================================
+%  From flow matching to the MeanFlow training objective
+%  ---------------------------------------------------------------
+%  A compact, non-tedious introduction for the thesis / defense:
+%  start from the straight-line flow-matching objective (the FlowCast
+%  baseline), introduce the average velocity, and show the MeanFlow
+%  objective is its strict one-equation generalisation.
+%
+%  Notation is kept identical to the thesis methods chapter
+%  (des_master_thesis/contents/chapter03.tex, sec:method-meanflow) and to
+%  the StormCast implementation (stormcast/utils/meanflow_loss.py).
+%
+%  Self-contained: `pdflatex meanflow_from_flowmatching.tex`.
+%  The same equations are rendered as standalone slide PNGs by
+%  individual_equations/build_equations.py.
+%======================================================================
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+
+% --- notation, matching the thesis (M_t mean, c_t conditioning, beta-weighted norm) ---
+\newcommand{\Rres}{R_t}
+\newcommand{\Mt}{M_t}
+\newcommand{\ct}{c_t}
+\newcommand{\sigd}{\sigma_{\mathrm{data}}}
+\newcommand{\Norm}{\mathcal{N}}
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\sg}{\operatorname{sg}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\bnormb}[1]{\big\lVert #1 \big\rVert_{2,\beta}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\title{\textbf{From Flow Matching to MeanFlow}\\[2pt]
+\large The one-equation step that turns a many-step velocity field
+into a one-step \emph{average}-velocity field}
+\author{Desmond Cheong \\ \small Master's thesis --- Taiwan-domain StormCast distillation}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\noindent
+\textit{Goal: introduce the MeanFlow training objective the way I present it in
+the thesis --- as a single, well-motivated generalisation of the straight-line
+flow-matching objective the FlowCast baseline already uses, not a new method
+dropped from the sky.} Notation follows the methods chapter
+(Chapter~3, \S\,\emph{The MeanFlow Residual}) and the implementation in
+\code{stormcast/utils/meanflow\_loss.py}. As there, all three heads model the
+\emph{residual} $\Rres=X_t-\Mt$ left by the frozen regression mean
+$\Mt$, in a space standardized by $\sigd$, conditioned on
+$\ct=\mathrm{concat}(X_{t-1},\Mt,I)$; the flow time runs from \emph{noise} to
+\emph{data}.
+
+%----------------------------------------------------------------------
+\section{Where we start: straight-line flow matching (FlowCast)}
+
+The FlowCast baseline is Independent Conditional Flow Matching on the
+standardized residual. With data endpoint $x_1=\Rres/\sigd$ and prior
+$x_0\sim\Norm(0,I)$, the straight-line interpolant and its (constant) velocity
+are
+\begin{equation}
+  x_t = (1-t)\,x_0 + t\,x_1 + \sigma_{\mathrm{path}}\,\eta,
+  \qquad
+  v = x_1 - x_0 ,
+  \label{eq:fm_path}
+\end{equation}
+and the network is regressed straight onto that velocity,
+\begin{equation}
+  \mathcal{L}_{\mathrm{FC}}
+   = \Exp_{t,\,x_0,\,x_1}\,
+        \bnormb{\,v_\theta(x_t,t;\ct) - (x_1 - x_0)\,}^2
+     \;(+\,\lambda_{\mathrm{spec}}\mathcal{L}_{\mathrm{spec}}),
+  \label{eq:fm_loss}
+\end{equation}
+with the precipitation-aware channel weights $\beta=(1,1,1,2)$ and a shared
+\code{qpepre} log-PSD term that all heads carry (kept implicit from here on).
+The catch is the \emph{sampler}: knowing only the instantaneous velocity,
+generation must integrate it,
+\begin{equation}
+  x_{t+\Delta t} = x_t + \Delta t\;v_\theta(x_t,t;\ct),
+  \qquad \Delta t = 1/K,
+  \label{eq:fm_sampler}
+\end{equation}
+and because the learned \emph{marginal} field is curved, a single Euler jump
+overshoots: accuracy needs $K\!\approx\!10$ small steps per forecast hour.
+MeanFlow removes exactly this integration.
+
+%----------------------------------------------------------------------
+\section{The one idea: predict the \emph{average} velocity}
+
+Write the same straight-line path as the pure interpolant
+$z_s=(1-s)\,x_0+s\,x_1$ (MeanFlow drops FlowCast's small $\sigma_{\mathrm{path}}$
+thickening, $\sigma_{\mathrm{path}}=0$) and pick two flow times $r\le t$ along
+it. Define the \textbf{average velocity} over $[r,t]$,
+\begin{equation}
+  u(z_r,r,t) \;\triangleq\; \frac{1}{t-r}\int_r^t v(z_\tau,\tau)\,\dd\tau,
+  \qquad \lim_{t\to r} u(z_r,r,t) = v(z_r,r),
+  \label{eq:mf_avgvel}
+\end{equation}
+a property of the underlying flow, just like $v$. Its defining feature is that
+transport over the interval becomes a single algebraic jump --- no solver:
+\begin{equation}
+  z_t \;=\; z_r + (t-r)\,u(z_r,r,t).
+  \label{eq:mf_displacement}
+\end{equation}
+One evaluation at $(r,t)=(0,1)$ takes noise to data. The cost has moved from
+inference into training: \eqref{eq:mf_avgvel} is a path integral we cannot
+evaluate, so $u$ cannot be regressed directly.
+
+%----------------------------------------------------------------------
+\section{Making it trainable: the MeanFlow identity}
+
+Eliminate the integral by differentiation rather than quadrature. Clear the
+denominator,
+\begin{equation}
+  (t-r)\,u(z_r,r,t) \;=\; \int_r^t v(z_\tau,\tau)\,\dd\tau,
+  \label{eq:mf_integral}
+\end{equation}
+and differentiate with respect to the \emph{state} time $r$ at fixed $t$, with
+$z_r$ moving along the trajectory ($\dd z_r/\dd r=v$, $\dd t/\dd r=0$). The
+product rule on the left and the fundamental theorem of calculus on the right
+give $-u+(t-r)\,\dd u/\dd r=-v$, i.e.\ the \textbf{MeanFlow identity}
+\begin{equation}
+  \boxed{\;\;u(z_r,r,t) \;=\; v(z_r,r) \;+\; (t-r)\,\frac{\dd u}{\dd r}\;\;}
+  \label{eq:mf_identity}
+\end{equation}
+where $\dd u/\dd r$ is the \emph{total} derivative along the trajectory --- one
+Jacobian--vector product with tangent $(v,1,0)$ in $(z,r,t)$:
+\begin{equation}
+  \frac{\dd u}{\dd r} \;=\; v\,\partial_z u \;+\; \partial_r u
+  \qquad(\text{$t$ fixed}).
+  \label{eq:mf_jvp}
+\end{equation}
+The path integral is gone; the target needs only quantities at a single point of
+a single trajectory.
+
+\paragraph{Convention note.} This is Geng et al.'s identity transcribed to the
+thesis's noise-to-data convention. They place data at $s=0$ and differentiate
+with respect to $t$, obtaining $u=v-(t-r)\,\dd u/\dd t$; here data sits at $s=1$,
+the differentiation runs through the lower limit, and the sign flips --- so do
+not line-diff \eqref{eq:mf_identity} against the paper.
+
+\paragraph{It contains flow matching exactly.}
+Send the interval to zero. The prefactor $(t-r)$ vanishes and
+\eqref{eq:mf_identity} collapses to the boundary condition
+\begin{equation}
+  \lim_{r\to t} u(z_r,r,t) \;=\; u(z_t,t,t) \;=\; v ,
+  \label{eq:mf_boundary}
+\end{equation}
+the average velocity over a zero-width interval \emph{is} the instantaneous
+velocity. On the diagonal $r=t$ the MeanFlow target is the flow-matching target:
+MeanFlow is a \emph{strict generalisation} of FlowCast, not a different
+objective.
+
+%----------------------------------------------------------------------
+\section{The training objective}
+
+Regress the network onto its own identity, holding the right-hand side constant
+with a stop-gradient $\sg[\cdot]$:
+\begin{equation}
+  u_{\mathrm{tgt}} \;=\; \sg\!\Big[\,v + (t-r)\big(v\,\partial_z u_\theta + \partial_r u_\theta\big)\Big],
+  \label{eq:mf_target}
+\end{equation}
+\begin{equation}
+  \mathcal{L}_{\mathrm{MF}}
+   \;=\; \Exp\Big[\,\sg(w)\,
+        \bnormb{\,u_\theta(z_r,r,t;\ct) - u_{\mathrm{tgt}}\,}^2\,\Big],
+  \qquad w = \big(\lVert\Delta\rVert_{2,\beta}^2 + \varepsilon_w\big)^{-p}.
+  \label{eq:mf_loss}
+\end{equation}
+The adaptive weight $w$ (exponent $p=1$, $\varepsilon_w=10^{-3}$) down-weights
+high-error samples; $p=0$ recovers plain weighted MSE. The derivative inside
+$u_{\mathrm{tgt}}$ is one forward-mode \code{torch.func.jvp} with tangent
+$(v,1,0)$, evaluated under \code{no\_grad} on the bare module. Two flow times are
+drawn per sample and sorted to $r\le t$; a fraction $\rho_{\mathrm{MF}}=0.25$
+keeps $r<t$ (the bootstrapped, finite-interval target), and the other $75\%$
+collapse to $r=t$, where \eqref{eq:mf_boundary} makes the loss \emph{exactly}
+the FlowCast I-CFM regression. The diagonal supplies the clean, data-grounded
+anchor; the off-diagonal teaches the finite-interval average velocity that
+one-step sampling actually invokes. Channel weights and the \code{qpepre} log-PSD
+term are inherited unchanged from FlowCast.
+
+%----------------------------------------------------------------------
+\section{Sampling}
+
+Starting from $z_0\sim\Norm(0,I)$, integrate the learned average velocity over
+$[0,1]$ in $K$ equal jumps,
+\begin{equation}
+  z_{(i+1)/K} \;=\; z_{i/K} + \tfrac{1}{K}\,
+      u_\theta\!\big(z_{i/K},\,\tfrac{i}{K},\,\tfrac{i+1}{K};\,\ct\big),
+  \qquad i=0,\dots,K-1,
+  \label{eq:mf_sampler}
+\end{equation}
+and reconstruct the field as $\widehat{X}_t=\Mt+\sigd\,z_1$. The headline setting
+is $K=1$ (one network evaluation, $\widehat{x}_1=x_0+u_\theta(x_0,0,1;\ct)$);
+$K=2$ is the validation sweet spot. Unlike FlowCast's Euler sampler, raising $K$
+removes no truncation error --- each jump is exact under a perfect $u$ --- it
+only shortens the intervals over which the \emph{learned} $u_\theta$ must hold.
+Sampling uses the EMA weights.
+
+%----------------------------------------------------------------------
+\section*{Provenance and cross-references}
+
+The average-velocity objective and identity
+\eqref{eq:mf_identity}--\eqref{eq:mf_loss} are due to Geng et al.\ (\emph{Mean
+Flows for One-step Generative Modeling},
+\href{https://arxiv.org/abs/2505.13447}{arXiv:2505.13447}, 2025); here they are
+mirrored into the StormCast residual convention so the diagonal collapses onto
+the FlowCast baseline. The same pixel-space MeanFlow objective has since been
+carried to autoregressive dynamical-system forecasting by Yang \& Xue (\emph{MeLISA:
+Towards Scalable One-step Generative Modeling for Autoregressive Dynamical System
+Forecasting}, \href{https://arxiv.org/abs/2605.05540}{arXiv:2605.05540}, 2026),
+corroborating average-velocity sampling as a route to one-step rollouts for
+physical dynamics --- the same motivation as this thesis.
+
+\smallskip
+\noindent\textit{In this thesis.} The derivation and design choices above are
+Chapter~3, \S\,\emph{The MeanFlow Residual} (Eqs.~for the average velocity, the
+identity, the loss, and the sampler) and \S\,\emph{Loss Design for the
+Precipitation Channel}; the background flow-matching theory MeanFlow generalises
+is Chapter~2, \S\,\emph{Flow Matching, FlowCast, and MeanFlow}.
+\textit{In the code.} Loss \code{stormcast/utils/meanflow\_loss.py}
+(\code{MeanFlowLoss}); training loop \code{stormcast/utils/trainer\_meanflow.py};
+preconditioner \code{stormcast/utils/meanflow\_precond.py}; sampler
+\code{meanflow\_model\_forward} in \code{stormcast/utils/nn.py}; configs
+\code{stormcast/config/\{training,model\}/meanflow.yaml}; long-form notes
+\code{stormcast/docs/meanflow.\{tex,md\}}.
+
+\end{document}

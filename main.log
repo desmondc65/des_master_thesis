@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.16)  23 JUN 2026 18:03
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.16)  24 JUN 2026 08:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1540,7 +1540,7 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 Overfull \hbox (20.61493pt too wide) in paragraph at lines 22--22
 \TU/BiauKai(0)/m/n/16 路 與 多 媒 體 研 究 所 完 成 之 碩 士 學 位 論 文，|  於 民 國 \TU/TimesNewRo
 man(0)/m/n/16 115 \TU/BiauKai(0)/m/n/16 年 \TU/TimesNewRoman(0)/m/n/16 6 \TU/Bia
-uKai(0)/m/n/16 月 \TU/TimesNewRoman(0)/m/n/16 23 \TU/BiauKai(0)/m/n/16 日
+uKai(0)/m/n/16 月 \TU/TimesNewRoman(0)/m/n/16 24 \TU/BiauKai(0)/m/n/16 日
  []
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
@@ -1553,16 +1553,16 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 
 
 ]
+(./front/acknowledgement.tex
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [2]
-(./front/acknowledgement.tex) (./front/abstract.tex
+ [2
+
+
+]) (./front/abstract.tex
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [3
-
-
-]
+ [3]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [4
@@ -2765,12 +2765,12 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 8F27F8D886E0BBCEA03688ADC7CC7D85;17099.
  ) 
 Here is how much of TeX's memory you used:
- 37648 strings out of 476415
- 818380 string characters out of 5792682
- 1940627 words of memory out of 5000000
- 58892 multiletter control sequences out of 15000+600000
+ 37576 strings out of 476415
+ 813952 string characters out of 5792682
+ 1939627 words of memory out of 5000000
+ 58820 multiletter control sequences out of 15000+600000
  569533 words of font info for 129 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  99i,16n,131p,2505b,1243s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.xdv (143 pages, 2226192 bytes).
+Output written on main.xdv (143 pages, 2222980 bytes).

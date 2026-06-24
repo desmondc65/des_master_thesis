@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex main"] 1782208996.20947 "main.aux" "main.bbl" "main" 1782209005.00947 0
+["bibtex main"] 1782259761.66658 "main.aux" "main.bbl" "main" 1782259770.44602 0
   "./back/references.bib" 1781729422.60252 10881 d9955ec085a1b4ef5dfd797c677390d3 ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/natbib/abbrvnat.bst" 1233624470 26532 66bed5cc59495faaa3f9ae9af9fa5e42 ""
-  "main.aux" 1782208997.84352 52299 8b5bc575e747204b939477e6e92133e0 "xelatex"
+  "main.aux" 1782259763.29571 52299 3dc4a1ee306ba4ff07639eb58e0f84e9 "xelatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["xdvipdfmx"] 1782208997.99942 "main.xdv" "main.pdf" "main" 1782209005.01084 0
-  "main.xdv" 1782208997.84532 2226192 9b8a2187a181ffe0e7bee8c58da9b62f "xelatex"
+["xdvipdfmx"] 1782259763.4533 "main.xdv" "main.pdf" "main" 1782259770.4474 0
+  "main.xdv" 1782259763.29855 2222980 9aa569127a5f9a1f4416d97f0c6b2bb7 "xelatex"
   (generated)
   "main.pdf"
   (rewritten before read)
-["xelatex"] 1782208996.24664 "main.tex" "main.xdv" "main" 1782209005.00954 0
+["xelatex"] 1782259761.70566 "main.tex" "main.xdv" "main" 1782259770.44609 0
   "/etc/texmf/web2c/texmf.cnf" 1768728223.52462 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136768653 1528 f853c4d1b4e0550255e02831fdc8496f ""
@@ -246,8 +246,8 @@
   "contents/chapter03.tex" 1782206899.23271 61593 592a8ccc36a018869faf317aac68eaa8 ""
   "contents/chapter04.tex" 1782206966.16685 48268 05a5e443ea158d8bd0515ab457b5d469 ""
   "contents/chapter05.tex" 1782207008.50754 9898 1ed2f93564e9e6f9ee89d8482e3979e7 ""
-  "figures/flowcast/loss_curves.png" 1781729422.62435 81762 54b388b269bd380f4145e0221f4cb06e ""
-  "figures/flowcast/qpepre_spectrum.png" 1781729422.62476 30694 858fbbfdd5f53be863a4d799b13f9d80 ""
+  "figures/flowcast/loss_curves.png" 1782259753.2268 81762 54b388b269bd380f4145e0221f4cb06e ""
+  "figures/flowcast/qpepre_spectrum.png" 1782259753.22693 30694 858fbbfdd5f53be863a4d799b13f9d80 ""
   "figures/highres_distributions/stormcast_test_train_HighRes_qpepre_gaussian_check.png" 1781729422.62715 634200 7582bac885c23758f960d3ed27ddbef7 ""
   "figures/highres_distributions/stormcast_test_train_HighRes_t2m_gaussian_check.png" 1781729422.63025 847733 ae34a250a1ce942e5869bc06b2c53c56 ""
   "figures/highres_distributions/stormcast_test_train_HighRes_u10_gaussian_check.png" 1781729422.63329 839292 d92a81b9c9c5abf053d3825ad56065b0 ""
@@ -266,14 +266,14 @@
   "front/abstract.tex" 1782206436.43402 7282 98110364aa8a6de063050fa3461f9768 ""
   "front/acknowledgement.tex" 1781729423.54665 682 5ca5ff9dc39f1fe54c37225dae0bc170 ""
   "front/denotation.tex" 1782206473.22397 3490 42c336a47bca11c5de56fbc8020dbbc5 ""
-  "main.aux" 1782208997.84352 52299 8b5bc575e747204b939477e6e92133e0 "xelatex"
-  "main.bbl" 1782208996.24382 10340 69ce44f9a6d0e9aa11421a9a5cc43822 "bibtex main"
-  "main.lof" 1782208997.84532 1296 7f18f252ef9edc86c4f77fb0c736f0db "xelatex"
-  "main.lot" 1782208997.84532 1202 a9bc611da43f5310d2cc094aede7a9c7 "xelatex"
-  "main.out" 1782208997.84496 17099 8f27f8d886e0bbcea03688adc7cc7d85 "xelatex"
+  "main.aux" 1782259763.29571 52299 3dc4a1ee306ba4ff07639eb58e0f84e9 "xelatex"
+  "main.bbl" 1782259761.70266 10340 69ce44f9a6d0e9aa11421a9a5cc43822 "bibtex main"
+  "main.lof" 1782259763.29855 1296 7f18f252ef9edc86c4f77fb0c736f0db "xelatex"
+  "main.lot" 1782259763.29855 1202 a9bc611da43f5310d2cc094aede7a9c7 "xelatex"
+  "main.out" 1782259763.29771 17099 8f27f8d886e0bbcea03688adc7cc7d85 "xelatex"
   "main.tex" 1782123855.41561 1754 4395b8e4b6a7531e4fd5205d644d32d4 ""
-  "main.toc" 1782208997.84532 15919 023804e90add387c62de3c24e4909b90 "xelatex"
-  "ntusetup.tex" 1782208983.81287 2717 189c66167d53dc206dcb43ea89921be2 ""
+  "main.toc" 1782259763.29855 15919 023804e90add387c62de3c24e4909b90 "xelatex"
+  "ntusetup.tex" 1782259634.1729 2513 93c9989bebd9216166cbd7dc04f1ccfd ""
   "ntuthesis.cls" 1781729423.56317 27826 6500fc5cbfdd1bf82b1708432b431391 ""
   (generated)
   "main.aux"

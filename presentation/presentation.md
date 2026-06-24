@@ -1,7 +1,6 @@
 # Master's Defense — Presentation Content
 
-**Title:** *Kilometer-Scale Convection-Allowing Model Emulation using Average-Velocity Flow Matching:
-One- to Two-Step MeanFlow Residual Generation for Taiwan Convective-Scale Weather Prediction*
+**Title:** *Few-Step MeanFlow Residuals for Convection-Allowing Forecasting over Taiwan*
 
 **Author:** Desmond Cheong (鍾鎮嶸) · National Taiwan University, Graduate Institute of Networking and Multimedia, College of EECS · Advisor: Cheng-Fu Chou (周承復) · 2026
 
