@@ -1,0 +1,119 @@
+% =============================================================================
+%  Dataset + methods-comparison TABLES (no images)
+%    Table 1  tab:era5-vars      -- 24 ERA5 LowRes conditioning channels
+%    Table 2  tab:highres-vars   -- 4 HighRes target channels (RWRF + QPEPRE)
+%    Table 3  tab:method-compare -- StormCast (EDM) vs FlowCast vs MeanFlow
+%
+%  Requires booktabs + siunitx (already loaded by the thesis preamble).
+%  Numbers in Table 3 are the on-disk scoreboard
+%  (experiment_scripts/results/main_experiment/scoreboard_3way.csv);
+%  dataset normalisation stats are from the cleaned 192x96 store.
+%  Include with:  \input{figures/dataset_losses/dataset_tables.tex}
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% Table 1: ERA5 LowRes conditioning variables (24 channels)
+% -----------------------------------------------------------------------------
+\begin{table}[htbp]
+  \centering
+  \caption[ERA5 LowRes conditioning variables]{The 24 ERA5 LowRes channels that
+  make up the conditioning state $S_t$. Four surface variables are taken at a
+  single level; five upper-air variables are taken at each of the four standard
+  pressure levels \SIlist{1000;850;500;250}{\hecto\pascal}, giving
+  $4 + 5\times4 = 24$ channels. All fields are re-gridded from the
+  $\sim$\SI{25}{\kilo\metre} ECMWF ERA5 reanalysis onto the common
+  $192\times96$ Taiwan grid.}
+  \label{tab:era5-vars}
+  \small
+  \begin{tabular}{llll r}
+    \toprule
+    Code & Variable & Units & Levels (hPa) & \# ch. \\
+    \midrule
+    \multicolumn{5}{l}{\emph{Surface (single level)}} \\
+    \texttt{mslp} & Mean sea-level pressure & Pa                 & surface & 1 \\
+    \texttt{t2m}  & 2\,m temperature        & K                  & surface & 1 \\
+    \texttt{u10}  & 10\,m zonal wind        & m\,s$^{-1}$        & surface & 1 \\
+    \texttt{v10}  & 10\,m meridional wind   & m\,s$^{-1}$        & surface & 1 \\
+    \midrule
+    \multicolumn{5}{l}{\emph{Upper-air (one channel per pressure level)}} \\
+    \texttt{q} & Specific humidity   & kg\,kg$^{-1}$    & 1000, 850, 500, 250 & 4 \\
+    \texttt{t} & Temperature         & K                & 1000, 850, 500, 250 & 4 \\
+    \texttt{u} & Zonal wind          & m\,s$^{-1}$      & 1000, 850, 500, 250 & 4 \\
+    \texttt{v} & Meridional wind     & m\,s$^{-1}$      & 1000, 850, 500, 250 & 4 \\
+    \texttt{z} & Geopotential        & m$^2$\,s$^{-2}$  & 1000, 850, 500, 250 & 4 \\
+    \midrule
+    \multicolumn{4}{l}{\textbf{Total}} & \textbf{24} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------
+% Table 2: HighRes target variables (RWRF + QPEPRE), 4 channels
+% -----------------------------------------------------------------------------
+\begin{table}[htbp]
+  \centering
+  \caption[HighRes target variables]{The four HighRes target channels $X_{t+1}$
+  on the convection-permitting $\sim$\SI{2}{\kilo\metre} grid. The three
+  near-surface fields come from the regional WRF (RWRF) model; precipitation is
+  the radar-derived QPEPRE observational product. The last two columns are the
+  per-channel normalisation mean and standard deviation stored with the cleaned
+  $192\times96$ store and applied by the data loader. The \texttt{qpepre}
+  statistics are computed in $\log(1+x)$ space (the cleaning pass applies a
+  \texttt{log1p} transform before standardisation), so its mean/std are
+  dimensionless; the others are in the physical units shown.}
+  \label{tab:highres-vars}
+  \small
+  \begin{tabular}{lllrr}
+    \toprule
+    Code & Variable & Source / units & Norm.\ mean & Norm.\ std \\
+    \midrule
+    \texttt{t2m}    & 2\,m temperature      & RWRF, K              & $295.40$ & $6.07$ \\
+    \texttt{u10}    & 10\,m zonal wind      & RWRF, m\,s$^{-1}$    & $-1.06$  & $3.58$ \\
+    \texttt{v10}    & 10\,m meridional wind & RWRF, m\,s$^{-1}$    & $-1.87$  & $4.86$ \\
+    \texttt{qpepre} & Hourly precipitation  & QPEPRE radar, mm\,h$^{-1}$ & $0.10$ & $0.37$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% -----------------------------------------------------------------------------
+% Table 3: Methods comparison (StormCast EDM vs FlowCast vs MeanFlow)
+% -----------------------------------------------------------------------------
+% If this runs past the text width, wrap the tabular in \resizebox{\linewidth}{!}{...}.
+\begin{table}[htbp]
+  \centering
+  \caption[Methods comparison: StormCast vs FlowCast vs MeanFlow]{Head-to-head
+  comparison of the three generative residual heads on the 2022 validation year
+  (cleaned $192\times96$, log1p \texttt{qpepre}, $\approx 2\,\text{M}$ training
+  samples; ten-member ensembles, $+12$\,h rollouts). \emph{NFE} is the number of
+  network evaluations per generative step; \emph{Time/Seq.}\ is the wall-clock
+  cost of one ten-member rollout sequence on a single NVIDIA RTX A6000. RMSE is
+  per-channel after denormalisation (\texttt{t2m} in K; \texttt{u10}/\texttt{v10}
+  in m\,s$^{-1}$; \texttt{qpepre} in mm\,h$^{-1}$); CRPS is the rollout-mean
+  precipitation score; CSI-M / FAR-M are threshold-mean precipitation skill at a
+  \SI{10}{\kilo\metre} neighbourhood. $\uparrow$/$\downarrow$ give the better
+  direction; \textbf{bold} marks the best in each column. StormCast is the EDM
+  diffusion teacher; FlowCast and MeanFlow are the flow-matching students.
+  Training/validation losses are in different objective spaces per head (weighted
+  denoising vs.\ flow-matching vs.\ average-velocity) and are therefore not
+  directly comparable across rows, so head-to-head quality is reported on the
+  shared validation metrics rather than on loss.}
+  \label{tab:method-compare}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{lrrrrrrrrr}
+    \toprule
+    Method & NFE & Time/Seq. & CRPS & \multicolumn{4}{c}{RMSE$\downarrow$} & CSI-M & FAR-M \\
+    \cmidrule(lr){5-8}
+     & & (s)$\downarrow$ & $\downarrow$ & \texttt{t2m} & \texttt{u10} & \texttt{v10} & \texttt{qpepre} & $\uparrow$ & $\downarrow$ \\
+    \midrule
+    StormCast (EDM)     & 35 & 20.67 & 0.6783 & 1.0208 & 1.5626 & 1.9574 & 0.9429 & \textbf{0.1841} & 0.3693 \\
+    \midrule
+    FlowCast ($K{=}10$) & 10 & 5.92 & 0.6833 & 1.1410 & \textbf{1.4935} & \textbf{1.6423} & 0.8959 & 0.1639 & 0.3678 \\
+    FlowCast ($K{=}15$) & 15 & 8.08 & \textbf{0.6740} & 1.1312 & 1.5203 & 1.6710 & \textbf{0.8897} & 0.1746 & 0.3671 \\
+    FlowCast ($K{=}20$) & 20 & 10.46 & 0.6856 & 1.1767 & 1.5226 & 1.7316 & 0.9013 & 0.1794 & 0.4411 \\
+    \midrule
+    MeanFlow ($K{=}1$)  & 1 & \textbf{1.80} & 0.8485 & 1.0453 & 1.6540 & 2.1740 & 0.9263 & 0.1588 & \textbf{0.3485} \\
+    MeanFlow ($K{=}2$)  & 2 & 2.37 & 0.7265 & \textbf{0.9999} & 1.5350 & 1.7902 & 0.9404 & 0.1709 & 0.4680 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

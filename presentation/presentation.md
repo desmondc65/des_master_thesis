@@ -4,7 +4,7 @@
 
 **Author:** Desmond Cheong (鍾鎮嶸) · National Taiwan University, Graduate Institute of Networking and Multimedia, College of EECS · Advisor: Cheng-Fu Chou (周承復) · 2026
 
-**Format:** 26 content slides + backup. Target **25–30 minutes** (~1 min/slide, results slides slightly longer).
+**Format:** 27 content slides + backup. Target **25–30 minutes** (~1 min/slide, results slides slightly longer).
 **Audience:** thesis committee, some members new to diffusion / flow matching. Stay high-level; anchor every abstract idea to "the model that predicts what the radar shows next hour."
 
 **Structure:** the deck follows a seven-part thesis arc —
@@ -85,9 +85,29 @@ Why do this for Taiwan specifically? Taiwan sits on the western Pacific typhoon 
 
 ---
 
+## Slide 4 — Motivation: the speed–skill gap
+
+**MESSAGE:** Operational convective forecasting needs three things at once — sharp, probabilistic, *and* fast — and today you can only get two; generative diffusion delivers the first two but its multi-step sampler breaks the third, and the standard fix (distillation) buys speed only at the price of a teacher and a second training stage. Closing that gap is what this thesis is for.
+
+**ON SLIDE**
+- **What operations need — all three at once:** sharp km-scale fields · calibrated uncertainty (an ensemble, not one guess) · a refresh that fits a **~10-min** cycle.
+- **Where we are — pick two:** deterministic neural models are *fast* but **blurry**; generative diffusion is *sharp + probabilistic* but **~35 calls/step → too slow** once you multiply by rollout × ensemble.
+- **The standard escape has a cost:** distillation needs a trained **teacher**, a **second training stage**, and still bottoms out around **10–15 calls**.
+- **The gap / opportunity:** reach the fast-*and*-sharp regime **teacher-free, in a single run** — by reshaping the noise→data *path itself*, not by distilling a slow sampler.
+- **Two research questions this sets up:**
+  - **RQ1** — does *straightening* the path (flow matching) recover diffusion skill at a few calls?
+  - **RQ2** — does learning the *average velocity* cut it to **1–2 calls, no teacher**, with no loss of skill?
+
+**SHOW:** a simple **skill × speed** trade-off cartoon — deterministic (fast, blurry) vs. diffusion (sharp, slow) vs. the empty *"fast **and** sharp"* target quadrant this thesis aims for. *(To build as [skill_vs_speed_tradeoff.png](../figures/concepts/skill_vs_speed_tradeoff.png); as a stand-in, tease [anim_cost_problem.gif](animations/out/anim_cost_problem.gif).)*
+
+**SCRIPT:**
+Before the background, let me state the motivation in one breath, because it frames everything that follows. An operational forecaster needs three things at the *same* time: forecasts that are sharp at the kilometre scale, forecasts that carry honest uncertainty — an ensemble, not a single guess — and a model fast enough to refresh inside a ten-minute cycle. Today you can have any two of those, not all three. Plain deterministic neural models are fast and cheap, but they're blurry. Generative diffusion models are sharp and probabilistic — but, as the next slides show, they cost around thirty-five network calls per forecast step, which becomes far too slow once you multiply by a rollout and an ensemble. The usual way out is distillation — train a fast student to imitate the slow model — but that buys speed at a price: you need the teacher in the first place, you pay for a second training stage, and in practice it still bottoms out around ten to fifteen calls. So the gap this thesis goes after is precise: can we land in the fast-*and*-sharp quadrant *without* a teacher and in a *single* training run — by changing the shape of the path from noise to forecast, rather than distilling a slow sampler? That splits into two questions: does straightening the path recover the skill cheaply, and does learning the *average* velocity take it all the way down to one or two calls. The rest of the talk answers both — but first, where this field came from.
+
+---
+
 # Part 2 — Related Work
 
-## Slide 4 — Background: how forecasting got here
+## Slide 5 — Background: how forecasting got here
 
 **MESSAGE:** Four eras — physics-based NWP, then data-driven neural forecasters, then the *generative* turn that trades a single blurry prediction for a sample from a distribution.
 
@@ -104,7 +124,7 @@ A little background, because not everyone here works on this. Weather prediction
 
 ---
 
-## Slide 5 — Why generative? The blurry-mean problem
+## Slide 6 — Why generative? The blurry-mean problem
 
 **MESSAGE:** A model trained to minimise pixel error converges to the *mean* of all plausible weather — which is smooth and rain-free. Sampling a distribution keeps the storms.
 
@@ -120,7 +140,7 @@ Let me make the "blurry mean" point concrete, because it's the reason generative
 
 ---
 
-## Slide 6 — Diffusion in one minute
+## Slide 7 — Diffusion in one minute
 
 **MESSAGE:** A diffusion model learns to turn noise into data by reversing a gradual noising process; sampling = walk a clean field back out of pure noise.
 
@@ -138,7 +158,7 @@ So what *is* a diffusion model, in one minute? Watch the animation. We take a cl
 
 ---
 
-## Slide 7 — The diffusion recipe and the EDM teacher
+## Slide 8 — The diffusion recipe and the EDM teacher
 
 **MESSAGE:** Denoising at every noise level *is* learning the score; sampling integrates a "probability-flow" ODE; our teacher uses the EDM formulation and a 35-call Heun sampler.
 
@@ -156,7 +176,7 @@ One slightly more technical slide, then I'll stay visual. Two facts make diffusi
 
 ---
 
-## Slide 8 — The catch: inference cost
+## Slide 9 — The catch: inference cost
 
 **MESSAGE:** 35 calls/step is fine once, but rollout × ensemble turns it into ~42,000 U-Net passes per cycle — outside the operational budget.
 
@@ -175,7 +195,7 @@ Here's why thirty-five matters. For a single forecast hour, thirty-five passes i
 
 # Part 3 — Dataset
 
-## Slide 9 — The data: Taiwan RWRF
+## Slide 10 — The data: Taiwan RWRF
 
 **MESSAGE:** 1-hour conditional forecasting over Taiwan: 24 coarse ERA5 conditioning channels in, 4 km-scale target channels out, hourly, full-year 2022 validation.
 
@@ -193,7 +213,7 @@ A quick orientation on the data. The task is one-hour-ahead forecasting over Tai
 
 ---
 
-## Slide 10 — qpepre is the hard channel
+## Slide 11 — qpepre is the hard channel
 
 **MESSAGE:** Three channels are near-Gaussian; precipitation is an atom-at-zero plus a heavy tail. That single fact drives every loss decision: channel weighting, a spectral term, and a log transform.
 
@@ -214,7 +234,7 @@ Here is that channel. Temperature and the winds are, statistically, well-behaved
 
 # Part 4 — Method
 
-## Slide 11 — The key insight: the path is *curved*
+## Slide 12 — The key insight: the path is *curved*
 
 **MESSAGE:** Diffusion needs many steps because its noise→data trajectory is curved; a low-order solver cuts corners and the error is worst on sparse precipitation.
 
@@ -231,7 +251,7 @@ So *why* does diffusion need so many steps — could we just use a better solver
 
 ---
 
-## Slide 12 — Lever 1: straight-line flow matching (FlowCast)
+## Slide 13 — Lever 1: straight-line flow matching (FlowCast)
 
 **MESSAGE:** Flow matching learns a velocity field along a *straight line* from noise to data; the target is just \(x_1-x_0\), trained with no teacher, sampled in a few Euler steps.
 
@@ -249,7 +269,7 @@ This is the flow-matching baseline, FlowCast, and it's beautifully simple — an
 
 ---
 
-## Slide 13 — Lever 2: average velocity (MeanFlow)
+## Slide 14 — Lever 2: average velocity (MeanFlow)
 
 **MESSAGE:** MeanFlow learns the *average* velocity over a whole interval, so one network call jumps from noise to data with no integration — and it's a strict generalisation of FlowCast.
 
@@ -267,7 +287,7 @@ FlowCast still pays for about ten Euler steps, because the *average* field it le
 
 ---
 
-## Slide 14 — The host model: StormCast's two stages
+## Slide 15 — The host model: StormCast's two stages
 
 **MESSAGE:** StormCast splits forecasting into a frozen deterministic mean plus a generative *residual*; we freeze everything and swap only the residual head.
 
@@ -284,7 +304,7 @@ Now, where do these flow models actually live? StormCast has a two-stage design,
 
 ---
 
-## Slide 15 — ★ The experimental design (core contribution)
+## Slide 16 — ★ The experimental design (core contribution)
 
 **MESSAGE:** One method (MeanFlow) measured against two baselines on a single axis — everything else held identical — so any difference is attributable to the *generative trajectory alone*. A controlled comparison, not a model zoo.
 
@@ -302,7 +322,7 @@ This slide is the heart of the contribution, so let me slow down. It is easy to 
 
 ---
 
-## Slide 16 — The three heads, side by side
+## Slide 17 — The three heads, side by side
 
 **MESSAGE:** Same backbone, one trajectory axis, three sampler costs: diffusion baseline 35 NFE → FlowCast baseline ~10 → MeanFlow (this work) 1–2.
 
@@ -327,7 +347,7 @@ Let me put the three heads next to each other before we get to results. Same net
 
 # Part 5 — Experiments
 
-## Slide 17 — How we measure skill
+## Slide 18 — How we measure skill
 
 **MESSAGE:** RMSE alone rewards blur, so we use five complementary families: deterministic, probabilistic, categorical-precip, spectral, and rollout.
 
@@ -345,7 +365,7 @@ A word on evaluation, because how you score precipitation determines what you co
 
 ---
 
-## Slide 18 — ★ Headline result: the three-way scoreboard
+## Slide 19 — ★ Headline result: the three-way scoreboard
 
 **MESSAGE:** The headline: at a matched budget, **MeanFlow** reaches the diffusion baseline's deterministic + categorical skill class at **1–2 calls (~9× faster)** with the best temperature of all heads; the FlowCast baseline marks the midpoint — matched CRPS, better winds/precip RMSE & false alarms, 3.7× faster.
 
@@ -370,13 +390,13 @@ This is the central result. Every row is at the same two-million-sample budget, 
 
 ---
 
-## Slide 19 — Cost vs quality: the Pareto picture
+## Slide 20 — Cost vs quality: the Pareto picture
 
 **MESSAGE:** Precipitation-CRPS quality saturates fast — FlowCast by ~8–10 steps, MeanFlow already below it at 1–2 — so the cheap regime *is* the accurate regime; the average-velocity objective shifts the whole frontier left.
 
 **ON SLIDE**
 - Sweep \(K\in\{1,\dots,50\}\): FlowCast **precipitation CRPS** saturates by \(K\approx 8\text{–}10\); more steps only add cost.
-- MeanFlow's precipitation-CRPS curve sits **below** FlowCast's saturated curve at **every** \(K\), and already undercuts it at \(K=1\text{–}2\). *(The narrowed-spread rollout-CRPS gap of Slide 18 is the separate aggregate metric.)*
+- MeanFlow's precipitation-CRPS curve sits **below** FlowCast's saturated curve at **every** \(K\), and already undercuts it at \(K=1\text{–}2\). *(The narrowed-spread rollout-CRPS gap of Slide 19 is the separate aggregate metric.)*
 - Wall-clock is linear in \(K\) → few-step regime is simultaneously cheap and accurate.
 - Operational picture: a 50-member, 24-h cycle = **2,400** evals (MeanFlow K=2) vs **42,000** (diffusion).
 
@@ -387,7 +407,7 @@ People always ask: if you add more steps, do the flow models keep improving — 
 
 ---
 
-## Slide 20 — Precipitation skill by threshold: a real trade-off
+## Slide 21 — Precipitation skill by threshold: a real trade-off
 
 **MESSAGE:** The flow heads are *conservative* (fewer false alarms, slightly fewer hits); diffusion is *aggressive* (more hits, more false alarms). At the heaviest rain, diffusion keeps a hit-rate edge.
 
@@ -404,7 +424,7 @@ Let me be honest about where the flow heads *don't* win, because it's an interes
 
 ---
 
-## Slide 21 — Rollout stability and qualitative cases
+## Slide 22 — Rollout stability and qualitative cases
 
 **MESSAGE:** Neither flow head destabilises over a 12-h rollout; visually they keep dry regions dry while preserving sharp convective structure — MeanFlow at two evaluations.
 
@@ -423,7 +443,7 @@ Two robustness checks. First, rollout: I chain the model forward for twelve hour
 
 # Part 6 — Discussion
 
-## Slide 22 — Failure modes (told honestly)
+## Slide 23 — Failure modes (told honestly)
 
 **MESSAGE:** Three named, diagnosed, mitigable failure modes — this is where the honest science is.
 
@@ -439,7 +459,7 @@ I want to spend a slide on failure modes, because that's where the real understa
 
 ---
 
-## Slide 23 — ★ Contributions
+## Slide 24 — ★ Contributions
 
 **MESSAGE:** One reproducible single-run average-velocity pipeline (MeanFlow), two retained baselines that make the comparison controlled, a precipitation-aware loss + eval suite — the first study of average-velocity flow matching on a regional convective-scale forecaster.
 
@@ -458,7 +478,7 @@ So, to gather the contributions. The headline one is MeanFlow — to my knowledg
 
 ---
 
-## Slide 24 — Limitations & future work
+## Slide 25 — Limitations & future work
 
 **MESSAGE:** Single snapshot, single domain, heavy-rain gap, low-NFE spread — all four are concrete and addressable.
 
@@ -480,7 +500,7 @@ The honest limitations. These numbers are at a single, relatively early training
 
 # Part 7 — Conclusion
 
-## Slide 25 — Conclusion
+## Slide 26 — Conclusion
 
 **MESSAGE:** Learning the *average velocity* of the noise→weather path — MeanFlow — lets one or two network calls do what diffusion needs thirty-five for, a credible route to fast, sharp, probabilistic regional forecasting.
 
@@ -497,7 +517,7 @@ To conclude. Generative modelling is almost certainly the right tool for short-r
 
 ---
 
-## Slide 26 — Thank you / Questions
+## Slide 27 — Thank you / Questions
 
 **ON SLIDE**
 - *One line:* **One-to-two-step Taiwan StormCast nowcasts via average-velocity flow matching (MeanFlow) — diffusion-level skill at a tenth of the cost, no teacher; the FlowCast straight-line baseline marks the midpoint.**
