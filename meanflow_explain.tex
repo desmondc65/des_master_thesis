@@ -1,0 +1,156 @@
+\documentclass[11pt]{article}
+
+% ------------------------------------------------------------------
+% Speaker notes: explaining the MeanFlow equations on presentation
+% slides 30-34 (Stormcast_via_cfm_and_meanflow.pdf). One section per
+% slide; each gives the equation followed by suggested bullet points.
+% ------------------------------------------------------------------
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage[colorlinks=true, linkcolor=blue!50!black, urlcolor=blue!50!black]{hyperref}
+
+% notation shortcuts matching the thesis
+\newcommand{\Nbb}{\mathcal{N}}
+\newcommand{\Ebb}{\mathbb{E}}
+
+\setlist[itemize]{leftmargin=1.4em, itemsep=2pt, topsep=3pt}
+
+\title{\textbf{Explaining the MeanFlow Equations}\\[2pt]
+       \large Speaker bullets for presentation slides 30--34}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2.5em}
+
+\noindent The five equations on slides 30--34 build a single argument:
+\emph{define} the object we want $\rightarrow$ show \emph{why} it is useful
+$\rightarrow$ expose the \emph{catch} $\rightarrow$ make it \emph{computable}
+$\rightarrow$ \emph{train} a network on it. The three-panel figure
+(Diffusion $\approx 35$ calls / FlowCast $\approx 10$ / MeanFlow $1$) stays
+fixed while the equation underneath advances.
+
+% ==================================================================
+\section*{Slide 30 --- Average velocity (definition)}
+\begin{equation*}
+  u(z_r, r, t) \;\triangleq\; \frac{1}{t - r} \int_{r}^{t} v(z_\tau, \tau)\, d\tau
+\end{equation*}
+\begin{itemize}
+  \item \textbf{The picture on the right is the whole story:} diffusion
+        curves to the forecast in $\approx 35$ calls, FlowCast straightens it
+        to $\approx 10$, MeanFlow wants to jump there in \textbf{1}.
+  \item $v(z_\tau, \tau)$ is the \textbf{instantaneous} velocity FlowCast
+        already learns --- the local tangent at each point of the path.
+  \item $u$ is its \textbf{time-average over the interval $[r, t]$}:
+        displacement divided by interval length. It is the single constant
+        velocity that carries you from $z_r$ to $z_t$.
+  \item Crucially, $u$ is a \textbf{property of the flow itself}, not of any
+        network --- and as $t \to r$ it collapses back to $v$
+        (one evaluation $=$ FlowCast).
+\end{itemize}
+
+% ==================================================================
+\section*{Slide 31 --- Single-step transport (why we want $u$)}
+\begin{equation*}
+  z_t = z_r + (t - r)\, u(z_r, r, t)
+\end{equation*}
+\begin{itemize}
+  \item This is just the definition rearranged --- but read it as a
+        \textbf{sampler}: knowing $u$ turns transport into \textbf{one
+        algebraic step}, no ODE solver.
+  \item Set $(r, t) = (0, 1)$ and a \textbf{single evaluation maps
+        noise $\rightarrow$ forecast} (the green dot, one call).
+  \item This is where MeanFlow differs from FlowCast in kind, not degree:
+        FlowCast \emph{integrates} many small steps; MeanFlow takes
+        \textbf{one exact step}.
+  \item \textbf{The catch:} $u$ is defined by an intractable path integral
+        (slide 30), so we cannot regress a network onto it directly. The cost
+        has moved from inference into training.
+\end{itemize}
+
+% ==================================================================
+\section*{Slide 32 --- The MeanFlow identity \textnormal{(boxed = key result)}}
+\begin{equation*}
+  u(z_r, r, t) \;=\; v(z_r, r) \;+\; (t - r)\, \frac{d}{dr}\, u(z_r, r, t)
+\end{equation*}
+\begin{itemize}
+  \item We \textbf{kill the integral by differentiating instead of
+        integrating.} Multiply slide 30 by $(t - r)$, differentiate in the
+        state-time $r$ (product rule $+$ fundamental theorem of calculus).
+  \item Result relates the field we \textbf{want} ($u$) to the field we
+        \textbf{can sample} ($v$), using only quantities at a \textbf{single
+        point of a single trajectory} --- the integral is gone.
+  \item The term $(t - r)\, \frac{d}{dr} u$ is the \textbf{correction} that
+        lifts the local velocity $v$ to the interval average $u$.
+  \item At $t = r$ it reduces to $u = v$ --- \textbf{plain flow matching is
+        the boundary condition}, which is exactly why MeanFlow is a clean
+        generalisation of FlowCast.
+\end{itemize}
+
+% ==================================================================
+\section*{Slide 33 --- Expanding the total derivative}
+\begin{equation*}
+  \frac{d}{dr}\, u(z_r, r, t) \;=\; v(z_r, r)\, \partial_z u \;+\; \partial_r u
+\end{equation*}
+\begin{itemize}
+  \item The $\frac{d}{dr}$ in the identity is a \textbf{total} derivative ---
+        the state $z_r$ itself moves along the trajectory as $r$ changes
+        ($dz_r / dr = v$).
+  \item Chain rule splits it into two \textbf{partials we can compute}:
+        motion through space ($v\, \partial_z u$) plus the explicit dependence
+        on the state-time ($\partial_r u$). ($t$ is held fixed, so no
+        $\partial_t$ term.)
+  \item This is the form that maps directly onto a \textbf{Jacobian--vector
+        product (JVP)}: one extra forward-mode pass with tangent $(v, 1, 0)$
+        for $(z, r, t)$ --- no higher-order gradients.
+  \item In short: this line is what makes the identity \textbf{actually
+        trainable} on a network.
+\end{itemize}
+
+% ==================================================================
+\section*{Slide 34 --- Training objective}
+\begin{align*}
+  \mathcal{L}_{\text{MF}}
+  &= \Ebb\Bigl[\, \mathrm{sg}(w)\,
+       \bigl\| u_\theta(z_r, r, t, c_t) - \mathrm{sg}(u_{\text{tgt}}) \bigr\|_{2,\beta}^2
+     \,\Bigr] + \lambda_{\text{spec}}\, \mathcal{L}_{\text{spec}}, \\[4pt]
+  u_{\text{tgt}} &= v + (t - r)\bigl( v\, \partial_z u_\theta + \partial_r u_\theta \bigr)
+\end{align*}
+\begin{itemize}
+  \item We \textbf{regress the network onto the identity's right-hand side}:
+        the target $u_{\text{tgt}}$ is just slide 32 with slide 33 substituted
+        in, and the network \textbf{bootstraps its own derivative}.
+  \item $v = x_1 - x_0$ is the conditional I-CFM velocity (same substitution
+        FlowCast makes, valid in expectation) --- \textbf{still teacher-free,
+        no diffusion model queried}.
+  \item \textbf{stop-gradient ($\mathrm{sg}$)} on the target and on the
+        weight: we do not backprop through the JVP, so training stays
+        first-order and stable.
+  \item \textbf{$w = (\|\Delta\|_{2,\beta}^2 + \varepsilon)^{-p}$} is adaptive
+        loss weighting (down-weights hard samples); \textbf{$\|\cdot\|_{2,\beta}$}
+        carries the same per-channel weights $\beta = (1, 1, 1, 2)$ and
+        \textbf{$\mathcal{L}_{\text{spec}}$} the same \texttt{qpepre} spectral
+        term as FlowCast.
+  \item A network at zero loss \textbf{satisfies the identity $\rightarrow$
+        equals the true average velocity.} And on the $75\%$ of the batch where
+        $t = r$, $u_{\text{tgt}} = v$ and this is \textbf{literally the
+        FlowCast loss} --- so MeanFlow vs FlowCast is an A/B on the objective
+        alone.
+\end{itemize}
+
+\vspace{1em}
+\begin{mdframed}[backgroundcolor=gray!8, linecolor=gray!40]
+\textbf{Presentation note.} The same three-panel figure repeats on all five
+slides while the equation underneath advances. If that is intentional
+(equations animating in over a fixed visual), these bullets match it. If you
+prefer, let the coloured dots / trajectory in the figure light up in step with
+the equation --- e.g.\ highlight the single green MeanFlow dot on slide 31 when
+you introduce one-step transport.
+\end{mdframed}
+
+\end{document}

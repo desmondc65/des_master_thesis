@@ -3,7 +3,7 @@
 \chapter{Experiments and Results}
 \label{ch:experiments}
 
-This chapter presents the empirical evaluation of the MeanFlow residual of Chapter~\ref{ch:method} against its two reference heads --- the EDM diffusion baseline it sets out to accelerate and the FlowCast straight-line flow-matching baseline it generalises. Section~\ref{sec:exp-protocol} defines the experimental protocol and the matched-sample-budget convention. Section~\ref{sec:exp-metrics} defines the evaluation metrics. Section~\ref{sec:exp-main} reports the headline comparison on the 2022 validation year. Section~\ref{sec:exp-nfe} reports the NFE / wall-clock--versus--quality trade-off for both flow heads, where MeanFlow's one-to-two-evaluation operating point is the central result. Section~\ref{sec:exp-precip} drills into precipitation skill by threshold; Section~\ref{sec:exp-rollout} reports autoregressive rollout error growth. Sections~\ref{sec:exp-log1p} and~\ref{sec:exp-qpw} report the \texttt{log1p}-encoding and precipitation-weight ablations. Section~\ref{sec:exp-legacy} places the heads against a legacy old-StormCast baseline. Section~\ref{sec:exp-qual} presents qualitative case studies, Section~\ref{sec:exp-failure} catalogues failure modes, and Section~\ref{sec:exp-discussion} concludes with a discussion.
+This chapter presents the empirical evaluation of the MeanFlow residual of Chapter~\ref{ch:method} against its two reference heads --- the EDM diffusion baseline it sets out to accelerate and the FlowCast straight-line flow-matching baseline it generalises. Section~\ref{sec:exp-protocol} defines the experimental protocol and the matched-sample-budget convention. Section~\ref{sec:exp-metrics} defines the evaluation metrics. Section~\ref{sec:exp-main} reports the headline comparison on the 2022 validation year. Section~\ref{sec:exp-nfe} reports the inference-cost (wall-clock and NFE) ablation, where MeanFlow's one-to-two-evaluation operating point is the central result. Section~\ref{sec:exp-precip} drills into precipitation skill by threshold and neighbourhood size; Section~\ref{sec:exp-rollout} reports autoregressive rollout error growth. Sections~\ref{sec:exp-log1p} and~\ref{sec:exp-qpw} report the \texttt{log1p}-encoding and precipitation-weight ablations. Section~\ref{sec:exp-legacy} places the heads against a legacy old-StormCast baseline. Section~\ref{sec:exp-qual} presents qualitative case studies, Section~\ref{sec:exp-failure} catalogues failure modes, and Section~\ref{sec:exp-discussion} concludes with a discussion.
 
 % ==================================================
 \section{Experimental Protocol}
@@ -15,11 +15,11 @@ This chapter presents the empirical evaluation of the MeanFlow residual of Chapt
 
 \paragraph{Single-snapshot noise.} Each validation point is a single snapshot. Adjacent validation logs drift by $10$--$30\,\%$, so differences below $\approx 5\,\%$ on a single metric should not be over-interpreted; we call out only gaps that are large relative to this noise floor.
 
-\paragraph{NFE budgets and samplers.} The EDM baseline samples with its native 18-step Heun schedule (two model evaluations per step except the last, $2N - 1 = 35$ NFE per hourly step). FlowCast samples with $K$ explicit Euler steps, $K$ NFE; we report $K \in \{10, 15, 20\}$ in the rollout scoreboard and sweep $K$ from $1$ to $50$ in the inference-step study of Section~\ref{sec:exp-nfe}. MeanFlow samples with $K$ average-velocity segments (Eq.~\eqref{eq:meanflow-sampler}), also exactly $K$ NFE; its headline operating points are $K \in \{1, 2\}$, and Section~\ref{sec:exp-nfe} sweeps it over the same $1$--$50$ grid as FlowCast. The scoreboard harness loads the two flow students from their online checkpoints in the same way, so the FlowCast-versus-MeanFlow comparison is symmetric end to end (the EMA shadow is used by the in-training validation sampler; Section~\ref{sec:method-flowcast}).
+\paragraph{NFE budgets and samplers.} The EDM baseline samples with its native 18-step Heun schedule (two model evaluations per step except the last, $2N - 1 = 35$ NFE per hourly step). FlowCast samples with $K$ explicit Euler steps, $K$ NFE; we use $K = 10$ in the headline scoreboard, the point at which the straight-line ODE is essentially converged (Section~\ref{sec:exp-nfe}), and report the $K \in \{10, 15, 20\}$ cost ladder in the timing ablation. MeanFlow samples with $K$ average-velocity segments (Eq.~\eqref{eq:meanflow-sampler}), also exactly $K$ NFE; its headline operating points are $K \in \{1, 2\}$. The scoreboard harness loads the two flow students from their online checkpoints in the same way, so the FlowCast-versus-MeanFlow comparison is symmetric end to end (the EMA shadow is used by the in-training validation sampler; Section~\ref{sec:method-flowcast}).
 
-\paragraph{Rollouts and ensembling.} The scoreboard metrics are computed from autoregressive rollouts driven by \texttt{compare\_diffusion\_vs\_flowcast.py}, which denormalises every output (undoing standardisation and the \texttt{log1p} encoding) so that \texttt{qpepre} is scored in mm\,h$^{-1}$ regardless of the on-disk encoding. CRPS uses a \textbf{ten-member} per-hour ensemble of independent noise seeds --- matching the ensemble-size bracket of operational convection-permitting ensemble systems (e.g.\ HREF at $\approx 10$ members, MOGREPS-UK at 18) --- and deterministic and categorical scores use the ensemble mean. Ten initial times are spaced evenly across the validation year, each rolled out to $+12$\,h.
+\paragraph{Rollouts and ensembling.} The scoreboard metrics are computed from autoregressive rollouts driven by \texttt{compare\_diffusion\_vs\_flowcast.py}, which denormalises every output (undoing standardisation and the \texttt{log1p} encoding) so that \texttt{qpepre} is scored in mm\,h$^{-1}$ regardless of the on-disk encoding. Following the StormCast ensemble design \citep{pathak2024stormcast}, CRPS uses a \textbf{five-member} per-hour ensemble of independent noise seeds propagated autoregressively. Deterministic and categorical scores use the ensemble mean. Ten initial times are spaced evenly across the validation year, each rolled out autoregressively over a \textbf{six-hour} horizon ($+1\,\text{h}\,\ldots\,+6\,\text{h}$), matching StormCast's headline 1--6\,h skill window.
 
-\paragraph{Hardware.} Training: multi-GPU single node. Evaluation: single GPU. The ``Time/Seq.'' column in the scoreboards is the wall-clock cost of generating one rollout sequence on the evaluation GPU and is the operationally relevant cost figure.
+\paragraph{Hardware.} Training: multi-GPU single node. Evaluation: single GPU. The ``Time/Seq.'' column in the scoreboards is the wall-clock cost of generating one five-member six-hour rollout sequence on the evaluation GPU; the dedicated inference-timing ablation of Section~\ref{sec:exp-nfe} reports the operationally relevant cost at a 50-member, 24-hour configuration on a single NVIDIA RTX A6000.
 
 % ==================================================
 \section{Evaluation Metrics}
@@ -41,41 +41,39 @@ with MAE defined analogously.
   \mathrm{FAR}(\tau) = \frac{F}{H + F}, \quad
   \mathrm{HSS}(\tau) = \frac{2(H\,\mathrm{CN} - M\,F)}{(H+M)(M+\mathrm{CN}) + (H+F)(F+\mathrm{CN})},
 \end{equation}
-where $\mathrm{CN}$ is the correct-negative count. We report $\tau \in \{0.1, 1.0, 5.0, 10.0, 16.0\}$\,mm\,h$^{-1}$; ``-M'' suffixes denote the mean over thresholds and ``-P16'' the $\tau = 16$\,mm\,h$^{-1}$ heavy-rain point. CSI and HSS reward correct detection (higher is better); FAR penalises over-prediction (lower is better).
+where $\mathrm{CN}$ is the correct-negative count. We report $\tau \in \{0.1, 1.0, 5.0, 10.0, 16.0\}$\,mm\,h$^{-1}$; ``-M'' suffixes denote the mean over thresholds and ``-P16'' the $\tau = 16$\,mm\,h$^{-1}$ heavy-rain point. CSI and HSS reward correct detection (higher is better); FAR penalises over-prediction (lower is better). To relax the single-pixel double-penalty, CSI/POD/FAR/HSS are scored with \emph{neighbourhood-max} pooling: an event counts as forecast if any pixel within an $n \times n$ window exceeds $\tau$. We evaluate at the four StormCast pooling windows \citep{pathak2024stormcast} on the $\approx 2$\,km RWRF grid --- $3$\,km (grid scale, $1\times1$\,px), $15$\,km ($7\times7$\,px), $27$\,km ($13\times13$\,px) and $45$\,km ($23\times23$\,px) --- and take the $15$\,km window as the headline.
 
-\paragraph{Fractions Skill Score.} With neighbourhood radius $n$,
+\paragraph{Fractions Skill Score.} With neighbourhood window $n$,
 \begin{equation}
   \mathrm{FSS}(\tau, n) = 1 - \frac{\sum_{i,j}(p^{\text{fc}}_{i,j} - p^{\text{ob}}_{i,j})^2}{\sum_{i,j}(p^{\text{fc}}_{i,j})^2 + \sum_{i,j}(p^{\text{ob}}_{i,j})^2},
 \end{equation}
-where $p_{i,j}$ is the fraction of $\tau$-exceeding pixels in an $n \times n$ box centred at $(i,j)$. FSS mitigates the double-penalty problem and is reported at the heavy-rain point $\tau = 16$\,mm\,h$^{-1}$ for $n \in \{3, 7, 15\}$.
+where $p_{i,j}$ is the \emph{fraction} of $\tau$-exceeding pixels in the $n \times n$ box centred at $(i,j)$ \citep{roberts2008fss}. FSS mitigates the double-penalty problem and is reported at the same four pooling windows; the heavy-rain point $\tau = 16$\,mm\,h$^{-1}$ is denoted FSS-P16.
 
 \paragraph{Radial log-PSD.} We compute the 2D FFT of each \texttt{qpepre} field, square its magnitude, radially average to obtain $P(\kappa)$, and compare $\log P(\kappa)$ of forecast and observation. A model that blurs precipitation has a log-PSD that decays too fast at high wavenumbers.
 
-\paragraph{Rollout metrics.} Per-channel RMSE is additionally reported as a function of lead time $\ell \in \{1, \ldots, 12\}$\,h to expose autoregressive error growth.
+\paragraph{Rollout metrics.} Per-channel RMSE is additionally reported as a function of lead time $\ell \in \{1, \ldots, 6\}$\,h to expose autoregressive error growth.
 
 % ==================================================
 \section{MeanFlow versus Diffusion and FlowCast: Headline Comparison}
 \label{sec:exp-main}
 
-Table~\ref{tab:main-scoreboard} is the central result of the thesis: MeanFlow (at one and two average-velocity segments) set against its two reference heads --- the EDM diffusion baseline and the FlowCast straight-line baseline (at three Euler-step counts) --- on the 2022 validation year, all at the matched $\approx 2\,\text{M}$-sample budget, sharing the same frozen regression mean and cleaned log1p dataset. Figure~\ref{fig:scoreboard} visualises the same scoreboard.
+Table~\ref{tab:main-scoreboard} is the central result of the thesis: MeanFlow (at one and two average-velocity segments) set against its two reference heads --- the EDM diffusion baseline and the FlowCast straight-line baseline at $K = 10$ Euler steps --- on the 2022 validation year, all at the matched $\approx 2\,\text{M}$-sample budget, sharing the same frozen regression mean and cleaned log1p dataset. Categorical scores are reported at the $15$\,km headline pooling window; Section~\ref{sec:exp-precip} reports all four windows. Figure~\ref{fig:scoreboard} visualises the same scoreboard.
 
 \begin{table}[htbp]
   \centering
-  \caption[FlowCast and MeanFlow versus EDM diffusion scoreboard]{Headline three-way comparison on the 2022 validation year (cleaned $192\times96$, log1p qpepre, $\approx 2\,\text{M}$ training samples; ten-member ensembles over ten initial times, $+12$\,h rollouts). Precipitation scores are in mm\,h$^{-1}$ after denormalisation. ``-M'' = mean over thresholds, ``-P16'' = $16$\,mm\,h$^{-1}$. $\uparrow$/$\downarrow$ indicate the better direction; \textbf{bold} marks the best in each column. Time/Seq.\ is the wall-clock cost of one ten-member rollout sequence on a single NVIDIA RTX A6000; wall-clock on the shared GPU varies at the $\pm10\,\%$ level across sessions (the MeanFlow rows were timed in a later session whose diffusion leg ran $8\,\%$ faster than tabulated), so speedup factors are quoted to two significant figures at most.}
+  \caption[MeanFlow, FlowCast and EDM diffusion scoreboard]{Headline comparison on the 2022 validation year (cleaned $192\times96$, log1p qpepre, $\approx 2\,\text{M}$ training samples; five-member ensembles over ten initial times, $+6$\,h rollouts). Categorical scores ($15$\,km neighbourhood) and precipitation RMSE are in mm\,h$^{-1}$ after denormalisation. ``-M'' = mean over thresholds. $\uparrow$/$\downarrow$ indicate the better direction; \textbf{bold} marks the best in each column. \texttt{t2m} RMSE is omitted for width and discussed in the text (Figure~\ref{fig:rmse-channel}). Time/Seq.\ is the wall-clock cost of one five-member six-hour rollout sequence on a single NVIDIA RTX A6000.}
   \label{tab:main-scoreboard}
   \small
-  \setlength{\tabcolsep}{4pt}
-  \begin{tabular}{lrrrrrrrrr}
+  \setlength{\tabcolsep}{4.5pt}
+  \begin{tabular}{lrrrrrrrr}
     \toprule
-    Method & Time/Seq. & CRPS$\downarrow$ & CSI-M$\uparrow$ & FSS-P16$\uparrow$ & HSS-M$\uparrow$ & FAR-M$\downarrow$ & RMSE & RMSE & RMSE \\
-     & (s) & & & & & & u10$\downarrow$ & v10$\downarrow$ & qpepre$\downarrow$ \\
+    Method & Time/Seq. & CRPS$\downarrow$ & CSI-M$\uparrow$ & HSS-M$\uparrow$ & FAR-M$\downarrow$ & RMSE & RMSE & RMSE \\
+     & (s) & & & & & u10$\downarrow$ & v10$\downarrow$ & qpepre$\downarrow$ \\
     \midrule
-    EDM diffusion (35 NFE) & 21.78 & 0.6783 & \textbf{0.1498} & \textbf{0.0013} & 0.1804 & 0.4727 & 1.5626 & 1.9574 & 0.9429 \\
-    FlowCast ($K{=}10$) & 5.88 & 0.6833 & 0.1364 & 0.0000 & 0.1717 & 0.4188 & \textbf{1.4935} & \textbf{1.6423} & 0.8959 \\
-    FlowCast ($K{=}15$) & 8.35 & \textbf{0.6740} & 0.1435 & 0.0000 & 0.1805 & 0.4244 & 1.5203 & 1.6710 & \textbf{0.8897} \\
-    FlowCast ($K{=}20$) & 10.28 & 0.6856 & 0.1435 & 0.0000 & 0.1769 & 0.5436 & 1.5226 & 1.7316 & 0.9013 \\
-    MeanFlow ($K{=}1$) & \textbf{1.83} & 0.8485 & 0.1449 & \textbf{0.0013} & 0.1832 & \textbf{0.3861} & 1.6540 & 2.1740 & 0.9263 \\
-    MeanFlow ($K{=}2$) & 2.35 & 0.7265 & 0.1492 & 0.0000 & \textbf{0.1852} & 0.5241 & 1.5350 & 1.7902 & 0.9404 \\
+    EDM diffusion (35 NFE) & 11.23 & 0.5537 & 0.2622 & 0.2926 & 0.3417 & 1.3513 & 1.6082 & 1.0292 \\
+    FlowCast ($K{=}10$) & 3.07 & \textbf{0.5518} & 0.2504 & 0.2889 & 0.3504 & \textbf{1.2838} & \textbf{1.4085} & \textbf{0.9590} \\
+    MeanFlow ($K{=}1$) & \textbf{0.93} & 0.6710 & 0.2443 & 0.2861 & \textbf{0.2985} & 1.3767 & 1.6915 & 0.9834 \\
+    MeanFlow ($K{=}2$) & 1.16 & 0.6093 & \textbf{0.2690} & \textbf{0.3154} & 0.3738 & 1.2986 & 1.4887 & 1.0054 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -83,17 +81,17 @@ Table~\ref{tab:main-scoreboard} is the central result of the thesis: MeanFlow (a
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.92\linewidth]{figures/results/scoreboard_3way.png}
-  \caption[Three-way scoreboard plot]{Per-metric comparison of the EDM diffusion baseline, FlowCast at $K \in \{10, 15, 20\}$, and MeanFlow at $K \in \{1, 2\}$ on the 2022 validation year (ten-member ensembles). FlowCast attains its skill at roughly a quarter of the diffusion wall-clock cost, MeanFlow at roughly a tenth.}
+  \caption[Headline scoreboard plot]{Per-metric comparison of the EDM diffusion baseline, FlowCast at $K = 10$, and MeanFlow at $K \in \{1, 2\}$ on the 2022 validation year (five-member ensembles, $15$\,km categorical window). FlowCast attains its skill at roughly a third of the diffusion wall-clock cost, MeanFlow at roughly a tenth.}
   \label{fig:scoreboard}
 \end{figure}
 
-\paragraph{Read.} At $K = 10$ FlowCast runs in \SI{5.88}{\second} per ten-member sequence versus \SI{21.78}{\second} for the $35$-NFE EDM Heun sampler --- a \textbf{3.7$\times$ speedup} --- and at that budget it \emph{matches or beats} the diffusion baseline on most columns: CRPS is within the snapshot noise ($0.6833$ vs $0.6783$, a $0.7\,\%$ gap), and FlowCast is clearly better on \texttt{u10} RMSE ($-4\,\%$), \texttt{v10} RMSE ($-16\,\%$), \texttt{qpepre} RMSE ($-5\,\%$), and the false-alarm ratio (FAR-M $0.42$ vs $0.47$). The diffusion baseline retains an edge on the hit-based categorical score CSI-M, on the (near-degenerate; Section~\ref{sec:exp-precip}) heavy-rain FSS, and on \texttt{t2m} RMSE (diffusion \num{1.0208} vs FlowCast \num{1.1410}; the one channel where FlowCast trails, omitted from Table~\ref{tab:main-scoreboard} for width but shown in Figure~\ref{fig:rmse-channel}). Pushing FlowCast to $K = 15$ buys the best CRPS ($0.6740$) and best \texttt{qpepre} RMSE ($0.8897$) in the table at \SI{8.35}{\second}, still $2.6\times$ cheaper than diffusion; beyond that, $K = 20$ shows no further gain and a FAR regression, consistent with the straight-line ODE being essentially converged by $\approx 10$--$15$ steps.
+\paragraph{Read.} At $K = 10$ FlowCast runs in \SI{3.07}{\second} per five-member sequence versus \SI{11.23}{\second} for the $35$-NFE EDM Heun sampler --- a \textbf{3.7$\times$ speedup} --- and at that budget it \emph{matches or beats} the diffusion baseline on most columns. CRPS is in fact marginally better ($0.5518$ vs $0.5537$, a $0.3\,\%$ gap, i.e.\ statistically indistinguishable), and FlowCast is clearly ahead on \texttt{u10} RMSE ($-5\,\%$), \texttt{v10} RMSE ($-12\,\%$), and \texttt{qpepre} RMSE ($-7\,\%$). The diffusion baseline retains an edge on the hit-based categorical scores at the headline window --- CSI-M ($0.2622$ vs $0.2504$) and HSS-M ($0.2926$ vs $0.2889$) --- and on \texttt{t2m} RMSE (diffusion \num{0.8023} vs FlowCast \num{0.8498}; the one channel where FlowCast trails, omitted from Table~\ref{tab:main-scoreboard} for width but shown in Figure~\ref{fig:rmse-channel}). The two FAR figures are within noise at $15$\,km ($0.3504$ vs $0.3417$), but FlowCast is the lower-false-alarm head at the $3$, $27$ and $45$\,km windows (Section~\ref{sec:exp-precip}). Pushing FlowCast beyond $K = 10$ buys no headline skill, only wall-clock (Section~\ref{sec:exp-nfe}), consistent with the straight-line ODE being essentially converged by $\approx 10$ steps.
 
-\paragraph{Read (MeanFlow rows).} MeanFlow compresses the cost axis by another large factor: \SI{2.35}{\second} at $K = 2$ --- $\approx 9\times$ cheaper than the diffusion sampler and $2.5\times$ cheaper than FlowCast's $K = 10$ --- and \SI{1.83}{\second} at $K = 1$. At $K = 2$ it posts the best \texttt{t2m} RMSE of \emph{any} head (\num{0.9999} vs the diffusion baseline's \num{1.0208}; Figure~\ref{fig:rmse-channel}) --- repairing the one channel FlowCast loses --- together with the best HSS-M in the table ($0.1852$) and a CSI-M ($0.1492$) at the diffusion baseline's level, i.e.\ it does not inherit FlowCast's conservative hit-rate deficit. Its concessions are probabilistic and wind-deterministic: the $12$-hour rollout CRPS ($0.7265$) trails the ODE heads by $\approx 6$--$7\,\%$, FAR-M at $K = 2$ ($0.52$) sits at FlowCast's $K{=}20$ level rather than its $K{=}10$ level, and \texttt{v10} RMSE ($1.79$) lands between FlowCast ($1.64$) and diffusion ($1.96$). The $K = 1$ row makes the mechanism legible: deterministic and categorical scores stay close to $K = 2$ (and FAR-M $0.3861$ is the lowest in the table --- a narrow ensemble raises few alarms), but CRPS degrades to $0.8485$, essentially the legacy baseline's level. This is the under-dispersion failure mode of Section~\ref{sec:exp-failure} compounding autoregressively: the same checkpoint's \emph{single-step} calibration is ahead of FlowCast at every step count (Section~\ref{sec:exp-nfe}), so the rollout gap is accumulated spread deficit, not single-step quality.
+\paragraph{Read (MeanFlow rows).} MeanFlow compresses the cost axis by another large factor: \SI{1.16}{\second} at $K = 2$ --- $\approx 9.6\times$ cheaper than the diffusion sampler and $2.6\times$ cheaper than FlowCast's $K = 10$ --- and \SI{0.93}{\second} at $K = 1$. At $K = 2$ it posts the best categorical scores in the table at the headline window (CSI-M $0.2690$ and HSS-M $0.3154$, both \emph{above} the diffusion baseline's $0.2622$/$0.2926$), i.e.\ it does not inherit FlowCast's conservative hit-rate deficit, while matching FlowCast's \texttt{u10} and \texttt{v10} RMSE to within a few percent. Its concessions are probabilistic and on \texttt{qpepre} RMSE: the six-hour rollout CRPS ($0.6093$) trails the ODE heads by $\approx 10\,\%$, FAR-M at $K = 2$ ($0.3738$) is the highest in the table (more hits bought with more false alarms), and \texttt{qpepre} RMSE ($1.0054$) sits at the diffusion baseline's level rather than FlowCast's. The $K = 1$ row makes the mechanism legible: deterministic \texttt{t2m} ($0.8087$, second only to diffusion) and the lowest FAR-M in the table ($0.2985$, a narrow ensemble raises few alarms) sit alongside the worst CRPS of the cleaned heads ($0.6710$) and the worst \texttt{v10} RMSE ($1.6915$). The CRPS degradation from $K = 2$ to $K = 1$ ($0.6093 \to 0.6710$, $+10\,\%$) is the under-dispersion failure mode of Section~\ref{sec:exp-failure}: a single average-velocity evaluation maps each noise draw almost onto the conditional mean, narrowing ensemble spread, and the deficit compounds autoregressively. One extra segment restores most of the spread, which is why $K = 2$ is the recommended MeanFlow operating point.
 
-\paragraph{Interpretation.} The categorical picture is a coherent trade rather than a wash: FlowCast issues fewer false alarms (lower FAR) but also slightly fewer hits (lower CSI), i.e.\ it is the more \emph{conservative} precipitation forecaster, while the diffusion baseline is more aggressive in placing wet pixels and is rewarded by CSI but penalised by FAR. Notably, the FAR gap is much smaller at the ten-member standard than in small-ensemble pilots ($0.42$ vs $0.47$, where four-member runs showed $0.43$ vs $0.70$): averaging more members suppresses the diffusion head's speculative wet pixels, so part of its apparent false-alarm problem was an ensemble-size artefact. Which trade is preferable is an operational choice; the unambiguous wins for FlowCast are the wind fields, precipitation RMSE, and a $\sim$$3.7\times$ lower inference cost at statistically indistinguishable CRPS. MeanFlow occupies a third corner of the trade space: diffusion-level hit rates and the best temperature at a tenth of the diffusion cost, paid for with a single-snapshot-scale rollout-CRPS gap whose origin (narrowed ensemble spread under autoregression) is diagnosed in Sections~\ref{sec:exp-nfe} and~\ref{sec:exp-failure}; restoring rollout spread at $K \leq 2$ is listed as future work in Chapter~\ref{ch:conclusion}.
+\paragraph{Interpretation.} The categorical picture is a coherent trade rather than a wash. FlowCast is the most \emph{conservative} precipitation forecaster --- lowest false-alarm ratio across the wider neighbourhoods but slightly fewer hits at the headline window --- whereas the diffusion baseline and MeanFlow-$K2$ are more aggressive in placing wet pixels and are rewarded by CSI/HSS at some cost in FAR. Which trade is preferable is an operational choice; the unambiguous wins for FlowCast are the wind fields, precipitation RMSE, and a $\sim$$3.7\times$ lower inference cost at statistically indistinguishable CRPS. MeanFlow occupies a third corner of the trade space: the best categorical hit rates of any head at the headline window and near-best temperature, at a \emph{tenth} of the diffusion cost, paid for with a single-snapshot-scale rollout-CRPS gap whose origin (narrowed ensemble spread under autoregression) is diagnosed in Section~\ref{sec:exp-failure}; restoring rollout spread at $K \leq 2$ is listed as future work in Chapter~\ref{ch:conclusion}.
 
-\paragraph{Per-channel RMSE and CRPS.} Figures~\ref{fig:rmse-channel} and~\ref{fig:crps-channel} break the deterministic and probabilistic errors out by channel. FlowCast's advantage is largest and consistent across both metrics on the meridional wind \texttt{v10} and on the precipitation channel. On \texttt{u10} the two metrics disagree --- FlowCast has the lower RMSE but the diffusion baseline the lower CRPS at $K \leq 15$ (at $K = 20$ the two are tied) --- and on \texttt{t2m} the diffusion baseline leads both flow-ODE settings, FlowCast's temperature residual being marginally noisier at this budget. MeanFlow redraws the \texttt{t2m} column: at $K = 2$ its temperature RMSE (\num{0.9999}\,K) is the best of all heads, $2\,\%$ below the diffusion baseline and $12\,\%$ below FlowCast --- evidence that FlowCast's \texttt{t2m} weakness belongs to its learned trajectory rather than to the shared backbone, loss weights, or residual pipeline, since MeanFlow shares all three.
+\paragraph{Per-channel RMSE and CRPS.} Figures~\ref{fig:rmse-channel} and~\ref{fig:crps-channel} break the deterministic and probabilistic errors out by channel. FlowCast's advantage is largest and consistent across both metrics on the meridional wind \texttt{v10} (RMSE $1.41$ vs $1.61$; CRPS $0.742$ vs $0.793$) and on the precipitation channel (qpepre CRPS $0.281$, the best of any head). On \texttt{u10} the diffusion baseline holds the lower CRPS ($0.659$ vs $0.667$) despite FlowCast's lower RMSE, and on \texttt{t2m} the diffusion baseline leads both metrics, FlowCast's temperature residual being the noisiest at this budget. MeanFlow narrows the \texttt{t2m} gap: at $K = 1$ its temperature RMSE (\num{0.8087}\,K) is the best of the flow heads and within $1\,\%$ of the diffusion baseline --- evidence that FlowCast's \texttt{t2m} weakness belongs to its learned trajectory rather than to the shared backbone, loss weights, or residual pipeline, since MeanFlow shares all three --- while paying for its narrowed spread in the wind CRPS columns, where the $K = 1$ row is the weakest in the study.
 
 \begin{figure}[htbp]
   \centering
@@ -107,108 +105,130 @@ Table~\ref{tab:main-scoreboard} is the central result of the thesis: MeanFlow (a
     \caption{Per-channel CRPS.}
     \label{fig:crps-channel}
   \end{subfigure}
-  \caption[Per-channel RMSE and CRPS]{Per-channel deterministic (RMSE) and probabilistic (CRPS) errors for the diffusion baseline, FlowCast, and MeanFlow on the 2022 validation year. FlowCast wins on the winds and precipitation; MeanFlow at $K{=}2$ takes \texttt{t2m} from the diffusion baseline while staying competitive elsewhere.}
+  \caption[Per-channel RMSE and CRPS]{Per-channel deterministic (RMSE) and probabilistic (CRPS) errors for the diffusion baseline, FlowCast, and MeanFlow on the 2022 validation year. FlowCast wins on the winds and precipitation; MeanFlow at $K{=}1$ holds the best temperature of the flow heads while its narrowed spread shows up in the wind CRPS.}
   \label{fig:per-channel}
 \end{figure}
 
 % ==================================================
-\section{Inference Cost: NFE and Wall-Clock Trade-off}
+\section{Inference Cost: Wall-Clock and NFE Ablation}
 \label{sec:exp-nfe}
 
-The defining property of a straight-line flow is that it integrates accurately in very few steps; the defining property of an \emph{average-velocity} model is that it does not integrate at all. The three FlowCast rows of Table~\ref{tab:main-scoreboard} already show that quality is essentially flat across $K \in \{10, 15, 20\}$ while wall-clock rises linearly, so FlowCast's operational sweet spot sits at the low end of that range; the MeanFlow rows reach the table's deterministic and categorical skill class at $K \in \{1, 2\}$ (with the rollout-CRPS concession analysed above). Figure~\ref{fig:nfe} extends both sweeps over the full $K \in \{1, \ldots, 50\}$ range on the same matched checkpoints: FlowCast's precipitation CRPS saturates by $K \approx 8$--$10$, while MeanFlow starts \emph{below} FlowCast's saturated level already at $K = 1$--$2$ --- the two heads pay for quality in different currencies, integration steps versus a harder training objective, and MeanFlow's currency is the cheaper one at inference time. Wall-clock per sequence is linear in $K$ for both, so the few-step regime is simultaneously the accurate and the cheap one. Per NFE at the $K = 10$ operating point, FlowCast costs $\approx \SI{0.59}{\second}$ per network evaluation (single forward pass, ten members); because a fixed per-sequence overhead is amortised over more steps, the effective per-NFE cost falls toward $\approx \SI{0.51}{\second}$ at $K = 20$. Either way it undercuts the diffusion Heun sampler's $\approx \SI{0.62}{\second}$ per evaluation ($35$ evaluations per hourly step), so FlowCast is cheaper both because it uses fewer steps \emph{and} because each step is a single forward pass with no second-order correction.
+The defining property of a straight-line flow is that it integrates accurately in very few steps; the defining property of an \emph{average-velocity} model is that it does not integrate at all. Tables~\ref{tab:timing} and~\ref{tab:timing-h100} report the inference-timing ablation at an operationally realistic configuration --- a 50-member, 24-hour ensemble forecast on a single NVIDIA RTX A6000 (the deployment GPU) and on a single NVIDIA H100 80GB --- across the EDM Heun sampler, FlowCast at $K \in \{10, 15, 20\}$, and MeanFlow at $K \in \{1, 2\}$. This is the cost figure that matters for deployment: an ensemble convection-permitting cycle re-run every forecast hour. Figure~\ref{fig:timing} plots both devices' wall-clock on a log axis with each head's speedup over the EDM baseline annotated.
+
+\begin{table}[htbp]
+  \centering
+  \caption[Inference timing ablation (A6000)]{Inference timing on a single NVIDIA RTX A6000 (50-member ensemble, 24\,h autoregressive rollout, one CUDA warm-up forecast discarded). ``s\,/\,forecast'' is the wall-clock for one full 50-member 24\,h ensemble forecast --- the headline operational cost. ``Speedup'' is relative to the EDM diffusion sampler. ``s\,/\,NFE'' divides the per-forecast-hour cost by the per-step NFE; MeanFlow's higher per-NFE figure is fixed per-forecast overhead (I/O, denormalisation) amortised over only one--two evaluations, not a heavier network. \textbf{Bold} = best per column.}
+  \label{tab:timing}
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    Method & NFE/step & s\,/\,forecast$\downarrow$ & Speedup$\uparrow$ & s\,/\,fcst-hr$\downarrow$ & s\,/\,member$\downarrow$ & s\,/\,NFE \\
+    \midrule
+    EDM diffusion        & 35 & 1898.0 & 1.0$\times$ & 1.582 & 37.96 & 0.044 \\
+    FlowCast ($K{=}10$)  & 10 & 645.2  & 2.9$\times$ & 0.538 & 12.90 & 0.054 \\
+    FlowCast ($K{=}15$)  & 15 & 826.4  & 2.3$\times$ & 0.689 & 16.53 & 0.046 \\
+    FlowCast ($K{=}20$)  & 20 & 1086.3 & 1.7$\times$ & 0.905 & 21.73 & 0.045 \\
+    MeanFlow ($K{=}1$)   & 1  & \textbf{191.9} & \textbf{9.9$\times$} & \textbf{0.160} & \textbf{3.84} & 0.160 \\
+    MeanFlow ($K{=}2$)   & 2  & 239.1  & 7.9$\times$ & 0.199 & 4.78  & 0.100 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption[Inference timing ablation (H100)]{Inference timing on a single NVIDIA H100 80GB HBM3 (same protocol as Table~\ref{tab:timing}: 50-member ensemble, 24\,h autoregressive rollout, one CUDA warm-up forecast discarded). Columns as in Table~\ref{tab:timing}; ``Speedup'' is relative to the EDM diffusion sampler \emph{on the same device}. \textbf{Bold} = best per column. The H100 roughly halves every wall-clock against the A6000 (A6000/H100 $\approx 1.9$--$2.1\times$; see Figure~\ref{fig:timing}), and the relative speedups over EDM grow slightly because the diffusion baseline's many evaluations dominate more on faster silicon.}
+  \label{tab:timing-h100}
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{lrrrrrr}
+    \toprule
+    Method & NFE/step & s\,/\,forecast$\downarrow$ & Speedup$\uparrow$ & s\,/\,fcst-hr$\downarrow$ & s\,/\,member$\downarrow$ & s\,/\,NFE \\
+    \midrule
+    EDM diffusion        & 35 & 986.6 & 1.0$\times$ & 0.822 & 19.73 & 0.023 \\
+    FlowCast ($K{=}10$)  & 10 & 321.2 & 3.1$\times$ & 0.268 & 6.42  & 0.027 \\
+    FlowCast ($K{=}15$)  & 15 & 451.0 & 2.2$\times$ & 0.376 & 9.02  & 0.025 \\
+    FlowCast ($K{=}20$)  & 20 & 577.8 & 1.7$\times$ & 0.482 & 11.56 & 0.024 \\
+    MeanFlow ($K{=}1$)   & 1  & \textbf{91.1}  & \textbf{10.8$\times$} & \textbf{0.076} & \textbf{1.82} & 0.076 \\
+    MeanFlow ($K{=}2$)   & 2  & 116.4 & 8.5$\times$ & 0.097 & 2.33  & 0.048 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.96\linewidth]{figures/results/nfe_pareto.png}
-  \caption[FlowCast and MeanFlow NFE Pareto sweep]{FlowCast and MeanFlow quality and cost as the sampler step count $K$ is swept, holding each matched $\approx 2\,\text{M}$-sample checkpoint fixed (2022 validation, single generative step). (a)~FlowCast's precipitation CRPS is essentially converged by $K \approx 8$--$10$; MeanFlow's curve (dashed) sits \emph{below} FlowCast's at every $K$, and its $1$--$2$-segment values already undercut FlowCast at any step count in the sweep --- the average-velocity objective shifts the whole quality--NFE frontier left. The shaded band marks the $K \in \{10, 20\}$ FlowCast range tabulated in Table~\ref{tab:main-scoreboard}. (b)~wall-clock per sequence grows linearly in $K$ for both heads (dotted reference anchored at the most-amortised point), so the few-step regime is also the cheap regime. The head-to-head against the diffusion baseline is in Table~\ref{tab:main-scoreboard}; this sweep is on a smaller sequence subset, so absolute magnitudes are not directly comparable to the scoreboard.}
-  \label{fig:nfe}
+  \includegraphics[width=0.92\linewidth]{figures/results/timing_speedup.png}
+  \caption[Inference cost and speedup]{Wall-clock for one 50-member 24-hour ensemble forecast on a single NVIDIA RTX A6000 (solid) and a single NVIDIA H100 80GB (hatched), log axis, with each head's speedup over the $35$-NFE EDM diffusion baseline (on the same device) annotated above its bar. On the A6000 FlowCast-$K10$ is $2.9\times$, MeanFlow-$K2$ $7.9\times$, and MeanFlow-$K1$ $9.9\times$ faster than EDM; on the H100 the corresponding factors are $3.1\times$, $8.5\times$, and $10.8\times$. The bars sample the viridis ramp from baseline (cool) to the average-velocity student (warm).}
+  \label{fig:timing}
 \end{figure}
 
-Table~\ref{tab:nfe} lists the full FlowCast sweep; Table~\ref{tab:nfe-meanflow} repeats it for the MeanFlow head. Two systematic trends sit underneath FlowCast's CRPS saturation. First, CRPS and ensemble-mean RMSE move in \emph{opposite} directions with $K$: CRPS improves monotonically (calibration sharpens as the ODE is integrated more accurately) while \texttt{qpepre} RMSE of the ensemble mean is actually \emph{best at $K = 1$} and drifts up by $\approx 2\,\%$ at $K = 50$ --- coarse integration acts as an implicit smoother, pulling members toward a common (RMSE-friendly, structure-poor) field. Second, FAR-M rises steadily with $K$ ($\approx 0.11$--$0.12$ at $K \leq 3$ to $\approx 0.25$ at $K = 50$): better-integrated members place more, sharper wet pixels and incur more false alarms, converging toward the diffusion baseline's behaviour. Both trends reinforce the operational conclusion already drawn from Figure~\ref{fig:nfe}: past $K \approx 10$ the only things still changing are wall-clock and the conservative-to-aggressive trade-off, not headline skill.
+\paragraph{Read.} The ordering tracks the per-step NFE almost exactly, because wall-clock is dominated by network evaluations. FlowCast at $K = 10$ generates a full 50-member 24-hour ensemble in \SI{645}{\second} ($\approx 10.8$ min) against the diffusion sampler's \SI{1898}{\second} ($\approx 31.6$ min), a $2.9\times$ speedup; the $K = 15$ and $K = 20$ rungs scale the cost linearly ($826$\,s, $1086$\,s) for no headline-skill gain (Section~\ref{sec:exp-main}), which is why $K = 10$ is the FlowCast operating point. MeanFlow at $K = 2$ cuts the same ensemble forecast to \SI{239}{\second} ($\approx 4.0$ min, $7.9\times$ over diffusion and $2.7\times$ over FlowCast-$K10$), and at $K = 1$ to \SI{192}{\second} ($\approx 3.2$ min, $9.9\times$). Per network evaluation, the ODE heads cost $\approx \SI{0.045}{\second}$--$\SI{0.054}{\second}$, undercutting the diffusion Heun sampler's $\approx \SI{0.044}{\second}$ only marginally on a per-evaluation basis but decisively in aggregate because they need so many fewer evaluations and each is a single forward pass with no second-order corrector. MeanFlow's larger nominal s\,/\,NFE ($0.10$--$0.16$\,s) is an amortisation artefact: with only one or two evaluations, the fixed per-forecast overhead (data movement, denormalisation, metric I/O) is divided over a tiny NFE count rather than reflecting a more expensive forward pass --- the network itself is the same SongUNet as FlowCast's.
 
-\begin{table}[htbp]
-  \centering
-  \caption[FlowCast NFE sweep, full results]{Full FlowCast NFE sweep behind Figure~\ref{fig:nfe} (matched $\approx 2\,\text{M}$-sample checkpoint; 12 sequences $\times$ 10 members, single $+1$\,h generative step; \texttt{qpepre} in mm\,h$^{-1}$). \textbf{Bold} = best per quality column. The $K{=}1$ wall-clock carries one-off CUDA warm-up and is not representative; the timing column is best read from $K \geq 2$, where it is linear in $K$.}
-  \label{tab:nfe}
-  \small
-  \setlength{\tabcolsep}{6pt}
-  \begin{tabular}{rrrrrr}
-    \toprule
-    $K$ (NFE) & Time/Seq.\ (s) & CRPS qpepre$\downarrow$ & RMSE qpepre$\downarrow$ & CSI-M$\uparrow$ & FAR-M$\downarrow$ \\
-    \midrule
-    1 & 0.39 & 0.1588 & \textbf{0.5637} & 0.2499 & 0.1206 \\
-    2 & 0.18 & 0.1486 & 0.5643 & 0.2509 & \textbf{0.1105} \\
-    3 & 0.23 & 0.1438 & 0.5649 & 0.2519 & 0.1108 \\
-    4 & 0.27 & 0.1411 & 0.5657 & 0.2507 & 0.1179 \\
-    5 & 0.31 & 0.1394 & 0.5663 & 0.2529 & 0.1188 \\
-    6 & 0.34 & 0.1381 & 0.5666 & 0.2527 & 0.1259 \\
-    8 & 0.41 & 0.1363 & 0.5675 & 0.2526 & 0.1350 \\
-    10 & 0.48 & 0.1351 & 0.5679 & 0.2523 & 0.1862 \\
-    12 & 0.56 & 0.1343 & 0.5686 & 0.2533 & 0.1945 \\
-    16 & 0.73 & 0.1333 & 0.5699 & 0.2569 & 0.2173 \\
-    20 & 0.87 & 0.1327 & 0.5708 & 0.2631 & 0.2130 \\
-    25 & 1.07 & 0.1323 & 0.5723 & \textbf{0.2657} & 0.2141 \\
-    32 & 1.35 & 0.1320 & 0.5737 & 0.2653 & 0.2253 \\
-    40 & 1.70 & 0.1318 & 0.5749 & 0.2653 & 0.2298 \\
-    50 & 2.05 & \textbf{0.1316} & 0.5764 & 0.2648 & 0.2485 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+\paragraph{Operational consequence.} This is the cost that motivated the thesis (Section~\ref{sec:intro-cost}). A 50-member, 24-hour ensemble cycle issues $50\times24$ sequence-steps per forecast; at $35$ NFE per step the diffusion sampler performs $50\times24\times35 = 42{,}000$ network evaluations per cycle, against $12{,}000$ for FlowCast-$K10$ and just $2{,}400$ for MeanFlow-$K2$ ($1{,}200$ at $K = 1$). Converting a configuration that the diffusion sampler places at half an hour of GPU time per cycle into one that completes in four minutes is what moves an ensemble convection-permitting forecast back inside an operational between-radar-volume budget. Crucially, these speedups are obtained \emph{without} a second distillation training stage: they are intrinsic to the straight-line and average-velocity models.\footnote{The timing harness counts the EDM Heun sampler at $36$ evaluations per step (two per Heun step, last corrector retained); the $35$-NFE convention used elsewhere drops the final corrector. The one-evaluation difference does not affect any conclusion.}
 
-Three readings of Table~\ref{tab:nfe-meanflow} are specific to the average-velocity objective. First, the frontier shift visible in Figure~\ref{fig:nfe} is large: at $K = 2$ MeanFlow's precipitation CRPS ($0.1278$) is better than FlowCast's at \emph{any} step count in Table~\ref{tab:nfe} (best $0.1316$, at $K = 50$), and even the single-evaluation value ($0.1359$) sits at FlowCast's $K \approx 8$--$10$ level --- one or two average-velocity evaluations deliver what the straight-line ODE needs an essentially converged integration to reach. Second, the gap between $K = 1$ and $K = 2$ is the under-dispersion failure mode of Section~\ref{sec:exp-failure} in numerical form: CRPS improves by $6\,\%$ from one segment to two while the ensemble-mean RMSE barely moves ($0.5522 \to 0.5505$) --- the second evaluation buys back ensemble \emph{spread}, not accuracy. Third, beyond $K = 2$ the same two systematic trends as FlowCast set in, only flatter: CRPS drifts down by a further $\approx 8\,\%$ to its floor near $K = 40$ while wall-clock grows by an order of magnitude, and FAR-M rises from $0.17$--$0.19$ at $K \leq 2$ toward $\approx 0.29$ at $K = 50$ --- more segments place more, sharper wet pixels, the same conservative-to-aggressive drift. The recommended operating point therefore stays at $K = 2$. (The isolated FAR/CSI dip at $K = 4$ is a single-configuration outlier of this small sweep subset and is not interpreted.)
-
-\begin{table}[htbp]
-  \centering
-  \caption[MeanFlow NFE sweep, full results]{Full MeanFlow NFE sweep behind Figure~\ref{fig:nfe} (matched $\approx 2\,\text{M}$-sample checkpoint; 12 sequences $\times$ 10 members, single $+1$\,h generative step; \texttt{qpepre} in mm\,h$^{-1}$). \textbf{Bold} = best per quality column. As in Table~\ref{tab:nfe}, the $K{=}1$ wall-clock carries one-off CUDA warm-up and is not representative; the timing column is best read from $K \geq 2$, where it is linear in $K$.}
-  \label{tab:nfe-meanflow}
-  \small
-  \setlength{\tabcolsep}{6pt}
-  \begin{tabular}{rrrrrr}
-    \toprule
-    $K$ (NFE) & Time/Seq.\ (s) & CRPS qpepre$\downarrow$ & RMSE qpepre$\downarrow$ & CSI-M$\uparrow$ & FAR-M$\downarrow$ \\
-    \midrule
-    1 & 0.24 & 0.1359 & 0.5522 & 0.2720 & \textbf{0.1657} \\
-    2 & 0.19 & 0.1278 & 0.5505 & 0.2777 & 0.1924 \\
-    3 & 0.23 & 0.1251 & 0.5531 & 0.2662 & 0.1826 \\
-    4 & 0.26 & 0.1239 & 0.5549 & 0.2541 & 0.2510 \\
-    5 & 0.31 & 0.1231 & \textbf{0.5497} & 0.2834 & 0.2078 \\
-    6 & 0.34 & 0.1201 & 0.5507 & 0.2802 & 0.2481 \\
-    8 & 0.42 & 0.1203 & 0.5507 & 0.2759 & 0.2315 \\
-    10 & 0.51 & 0.1195 & 0.5506 & 0.2929 & 0.2488 \\
-    12 & 0.60 & 0.1187 & 0.5523 & 0.3086 & 0.2846 \\
-    16 & 0.74 & 0.1184 & 0.5522 & 0.2953 & 0.2640 \\
-    20 & 0.90 & 0.1190 & 0.5521 & 0.2879 & 0.2461 \\
-    25 & 1.09 & 0.1183 & 0.5512 & 0.2959 & 0.2584 \\
-    32 & 1.36 & 0.1179 & 0.5515 & 0.3066 & 0.2926 \\
-    40 & 1.69 & \textbf{0.1176} & 0.5538 & 0.3021 & 0.2827 \\
-    50 & 2.10 & 0.1178 & 0.5524 & \textbf{0.3161} & 0.2894 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-The practical consequence is the one that motivated the thesis (Section~\ref{sec:intro-cost}). A 50-member, 24-hour ensemble rollout costs, per forecast cycle, $50\times24$ sequence-steps; at $\approx \SI{0.59}{\second}$ per NFE and $K = 10$, FlowCast brings the generative head's contribution down by the same $\approx 3.7\times$ factor seen in the single-sequence timing, moving a configuration that the $35$-NFE diffusion sampler places outside the between-radar-volume budget back inside it. MeanFlow at $K = 2$ divides the generative evaluation count by a further $5\times$: the same 50-member cycle needs $50\times24\times2 = 2{,}400$ network evaluations against $42{,}000$ for the diffusion sampler, cheap enough that the ensemble size itself --- not the sampler --- becomes the budget knob. Crucially, these speedups are obtained \emph{without} a second distillation training stage: they are intrinsic to the straight-line and average-velocity models.
+\paragraph{Cross-hardware.} The H100 leg (Table~\ref{tab:timing-h100}) confirms that the ranking is hardware-independent: the H100 roughly halves every wall-clock relative to the A6000 (A6000/H100 $= 1.9$--$2.1\times$ across all six configurations), but the \emph{relative} speedups over the EDM baseline are preserved and even grow slightly --- FlowCast-$K10$ goes from $2.9\times$ on the A6000 to $3.1\times$ on the H100, and MeanFlow-$K2$ from $7.9\times$ to $8.5\times$ ($K = 1$: $9.9\times \to 10.8\times$). The mechanism is that the diffusion baseline's $35$ evaluations per step keep it compute-bound on faster silicon, while the one-to-two-evaluation MeanFlow head amortises a larger fixed-overhead fraction, so each hardware generation widens rather than narrows the gap. In absolute terms the H100 brings the MeanFlow-$K2$ cost to \SI{116}{\second} ($\approx 1.9$ min) and MeanFlow-$K1$ to \SI{91}{\second} ($\approx 1.5$ min) per 50-member 24-hour forecast, against the diffusion sampler's \SI{987}{\second} ($\approx 16.4$ min).
 
 % ==================================================
-\section{Precipitation Skill by Threshold}
+\section{Precipitation Skill by Threshold and Neighbourhood}
 \label{sec:exp-precip}
 
-Mean categorical scores hide the threshold dependence that matters operationally. Figure~\ref{fig:csi-threshold} plots CSI, FAR, and HSS against the rainfall threshold, and Figure~\ref{fig:fss} the heavy-rain FSS at three neighbourhood sizes.
+Mean categorical scores hide both the threshold dependence and the neighbourhood dependence that matter operationally. Figure~\ref{fig:csi-threshold} plots CSI, FAR, and HSS against the rainfall threshold at the headline window, and Figure~\ref{fig:fss} the heavy-rain FSS across the four pooling windows.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.95\linewidth]{figures/results/csi_per_threshold.png}
-  \caption[Categorical precipitation skill by threshold]{CSI, FAR, and HSS as a function of rainfall threshold for the diffusion baseline, FlowCast at $K \in \{10, 15, 20\}$, and MeanFlow at $K \in \{1, 2\}$ (ten-member ensemble means). The flow heads hold a FAR advantage at every threshold; the diffusion baseline pulls ahead on CSI at the heavier $5$--$10$\,mm\,h$^{-1}$ thresholds.}
+  \caption[Categorical precipitation skill by threshold]{CSI, FAR, and HSS as a function of rainfall threshold for the diffusion baseline, FlowCast at $K = 10$, and MeanFlow at $K \in \{1, 2\}$ (five-member ensemble means, $15$\,km neighbourhood). All heads collapse toward zero CSI above $\approx 5$\,mm\,h$^{-1}$ at this budget; the flow heads hold a false-alarm advantage at the light-to-moderate thresholds.}
   \label{fig:csi-threshold}
 \end{figure}
 
-\paragraph{Light to moderate rain.} At $\tau = 0.1$\,mm\,h$^{-1}$ the two heads are close on CSI (diffusion $0.509$, FlowCast-$K20$ $0.524$, FlowCast-$K10$ $0.507$), but FlowCast's false-alarm ratio is substantially lower ($0.33$ vs $0.46$). The same ordering holds at $\tau = 1.0$\,mm\,h$^{-1}$ (CSI: diffusion $0.303$ vs FlowCast-$K15$ $0.290$; FAR: FlowCast-$K10$ $0.39$ vs diffusion $0.62$). This is the quantitative form of the ``more conservative'' behaviour noted above: FlowCast does not paint speculative light rain across dry pixels.
+\paragraph{Neighbourhood dependence.} Every categorical score improves monotonically as the pooling window widens from $3$\,km to $45$\,km, because the grid-scale double penalty relaxes. At $\tau = 0.1$\,mm\,h$^{-1}$ the EDM baseline's CSI rises from $0.533$ ($3$\,km) to $0.720$ ($45$\,km) and FlowCast's from $0.546$ to $0.738$; the wet/dry discrimination the models actually have is a few-pixel-displaced one, which the grid-scale score under-credits. The $3$\,km (grid-scale) categorical numbers collapse to near-zero at the heavy thresholds for all heads --- this is the single-pixel artefact the StormCast pooling windows are designed to relax, not a model statement. Table~\ref{tab:precip-window} reports the threshold-averaged categorical scores across all four windows for every head.
 
-\paragraph{Heavy rain.} At $\tau = 5.0$ and $10.0$\,mm\,h$^{-1}$ the diffusion baseline leads on CSI ($0.075$ vs $0.040$ at $5$\,mm\,h$^{-1}$), reflecting its more aggressive placement of intense cells. FlowCast's heavy-rain hit rate at this $\approx 2\,\text{M}$-sample budget is its weakest point and a clear target for the longer-training and tail-loss experiments listed in the project to-do. At the heavy-rain point itself the comparison degenerates: with ten-member ensemble \emph{means}, almost no pixel of either head exceeds $16$\,mm\,h$^{-1}$, so FSS-P16 is zero for FlowCast and $\leq 0.002$ for diffusion at every neighbourhood size (Figure~\ref{fig:fss}). This is an ensemble-mean artefact --- averaging members suppresses extremes --- rather than a statement about individual members, and it is precisely why per-member (probabilistic) heavy-rain scoring over larger ensembles is listed as future work in Chapter~\ref{ch:conclusion}.
+\begin{table}[htbp]
+  \centering
+  \caption[Precipitation skill across pooling windows]{Threshold-averaged categorical precipitation skill (mean over $\tau \in \{0.1, 1, 5, 10, 16\}$\,mm\,h$^{-1}$) at the four StormCast neighbourhood windows, with the heavy-rain FSS point (FSS-P16, $\tau = 16$\,mm\,h$^{-1}$) alongside, for the legacy and cleaned heads (five-member ensemble means, 2022 validation year). Every score improves as the window widens; the $15$\,km row is the headline of Table~\ref{tab:main-scoreboard}. FSS-P16 is near-zero for all heads (ensemble-mean smoothing of $\geq 16$\,mm\,h$^{-1}$ extremes; Figure~\ref{fig:fss}).}
+  \label{tab:precip-window}
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{llrrrr}
+    \toprule
+    Method & Window & CSI-M$\uparrow$ & HSS-M$\uparrow$ & FAR-M$\downarrow$ & FSS-P16$\uparrow$ \\
+    \midrule
+    Legacy EDM ($224{\times}128$) & 3\,km  & 0.1008 & 0.1256 & 0.5768 & 0.0198 \\
+                                  & 15\,km & 0.1448 & 0.1397 & 0.4110 & 0.0273 \\
+                                  & 27\,km & 0.1791 & 0.1472 & 0.3349 & 0.0256 \\
+                                  & 45\,km & 0.2312 & 0.1571 & 0.2570 & 0.0230 \\
+    \midrule
+    EDM diffusion & 3\,km  & 0.1956 & 0.2384 & 0.4853 & 0.0088 \\
+                  & 15\,km & 0.2622 & 0.2926 & 0.3417 & 0.0076 \\
+                  & 27\,km & 0.2989 & 0.3151 & 0.2628 & 0.0065 \\
+                  & 45\,km & 0.3434 & 0.3320 & 0.1963 & 0.0053 \\
+    \midrule
+    FlowCast ($K{=}10$) & 3\,km  & 0.1960 & 0.2462 & 0.4340 & 0.0053 \\
+                        & 15\,km & 0.2504 & 0.2889 & 0.3504 & 0.0038 \\
+                        & 27\,km & 0.2839 & 0.3129 & 0.2454 & 0.0040 \\
+                        & 45\,km & 0.3242 & 0.3337 & 0.1821 & 0.0043 \\
+    \midrule
+    MeanFlow ($K{=}1$) & 3\,km  & 0.2092 & 0.2621 & 0.4525 & 0.0018 \\
+                       & 15\,km & 0.2443 & 0.2861 & 0.2985 & 0.0017 \\
+                       & 27\,km & 0.2663 & 0.2987 & 0.2184 & 0.0014 \\
+                       & 45\,km & 0.2938 & 0.3081 & 0.1553 & 0.0011 \\
+    \midrule
+    MeanFlow ($K{=}2$) & 3\,km  & 0.2156 & 0.2709 & 0.4974 & 0.0295 \\
+                       & 15\,km & 0.2690 & 0.3154 & 0.3738 & 0.0264 \\
+                       & 27\,km & 0.2950 & 0.3315 & 0.3142 & 0.0228 \\
+                       & 45\,km & 0.3267 & 0.3452 & 0.2631 & 0.0184 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Light to moderate rain.} At $\tau = 0.1$\,mm\,h$^{-1}$ ($15$\,km) the heads are close on CSI (diffusion $0.650$, FlowCast $0.660$, MeanFlow-$K2$ $0.681$), but FlowCast's false-alarm ratio is markedly lower ($0.204$ vs the diffusion baseline's $0.290$). The same ordering holds at $\tau = 1.0$\,mm\,h$^{-1}$ (FAR: FlowCast $0.322$ vs diffusion $0.429$). This is the quantitative form of the ``more conservative'' behaviour: FlowCast does not paint speculative light rain across dry pixels, and MeanFlow-$K1$ is the most conservative of all (FAR $0.166$ at $\tau = 1.0$, $15$\,km).
+
+\paragraph{Heavy rain.} At $\tau = 5.0$ and $10.0$\,mm\,h$^{-1}$ the heads converge to low CSI ($\approx 0.13$--$0.17$ at $5$\,mm\,h$^{-1}$, $15$\,km, with MeanFlow-$K2$ marginally ahead), reflecting how hard intense convective cells are to place exactly at the $\approx 2\,\text{M}$-sample budget. Heavy-rain skill is the clearest target for the longer-training and tail-loss experiments listed in the project to-do. At the $16$\,mm\,h$^{-1}$ point the comparison degenerates: with five-member ensemble \emph{means}, almost no pixel of any head exceeds $16$\,mm\,h$^{-1}$, so FSS-P16 is at or below $0.03$ for all heads at every neighbourhood size (Figure~\ref{fig:fss}; MeanFlow-$K2$ is the relative best at FSS-P16 $\le 0.030$, still negligible). This is an ensemble-mean artefact --- averaging members suppresses extremes --- rather than a statement about individual members, and it is precisely why per-member (probabilistic) heavy-rain scoring over larger ensembles is listed as future work in Chapter~\ref{ch:conclusion}.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\linewidth]{figures/results/fss_p16.png}
-  \caption[Heavy-rain Fractions Skill Score]{FSS at $\tau = 16$\,mm\,h$^{-1}$ for neighbourhood sizes $n \in \{3, 7, 15\}$, computed on ten-member ensemble means, for all three heads. The score is near-zero across the board: averaging ten members suppresses $\geq 16$\,mm\,h$^{-1}$ extremes almost entirely, so this threshold mainly diagnoses ensemble-mean smoothing rather than model skill. Heavy-rain assessment at the member level requires probabilistic scoring (future work).}
+  \caption[Heavy-rain Fractions Skill Score]{FSS at $\tau = 16$\,mm\,h$^{-1}$ for the four pooling windows ($3$, $15$, $27$, $45$\,km), computed on five-member ensemble means, for all heads. The score is near-zero across the board: averaging members suppresses $\geq 16$\,mm\,h$^{-1}$ extremes almost entirely, so this threshold mainly diagnoses ensemble-mean smoothing rather than model skill. Heavy-rain assessment at the member level requires probabilistic scoring (future work).}
   \label{fig:fss}
 \end{figure}
 
@@ -216,16 +236,65 @@ Mean categorical scores hide the threshold dependence that matters operationally
 \section{Autoregressive Rollout}
 \label{sec:exp-rollout}
 
-Single-step skill understates operational risk because errors compound under autoregression. Figure~\ref{fig:rollout} plots per-channel RMSE against lead time out to 12 hours.
+Single-step skill understates operational risk because errors compound under autoregression. Figure~\ref{fig:rollout} plots per-channel RMSE against lead time out to six hours, and Table~\ref{tab:rollout-rmse} tabulates the same numbers at every lead.
+
+\begin{table}[htbp]
+  \centering
+  \caption[Rollout RMSE versus lead time]{Per-channel RMSE (physical units: m\,s$^{-1}$ for winds, K for \texttt{t2m}, mm\,h$^{-1}$ for \texttt{qpepre}) as a function of autoregressive lead time, $+1$\,h\,$\ldots$\,$+6$\,h, on the 2022 validation year (five-member ensemble means over ten initial times). \textbf{Bold} marks the best value per lead and channel. $^\dagger$Legacy \texttt{qpepre} is scored on the legacy $224{\times}128$ grid (raw mm\,h$^{-1}$ encoding) and is \emph{not} directly comparable to the cleaned $192{\times}96$ heads. $^\ddagger$Corrupt sample, excluded from the best-value bolding.}
+  \label{tab:rollout-rmse}
+  \small
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{llrrrr}
+    \toprule
+    Lead (h) & Method & u10$\downarrow$ & v10$\downarrow$ & t2m$\downarrow$ & qpepre$\downarrow$ \\
+    \midrule
+    1 & Legacy EDM ($224{\times}128$) & 1.1364 & 1.1229 & 0.4899 & \textbf{1.0441}$^\dagger$ \\
+      & EDM diffusion & 1.0035 & 1.0766 & 0.4259 & 1.1022 \\
+      & FlowCast ($K{=}10$) & 1.0094 & 1.0895 & 0.4708 & 1.0838 \\
+      & MeanFlow ($K{=}1$) & 0.9578 & 1.0892 & 0.4433 & 1.0612 \\
+      & MeanFlow ($K{=}2$) & \textbf{0.9577} & \textbf{1.0343} & \textbf{0.4258} & 1.0472 \\
+    \midrule
+    2 & Legacy EDM ($224{\times}128$) & 1.5537 & 1.4332 & 0.6811 & \textbf{1.1622}$^\dagger$ \\
+      & EDM diffusion & 1.2816 & 1.3563 & 0.5876 & 1.2361 \\
+      & FlowCast ($K{=}10$) & 1.2573 & 1.2927 & 0.6250 & 1.2254 \\
+      & MeanFlow ($K{=}1$) & 1.2558 & 1.4062 & 0.5927 & 1.2640 \\
+      & MeanFlow ($K{=}2$) & \textbf{1.2229} & \textbf{1.2896} & \textbf{0.5761} & 1.2774 \\
+    \midrule
+    3 & Legacy EDM ($224{\times}128$) & 1.7302 & 1.6452 & 0.8474 & \textbf{1.1179}$^\dagger$ \\
+      & EDM diffusion & 1.4005 & 1.6570 & 0.7477 & 1.2397 \\
+      & FlowCast ($K{=}10$) & 1.3141 & \textbf{1.4876} & 0.7839 & 1.2055 \\
+      & MeanFlow ($K{=}1$) & 1.3860 & 1.7085 & \textbf{0.7465} & 1.2415 \\
+      & MeanFlow ($K{=}2$) & \textbf{1.2954} & 1.5578 & 0.7565 & 1.2677 \\
+    \midrule
+    4 & Legacy EDM ($224{\times}128$) & 1.8454 & 1.7200 & 0.9645 & 10.7571$^\ddagger$ \\
+      & EDM diffusion & 1.4003 & 1.7498 & 0.8679 & 1.3480 \\
+      & FlowCast ($K{=}10$) & \textbf{1.3180} & \textbf{1.5556} & 0.8998 & \textbf{1.2718} \\
+      & MeanFlow ($K{=}1$) & 1.4564 & 1.8145 & \textbf{0.8572} & 1.3385 \\
+      & MeanFlow ($K{=}2$) & 1.3245 & 1.6101 & 0.8781 & 1.3660 \\
+    \midrule
+    5 & Legacy EDM ($224{\times}128$) & 2.0156 & 1.8685 & 1.0533 & \textbf{1.1137}$^\dagger$ \\
+      & EDM diffusion & 1.5313 & 1.9133 & 0.9898 & 1.3238 \\
+      & FlowCast ($K{=}10$) & \textbf{1.3689} & \textbf{1.5426} & 1.0542 & 1.2434 \\
+      & MeanFlow ($K{=}1$) & 1.6049 & 1.9838 & \textbf{0.9440} & 1.2937 \\
+      & MeanFlow ($K{=}2$) & 1.4759 & 1.7131 & 1.0065 & 1.3334 \\
+    \midrule
+    6 & Legacy EDM ($224{\times}128$) & 2.1399 & 2.1199 & 1.6099 & \textbf{1.1005}$^\dagger$ \\
+      & EDM diffusion & 1.6711 & 2.2335 & \textbf{1.6008} & 1.2994 \\
+      & FlowCast ($K{=}10$) & \textbf{1.5574} & \textbf{1.6805} & 1.7272 & 1.2189 \\
+      & MeanFlow ($K{=}1$) & 1.7741 & 2.3286 & 1.6157 & 1.2370 \\
+      & MeanFlow ($K{=}2$) & 1.6502 & 2.0141 & 1.7727 & 1.2749 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.95\linewidth]{figures/results/rollout_rmse.png}
-  \caption[Rollout RMSE versus lead time]{Per-channel RMSE as a function of autoregressive lead time (1--12\,h) for the legacy baseline, the EDM diffusion baseline, FlowCast, and MeanFlow at $K \in \{1, 2\}$. FlowCast tracks or improves on the diffusion baseline for the winds and precipitation across the horizon; MeanFlow at $K{=}2$ holds the lowest \texttt{t2m} error of the cleaned heads, and neither flow head destabilises under rollout.}
+  \caption[Rollout RMSE versus lead time]{Per-channel RMSE as a function of autoregressive lead time (1--6\,h) for the legacy baseline, the EDM diffusion baseline, FlowCast at $K = 10$, and MeanFlow at $K \in \{1, 2\}$. FlowCast tracks or improves on the diffusion baseline for the winds and precipitation across the horizon; MeanFlow at $K{=}1$ holds the lowest \texttt{t2m} error of the flow heads, and neither flow head destabilises under rollout.}
   \label{fig:rollout}
 \end{figure}
 
-\paragraph{Read.} Both heads show the expected monotone error growth. For \texttt{v10} FlowCast stays below the diffusion baseline at every lead time (e.g.\ \SI{1.98}{\metre\per\second} vs \SI{2.58}{\metre\per\second} at 10\,h); for \texttt{u10} the two are close, with FlowCast slightly ahead at long lead times (\SI{1.67}{\metre\per\second} vs \SI{1.94}{\metre\per\second} at 10\,h). The \texttt{qpepre} rollout RMSE is comparable between heads and does \emph{not} diverge --- the conservative FlowCast precipitation does not destabilise under rollout. The one adverse signal is \texttt{t2m}: FlowCast's temperature error grows faster after $\approx 8$\,h (reaching $\approx \SI{2.0}{\kelvin}$ at 10--12\,h versus $\approx \SI{1.7}{\kelvin}$ for diffusion), consistent with its weaker single-step \texttt{t2m} number. No run exhibited the unphysical blow-up that aggressive few-step diffusion samplers are prone to, which we attribute to the straight-line ODE's stability.
+\paragraph{Read.} All heads show the expected monotone error growth. For \texttt{v10} FlowCast stays well below the diffusion baseline at every lead time (\SI{1.68}{\metre\per\second} vs \SI{2.23}{\metre\per\second} at $+6$\,h), with MeanFlow-$K2$ between the two (\SI{2.01}{\metre\per\second}); for \texttt{u10} the heads are close, FlowCast slightly ahead at the longest lead ($+6$\,h: \SI{1.56}{\metre\per\second} vs the diffusion baseline's \SI{1.67}{\metre\per\second}). The \texttt{qpepre} rollout RMSE is comparable between the cleaned heads and does \emph{not} diverge ($\approx 1.2$--$1.3$\,mm\,h$^{-1}$ throughout) --- the conservative flow precipitation does not destabilise under rollout. The one adverse signal is \texttt{t2m}: FlowCast's temperature error grows fastest, reaching \SI{1.73}{\kelvin} at $+6$\,h against \SI{1.60}{\kelvin} for the diffusion baseline, consistent with its weaker single-step \texttt{t2m} number; MeanFlow at $K = 1$ holds \texttt{t2m} closest to the diffusion baseline (\SI{1.62}{\kelvin}) while $K = 2$ drifts to FlowCast's level (\SI{1.77}{\kelvin}), so the \texttt{t2m} rollout ordering follows the single-step ordering of Section~\ref{sec:exp-main} exactly. The legacy baseline shows an isolated \texttt{qpepre} blow-up at $+4$\,h ($\approx \SI{10.8}{\milli\metre\per\hour}$), the kind of unphysical excursion none of the cleaned flow heads exhibits --- which we attribute to the straight-line ODE's stability.
 
 % ==================================================
 \section{Ablation: \texttt{log1p} Precipitation Encoding}
@@ -289,7 +358,7 @@ To place the cleaned-pipeline heads in context, Table~\ref{tab:legacy} adds the 
 
 \begin{table}[htbp]
   \centering
-  \caption[Legacy versus cleaned pipeline]{Legacy old-StormCast EDM baseline versus the cleaned-pipeline diffusion, FlowCast, and MeanFlow heads. Precipitation in mm\,h$^{-1}$. The legacy leg uses a different grid/encoding, so absolute values are comparable only in magnitude (see Section~\ref{sec:method-data}).}
+  \caption[Legacy versus cleaned pipeline]{Legacy old-StormCast EDM baseline versus the cleaned-pipeline diffusion, FlowCast, and MeanFlow heads (categorical scores at the $15$\,km window, mm\,h$^{-1}$). The legacy leg uses a different grid/encoding, so absolute values are comparable only in magnitude (see Section~\ref{sec:method-data}).}
   \label{tab:legacy}
   \small
   \setlength{\tabcolsep}{5pt}
@@ -297,61 +366,47 @@ To place the cleaned-pipeline heads in context, Table~\ref{tab:legacy} adds the 
     \toprule
     Method & Time/Seq.\ (s) & CRPS$\downarrow$ & CSI-M$\uparrow$ & FAR-M$\downarrow$ & RMSE qpepre$\downarrow$ \\
     \midrule
-    Legacy EDM (raw, $224\times128$) & 49.55 & 0.8762 & 0.0614 & 0.6923 & 1.1736 \\
-    Cleaned EDM (35 NFE)             & 21.78 & \textbf{0.6783} & \textbf{0.1498} & 0.4727 & 0.9429 \\
-    Cleaned FlowCast ($K{=}10$)      & 5.88 & 0.6833 & 0.1364 & \textbf{0.4188} & \textbf{0.8959} \\
-    Cleaned MeanFlow ($K{=}2$)       & \textbf{2.35} & 0.7265 & 0.1492 & 0.5241 & 0.9404 \\
+    Legacy EDM (raw, $224\times128$) & 19.66 & 0.6348 & 0.1448 & 0.4110 & 1.4827 \\
+    Cleaned EDM (35 NFE)             & 11.23 & 0.5537 & 0.2622 & \textbf{0.3417} & 1.0292 \\
+    Cleaned FlowCast ($K{=}10$)      & 3.07 & \textbf{0.5518} & 0.2504 & 0.3504 & \textbf{0.9590} \\
+    Cleaned MeanFlow ($K{=}2$)       & \textbf{1.16} & 0.6093 & \textbf{0.2690} & 0.3738 & 1.0054 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\paragraph{Read.} The cleaning + \texttt{log1p} + retraining pipeline is a large step up over the legacy baseline on every metric (CRPS $0.88 \to 0.68$, CSI-M $0.06 \to 0.15$), independent of the generative head; on top of that, FlowCast adds the inference-cost and false-alarm wins at near-parity on CRPS ($0.6833$ vs $0.6783$, inside the snapshot noise), and MeanFlow compresses the cost axis to \SI{2.35}{\second} --- a $21\times$ end-to-end speedup over the legacy system and $\approx 9\times$ over the cleaned diffusion baseline --- while holding diffusion-level CSI; its rollout CRPS ($0.7265$) gives back part of FlowCast's parity but remains far below the legacy level. The legacy-to-cleaned and cleaned-EDM-to-flow gaps are therefore largely orthogonal: most of the headline improvement is the pipeline, and the flow heads' specific contribution is to deliver comparable skill at a fraction of the cost without a teacher --- FlowCast at near-CRPS-parity, MeanFlow at the lowest cost.
+\paragraph{Read.} The cleaning + \texttt{log1p} + retraining pipeline is a large step up over the legacy baseline on every metric (CRPS $0.63 \to 0.55$, CSI-M $0.14 \to 0.26$ at the headline window, qpepre RMSE $1.48 \to 0.96$--$1.03$), independent of the generative head. On top of that, FlowCast adds the inference-cost and precipitation-RMSE wins at near-parity-or-better on CRPS, and MeanFlow compresses the cost axis to \SI{1.16}{\second} per evaluation sequence --- a $17\times$ end-to-end speedup over the legacy system and $\approx 9.6\times$ over the cleaned diffusion baseline --- while posting the best categorical hit rate of any head; its rollout CRPS ($0.6093$) gives back part of FlowCast's parity but still improves on the legacy level. The legacy-to-cleaned and cleaned-EDM-to-flow gaps are therefore largely orthogonal: most of the headline improvement is the pipeline, and the flow heads' specific contribution is to deliver comparable-or-better skill at a fraction of the cost without a teacher --- FlowCast at CRPS parity, MeanFlow at the lowest cost.
 
 % ==================================================
 \section{Qualitative Case Studies}
 \label{sec:exp-qual}
 
-Figure~\ref{fig:qual-qpepre} shows side-by-side denormalised precipitation panels (truth, diffusion, FlowCast, MeanFlow) for representative 2022 validation hours, and Figure~\ref{fig:qual-u10} the same for the zonal wind. The qualitative reading matches the metrics: both flow heads produce sharp, spatially coherent precipitation with fewer speculative light-rain pixels in nominally dry regions (the FAR advantage made visible), while the diffusion baseline paints more widespread weak precipitation. MeanFlow's two-evaluation fields are not visibly smoother than FlowCast's ten-step fields --- the average-velocity sampler does not pay the blurring penalty that an aggressively truncated ODE integration would. On the wind field the flow heads' structure is visibly closer to the RWRF target.
+To complement the aggregate metrics we examine the single most precipitation-active initial time of the 2022 validation year --- $t_0 = $ 2022-10-15 21:00\,UTC, a heavy convective episode with a peak RWRF rain rate of $\approx 80$\,mm\,h$^{-1}$ and $\approx 48\,\%$ of the domain wet at $\geq 1$\,mm\,h$^{-1}$ --- and roll every head forward autoregressively over the same $+1$\,h\,$\ldots$\,$+6$\,h horizon used for the rollout metrics. Figure~\ref{fig:qual-qpepre} stacks the precipitation fields (RWRF truth, legacy EDM, cleaned EDM diffusion, FlowCast, MeanFlow), and Figure~\ref{fig:qual-u10} the zonal wind, all denormalised to physical units; the model rows load the matched $\approx 2\,\text{M}$-sample checkpoints used throughout the chapter.
+
+\paragraph{Precipitation.} The case renders the categorical trade-offs of Section~\ref{sec:exp-precip} visible. The cleaned EDM diffusion head paints the broadest, most diffuse precipitation --- widespread moderate rain that bleeds into nominally dry pixels, the spatial signature of its higher false-alarm ratio at the fine windows. FlowCast is the most conservative head: it keeps the dry regions dry but visibly \emph{damps} the most intense convective cores, and the heavy-rain signal washes out as the rollout advances --- the qualitative form of its low FAR bought at the cost of heavy-rain hits. MeanFlow at two evaluations occupies the middle ground the metrics predict: it retains markedly more high-intensity structure than FlowCast, re-forming bright $\geq 20$\,mm\,h$^{-1}$ cells late in the rollout (consistent with its best CSI-M/HSS-M hit rates), while still suppressing the diffusion baseline's speculative light rain. Crucially MeanFlow's two-evaluation fields are not visibly smoother than FlowCast's ten-step fields --- the average-velocity sampler does not pay the blurring penalty an aggressively truncated ODE integration would --- and none of the cleaned flow heads destabilises over the six hours (no unphysical excursions), echoing the bounded rollout RMSE of Table~\ref{tab:rollout-rmse}. The legacy EDM panel sits on the wider $224{\times}128$ grid (a different field of view) and is visibly grainier.
+
+\paragraph{Wind.} On \texttt{u10} (Figure~\ref{fig:qual-u10}) all heads track the broad-scale flow closely --- the wind channels are far easier than precipitation --- with the cleaned flow heads' fields lying closest to the RWRF target, consistent with their lower wind RMSE (Section~\ref{sec:exp-main}) and the absence of wind-field drift under rollout.
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.9\linewidth}
-    \includegraphics[width=\linewidth]{figures/results/qual_qpepre_seq00.png}
-    \caption{Validation sequence A.}
-  \end{subfigure}
-
-  \vspace{0.5em}
-  \begin{subfigure}[t]{0.9\linewidth}
-    \includegraphics[width=\linewidth]{figures/results/qual_qpepre_seq02.png}
-    \caption{Validation sequence B.}
-  \end{subfigure}
-  \caption[Qualitative precipitation panels]{Denormalised hourly precipitation (mm\,h$^{-1}$): RWRF/QPEPRE truth, EDM diffusion, FlowCast, and MeanFlow, for two 2022 validation sequences. The flow heads keep nominally dry regions dry while preserving convective structure; MeanFlow achieves this at two network evaluations.}
+  \includegraphics[width=0.86\linewidth]{figures/results/rollout6h_qpepre.png}
+  \caption[Qualitative precipitation rollout case study]{Six-hour autoregressive rollout of \texttt{qpepre} (mm\,h$^{-1}$) for the heavy-rain initial time $t_0 = $ 2022-10-15 21:00\,UTC. Rows: RWRF/QPEPRE truth, legacy EDM ($224{\times}128$), cleaned EDM diffusion ($35$ NFE), FlowCast ($K{=}10$), MeanFlow ($K{=}2$); columns: lead times $+1$\,h\,$\ldots$\,$+6$\,h. The diffusion head spreads broad moderate rain, FlowCast damps the intense cores under rollout, and MeanFlow retains the most high-intensity structure of the flow heads at two network evaluations.}
   \label{fig:qual-qpepre}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\linewidth]{figures/results/qual_u10_seq00.png}
-  \caption[Qualitative wind panel]{Denormalised 10\,m zonal wind \texttt{u10} (m\,s$^{-1}$): truth, diffusion, FlowCast, and MeanFlow. The flow heads' fields are closer to the RWRF target, consistent with their lower wind RMSE.}
+  \includegraphics[width=0.86\linewidth]{figures/results/rollout6h_u10.png}
+  \caption[Qualitative wind rollout case study]{Six-hour autoregressive rollout of the 10\,m zonal wind \texttt{u10} (m\,s$^{-1}$) for the same initial time and row/column layout as Figure~\ref{fig:qual-qpepre}. All heads track the broad-scale wind field; the cleaned flow heads lie closest to the RWRF target with no rollout drift.}
   \label{fig:qual-u10}
 \end{figure}
 
-\paragraph{Spectral sharpness.} Figure~\ref{fig:flowcast-spectrum} shows a representative FlowCast \texttt{qpepre} radial log-PSD against the target during training: the spectral-regularised FlowCast tracks the observation spectrum into the high-wavenumber band rather than rolling off early, which is the spectral signature of a sharp (non-blurry) generative forecast.
+\paragraph{Training dynamics.} Figure~\ref{fig:flowcast-loss} shows the FlowCast training and validation loss curves over the canonical run. The spectral-matching regulariser on \texttt{qpepre} (the radial log-PSD term of Section~\ref{sec:method-flowcast}) keeps the predicted precipitation spectrum from rolling off too early at high wavenumbers, which is the spectral signature of a sharp (non-blurry) generative forecast; both the training and validation curves descend smoothly with no divergence, and the EMA-shadow validation loss tracks below the online loss as expected.
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[width=\linewidth]{figures/flowcast/loss_curves.png}
-    \caption{FlowCast training/validation loss.}
-    \label{fig:flowcast-loss}
-  \end{subfigure}\hfill
-  \begin{subfigure}[t]{0.48\linewidth}
-    \includegraphics[width=\linewidth]{figures/flowcast/qpepre_spectrum.png}
-    \caption{\texttt{qpepre} radial log-PSD.}
-    \label{fig:flowcast-spectrum}
-  \end{subfigure}
-  \caption[FlowCast training curves and spectrum]{(a) FlowCast loss curves over training; (b) radial log power-spectral density of a validation \texttt{qpepre} sample versus the target. The spectral-matching regulariser keeps the predicted spectrum from decaying too fast at high wavenumbers.}
-  \label{fig:flowcast-train}
+  \includegraphics[width=0.7\linewidth]{figures/flowcast/loss_curves.png}
+  \caption[FlowCast training curves]{FlowCast training and validation loss over the canonical run. The smooth descent and the EMA-shadow validation curve confirm stable optimisation under the spectral-regularised CFM objective.}
+  \label{fig:flowcast-loss}
 \end{figure}
 
 % ==================================================
@@ -360,11 +415,11 @@ Figure~\ref{fig:qual-qpepre} shows side-by-side denormalised precipitation panel
 
 We document four failure modes observed during development.
 
-\paragraph{Heavy-rain under-detection.} The flow heads' weakest metric is pixel-exact CSI at the heavier thresholds ($5$--$10$\,mm\,h$^{-1}$): their conservative, low-false-alarm behaviour costs hits on intense cells. Diagnosis: the per-threshold CSI curve (Figure~\ref{fig:csi-threshold}) crossing below the diffusion baseline above $5$\,mm\,h$^{-1}$, partly recovered by the neighbourhood FSS. Mitigation candidates (deferred to future work): longer training, a higher $w_{\text{pr}}$ paired with the spectral term, or an explicit tail-quantile loss on \texttt{qpepre}.
+\paragraph{Heavy-rain under-detection.} The flow heads' weakest metric is pixel-exact CSI at the heavier thresholds ($5$--$10$\,mm\,h$^{-1}$): their conservative, low-false-alarm behaviour costs hits on intense cells, and at the $\approx 2\,\text{M}$-sample budget all heads converge to low heavy-rain CSI. Diagnosis: the per-threshold CSI curve (Figure~\ref{fig:csi-threshold}) flattening toward zero above $5$\,mm\,h$^{-1}$, partly recovered by the wider-neighbourhood FSS. Mitigation candidates (deferred to future work): longer training, a higher $w_{\text{pr}}$ paired with the spectral term, or an explicit tail-quantile loss on \texttt{qpepre}.
 
-\paragraph{\texttt{t2m} rollout drift.} FlowCast's temperature error grows faster than the diffusion baseline's after $\approx 8$ rollout hours (Figure~\ref{fig:rollout}). This is the autoregressive signature of its weaker single-step \texttt{t2m} number. Notably, MeanFlow does \emph{not} inherit this drift despite sharing FlowCast's backbone and loss weights --- its \texttt{t2m} rollout error stays at or below the diffusion baseline's --- which suggests the drift is a property of the learned trajectory rather than of the architecture. Mitigation for FlowCast: a per-channel weight that does not starve \texttt{t2m}, or a short teacher-forcing warmup.
+\paragraph{\texttt{t2m} rollout drift.} FlowCast's temperature error grows fastest of the cleaned heads under rollout, reaching \SI{1.73}{\kelvin} at $+6$\,h against the diffusion baseline's \SI{1.60}{\kelvin} (Figure~\ref{fig:rollout}). This is the autoregressive signature of its weaker single-step \texttt{t2m} number. Notably, MeanFlow at $K = 1$ does \emph{not} inherit this drift despite sharing FlowCast's backbone and loss weights --- its \texttt{t2m} rollout error stays at the diffusion baseline's level (\SI{1.62}{\kelvin}) --- which suggests the drift is a property of the learned trajectory rather than of the architecture. Mitigation for FlowCast: a per-channel weight that does not starve \texttt{t2m}, or a short teacher-forcing warmup.
 
-\paragraph{One-evaluation under-dispersion (MeanFlow).} At $K = 1$ MeanFlow's deterministic skill is intact but its CRPS lags its own $K = 2$ setting consistently: a single average-velocity evaluation maps each noise draw almost straight onto the conditional mean, narrowing ensemble spread and costing calibration. One extra segment ($K = 2$) restores most of the spread at one additional NFE, which is why $K = 2$ is the recommended MeanFlow operating point and the validation default. The effect \emph{compounds under autoregression}: in the single-step sweep the $K{=}1$-to-$K{=}2$ CRPS gap is $6\,\%$ (Table~\ref{tab:nfe-meanflow}), but over $12$-hour rollouts it widens to $17\,\%$ ($0.8485$ vs $0.7265$, Table~\ref{tab:main-scoreboard}) because each hour's narrowed ensemble seeds the next; the residual $\approx 6\,\%$ rollout-CRPS gap that remains at $K = 2$ against the ODE heads has the same origin, even though MeanFlow's \emph{single-step} calibration is the best in the study (Section~\ref{sec:exp-nfe}). Diagnosis: the CRPS columns of Tables~\ref{tab:nfe-meanflow} and~\ref{tab:main-scoreboard}; per-member rank histograms and rollout spread restoration are future work (Chapter~\ref{ch:conclusion}).
+\paragraph{One-evaluation under-dispersion (MeanFlow).} At $K = 1$ MeanFlow's deterministic skill is intact (its \texttt{t2m} is the best of the flow heads and its FAR the lowest in the study) but its CRPS lags its own $K = 2$ setting: a single average-velocity evaluation maps each noise draw almost straight onto the conditional mean, narrowing ensemble spread and costing calibration. The effect compounds under autoregression because each hour's narrowed ensemble seeds the next, so the rollout CRPS gap is the visible symptom: $0.6710$ at $K = 1$ versus $0.6093$ at $K = 2$ (a $10\,\%$ deficit; Table~\ref{tab:main-scoreboard}), with the wind CRPS columns of Figure~\ref{fig:crps-channel} showing the same signature. One extra segment ($K = 2$) restores most of the spread at one additional NFE, which is why $K = 2$ is the recommended MeanFlow operating point and the validation default. Diagnosis: the CRPS columns of Table~\ref{tab:main-scoreboard} and Figure~\ref{fig:per-channel}; per-member rank histograms and rollout spread restoration are future work (Chapter~\ref{ch:conclusion}).
 
 \paragraph{EMA dependence.} Loading the online \texttt{checkpoint\_*.pt} training-state dump instead of the proper weights produces visibly noisier flow-head samples. This is not a model failure but an evaluation pitfall. The in-training validation samplers use the EMA shadow (\texttt{ema\_state.pt}); the head-to-head harness of this chapter loads the online \texttt{.mdlus} checkpoints for FlowCast and MeanFlow \emph{symmetrically}, so the A/B comparison between the two students is unaffected by the convention, and the EMA-versus-online gap itself shrinks as training proceeds.
 
@@ -372,6 +427,6 @@ We document four failure modes observed during development.
 \section{Discussion}
 \label{sec:exp-discussion}
 
-The headline question of the thesis is whether a single-run, teacher-free \emph{average-velocity} residual can replace the EDM diffusion residual in a regional convection-permitting forecaster without losing the features that matter for Taiwan precipitation --- and do so cheaply enough to deploy. The evidence at the matched $\approx 2\,\text{M}$-sample budget is a qualified \emph{yes}: at $K \in \{1, 2\}$ network evaluations --- roughly a tenth of the diffusion sampler's cost --- MeanFlow reaches the diffusion baseline's deterministic and categorical skill class, posts the best \texttt{t2m} accuracy of any head, and delivers a single-step precipitation CRPS below the FlowCast baseline at any step count, conceding only a spread-driven rollout-CRPS gap (largest at $K = 1$, mostly closed by $K = 2$). The FlowCast straight-line baseline charts the intermediate point on the same trajectory axis: at $K = 10$ Euler steps it matches the diffusion baseline's CRPS, beats it on wind and precipitation RMSE, cuts its false-alarm ratio by $\approx 11\,\%$ (FAR-M $0.42$ vs $0.47$), and runs $\approx 3.7\times$ faster --- confirming that the straight-line path already recovers most of the diffusion skill before the average-velocity jump removes the last of the integration cost.
+The headline question of the thesis is whether a single-run, teacher-free \emph{average-velocity} residual can replace the EDM diffusion residual in a regional convection-permitting forecaster without losing the features that matter for Taiwan precipitation --- and do so cheaply enough to deploy. The evidence at the matched $\approx 2\,\text{M}$-sample budget is a qualified \emph{yes}: at $K \in \{1, 2\}$ network evaluations --- roughly a tenth of the diffusion sampler's cost --- MeanFlow reaches the diffusion baseline's deterministic and categorical skill class, posts the best categorical hit rates of any head at the headline neighbourhood and near-best temperature, and runs a full 50-member 24-hour ensemble forecast in four minutes against the diffusion sampler's half hour, conceding only a spread-driven rollout-CRPS gap (largest at $K = 1$, mostly closed by $K = 2$). The FlowCast straight-line baseline charts the intermediate point on the same trajectory axis: at $K = 10$ Euler steps it matches the diffusion baseline's CRPS, beats it on wind and precipitation RMSE, and runs $\approx 3.7\times$ faster --- confirming that the straight-line path already recovers most of the diffusion skill before the average-velocity jump removes the last of the integration cost.
 
 Three caveats bound these conclusions. First, all numbers are at a single $\approx 2\,\text{M}$-sample snapshot with $10$--$30\,\%$ validation noise; the FlowCast canonical run continues to $\approx 13.4\,\text{M}$ samples (step $140{,}000$) and a final comparison at converged budgets is part of the remaining work (Chapter~\ref{ch:conclusion} and the project to-do). Second, both heads are anchored to the same frozen regression mean and the same cleaned log1p dataset, so the comparison is clean but specific to this Taiwan RWRF setup; transfer to other domains is untested. Third, the precipitation-encoding gotcha of Section~\ref{sec:exp-log1p} means the regression mean and residual head must always share the \texttt{log1p} encoding --- mixing encodings silently corrupts the residual distribution. The next chapter summarises what we have learned and lays out the concrete experiments and data still needed to turn this provisional result into a defensible thesis claim.
