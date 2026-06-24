@@ -155,6 +155,45 @@ fixed while the equation underneath advances.
 \end{itemize}
 
 % ------------------------------------------------------------------
+\subsection*{How stop-gradient and the JVP fit together (the trick that makes it cheap)}
+\noindent The target $u_{\text{tgt}} = v + (t-r)\bigl(v\,\partial_z u_\theta + \partial_r u_\theta\bigr)$
+contains a \emph{derivative of the network itself}. Two tools handle it:
+\begin{itemize}
+  \item \textbf{The JVP computes that derivative --- forwards, in one pass.}
+        The term $v\,\partial_z u_\theta + \partial_r u_\theta$ is exactly the
+        total derivative $\frac{d}{dr}u_\theta$ of slide 33: the network's
+        Jacobian contracted against the trajectory tangent $(v, 1, 0)$ for the
+        inputs $(z, r, t)$. A \textbf{forward-mode Jacobian--vector product
+        (JVP)} returns precisely this contraction \emph{without ever forming the
+        full Jacobian} --- cost $\approx$ one extra forward pass
+        (\texttt{torch.func.jvp}).
+  \item \textbf{Stop-gradient is what keeps the JVP first-order.} The JVP is
+        itself a (differentiable) function of the weights $\theta$. If the
+        target were left live, backprop through the loss would have to
+        differentiate the JVP w.r.t.\ $\theta$ --- a \textbf{gradient of a
+        derivative}, i.e.\ second-order / Hessian-vector terms, expensive and
+        unstable on a $78.7$\,M-parameter network.
+  \item \textbf{So $\mathrm{sg}$ freezes the target into a constant.} Wrapping
+        $u_{\text{tgt}}$ in stop-gradient (\texttt{jvp} run under
+        \texttt{no\_grad}) turns the right-hand side into a fixed number. The
+        loss becomes an \textbf{ordinary first-order regression}
+        $\|u_\theta - \mathrm{sg}(u_{\text{tgt}})\|^2$: gradients flow only
+        through the \emph{prediction} $u_\theta$ on the left, never through the
+        derivative target on the right.
+  \item \textbf{Together = a bootstrapped regression.} Compute the derivative
+        target cheaply with forward-mode, freeze it, then take a plain MSE step
+        --- the network chases a moving target built from a frozen copy of
+        \emph{its own} derivative. (Same idea as the target network in
+        TD-learning, or the stop-grad in consistency models.)
+  \item \textbf{Why it matters:} this pairing is what replaces the intractable
+        path integral (slide 30) with \textbf{one forward-mode JVP at
+        first-order cost}, and is why MeanFlow trains with the \emph{same loss
+        machinery} as FlowCast. The JVP overhead is confined to the $25\%$
+        ($r < t$) subset of the batch; the prediction pass runs once over the
+        full batch.
+\end{itemize}
+
+% ------------------------------------------------------------------
 \subsection*{What is $\mathcal{L}_{\text{spec}}$? (the spectral regulariser)}
 \begin{equation*}
   \mathcal{L}_{\text{spec}} = \frac{1}{|\mathcal{K}|}\sum_{\kappa \in \mathcal{K}}

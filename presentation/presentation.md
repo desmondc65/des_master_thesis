@@ -218,12 +218,12 @@ A quick orientation on the data. The task is one-hour-ahead forecasting over Tai
 **MESSAGE:** Three channels are near-Gaussian; precipitation is an atom-at-zero plus a heavy tail. That single fact drives every loss decision: channel weighting, a spectral term, and a log transform.
 
 **ON SLIDE**
-- t2m / u10 / v10: roughly Gaussian → standard losses are fine.
-- **qpepre:** ~99% of pixels near zero (dry) + a heavy tail to 100+ mm/h → pixel-MSE collapses to "slightly wet everywhere."
-- Three loss hooks (shared by all heads):
-  - **Channel-weighted L2**, \(\beta=(1,1,1,w_{\text{pr}}),\ w_{\text{pr}}=2\).
-  - **Radial log-PSD regulariser** on qpepre (keeps the spectrum sharp), \(\lambda_{\text{spec}}=0.1\).
-  - **\(\log(1+x)\) encoding** → compresses σ from 9.12 mm/h to ≈0.37.
+- **t2m / u10 / v10** ≈ Gaussian → standard losses suffice.
+- **qpepre** = atom at 0 (≈99% dry) + heavy tail to 100+ mm/h → plain MSE collapses to *"slightly wet everywhere."*
+- **Three shared fixes** (all heads):
+  - **\(\log(1+x)\) encoding** — σ 9.12 → ≈0.37 (log space); *the key one*.
+  - **Channel-weighted L2** — \(\beta=(1,1,1,2)\), up-weights rain.
+  - **Radial log-PSD term** on qpepre — \(\lambda_{\text{spec}}=0.1\), keeps it sharp.
 
 **SHOW:** [stormcast_test_train_HighRes_qpepre_gaussian_check.png](../figures/highres_distributions/stormcast_test_train_HighRes_qpepre_gaussian_check.png) · equations [channel_l2.png](formulas/png/channel_l2.png) · [logpsd.png](formulas/png/logpsd.png) · [log1p.png](formulas/png/log1p.png)
 
