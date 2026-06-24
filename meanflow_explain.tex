@@ -16,6 +16,7 @@
 % notation shortcuts matching the thesis
 \newcommand{\Nbb}{\mathcal{N}}
 \newcommand{\Ebb}{\mathbb{E}}
+\newcommand{\Freg}{F_{\text{reg}}}
 
 \setlist[itemize]{leftmargin=1.4em, itemsep=2pt, topsep=3pt}
 
@@ -125,6 +126,16 @@ fixed while the equation underneath advances.
   \item We \textbf{regress the network onto the identity's right-hand side}:
         the target $u_{\text{tgt}}$ is just slide 32 with slide 33 substituted
         in, and the network \textbf{bootstraps its own derivative}.
+  \item \textbf{$c_t$ is the conditioning bundle} the network sees alongside
+        the noisy state --- $c_t = \mathrm{concat}(X_{t-1},\, M_t,\, I)$:
+        the previous high-res state $X_{t-1}$, the frozen regression mean
+        $M_t$ (the deterministic forecast this residual is correcting), and the
+        static invariants $I$ (land--sea mask, orography). It is concatenated
+        channel-wise with $z_r$ as network input. The low-res ERA5 field $S_t$
+        is \emph{deliberately omitted} from the direct path --- its synoptic
+        signal already enters through $M_t = \Freg(X_{t-1}, S_t, I)$. The same
+        $c_t$ is used by EDM, FlowCast, and MeanFlow, so only the generative
+        trajectory differs across heads.
   \item $v = x_1 - x_0$ is the conditional I-CFM velocity (same substitution
         FlowCast makes, valid in expectation) --- \textbf{still teacher-free,
         no diffusion model queried}.
@@ -143,6 +154,35 @@ fixed while the equation underneath advances.
         alone.
 \end{itemize}
 
+% ------------------------------------------------------------------
+\subsection*{What is $\mathcal{L}_{\text{spec}}$? (the spectral regulariser)}
+\begin{equation*}
+  \mathcal{L}_{\text{spec}} = \frac{1}{|\mathcal{K}|}\sum_{\kappa \in \mathcal{K}}
+    \bigl|\log P_{\text{pred}}(\kappa) - \log P_{\text{target}}(\kappa)\bigr|
+\end{equation*}
+\begin{itemize}
+  \item \textbf{What it measures:} the L1 distance between the
+        \textbf{radially-averaged log power spectra} of the predicted and
+        target \texttt{qpepre} fields. $P(\kappa)$ is the 2D power spectral
+        density averaged over all directions at wavenumber $\kappa$
+        (i.e.\ ``how much energy lives at spatial scale $1/\kappa$''), and
+        $\mathcal{K}$ is the set of non-zero radial wavenumbers on the grid.
+  \item \textbf{Why we need it:} pixel-wise RMSE-type losses reward
+        \textbf{smooth, low-amplitude} precipitation --- the model minimises
+        error by predicting a ``slightly-wet-everywhere'' blur and throws away
+        the sharp convective structure we actually care about. The spectral
+        term penalises a \textbf{wrong spatial spectrum}, forcing the right
+        amount of fine-scale (high-$\kappa$) energy back in.
+  \item \textbf{Log of the PSD} because precipitation energy spans orders of
+        magnitude across scales; the log makes the regulariser care about
+        \emph{all} wavenumbers, not just the few most energetic ones.
+  \item \textbf{Applied only to \texttt{qpepre}}, on the flow's
+        \emph{implied clean residual} $\hat{x}_1 = z_r + (1 - r)\,u_\theta$ (not
+        the raw velocity), and --- for MeanFlow --- only on the collapsed
+        $t = r$ subset, so it stays directly comparable to the FlowCast term.
+        Weighted by $\lambda_{\text{spec}} = 0.1$.
+\end{itemize}
+
 \vspace{1em}
 \begin{mdframed}[backgroundcolor=gray!8, linecolor=gray!40]
 \textbf{Presentation note.} The same three-panel figure repeats on all five
@@ -152,5 +192,186 @@ prefer, let the coloured dots / trajectory in the figure light up in step with
 the equation --- e.g.\ highlight the single green MeanFlow dot on slide 31 when
 you introduce one-step transport.
 \end{mdframed}
+
+\clearpage
+% ==================================================================
+% ==================================================================
+\begin{center}
+  \Large\textbf{Suggested content: Experiments / Discussion / Conclusion slides}
+\end{center}
+\vspace{0.5em}
+
+\noindent These are suggested slide skeletons grounded in the thesis numbers
+(Chapters~4--5). Each ``slide'' is one idea; pick the subset that fits your
+time budget. Keep one headline number per bullet --- the audience remembers
+the $\approx 10\times$ speedup, not the third decimal of CRPS.
+
+% ------------------------------------------------------------------
+\section*{EXPERIMENTS}
+
+\subsection*{E1 --- Setup / ``How we compare fairly''}
+\begin{itemize}
+  \item \textbf{One question:} can a teacher-free $1$--$2$-call model match the
+        $35$-call diffusion baseline? Three heads, \textbf{everything else held
+        fixed} --- same frozen regression mean, same SongUNet backbone, same
+        $\sigma_{\text{data}}$, same cleaned log1p dataset.
+  \item \textbf{Matched budget = training \emph{samples} seen ($\approx 2$\,M),
+        not steps} (batch sizes differ: EDM 64, FlowCast 96, MeanFlow 112). So
+        any gap reflects the \emph{generative trajectory}, not training compute.
+  \item \textbf{Evaluation:} 2022 full validation year (8{,}759 hours),
+        5-member ensembles, 10 initial times, $+1$\,h$\ldots+6$\,h rollouts.
+        All scores denormalised to physical units (mm\,h$^{-1}$, K, m\,s$^{-1}$).
+  \item \textbf{Caveat up front:} single-snapshot validation noise is
+        $10$--$30\%$ --- only call gaps that clear that floor.
+\end{itemize}
+
+\subsection*{E2 --- Headline scoreboard (the central result)}
+\begin{itemize}
+  \item \textbf{FlowCast ($K{=}10$) ties or beats diffusion at $3.7\times$ less
+        cost:} CRPS $0.552$ vs $0.554$ (a tie), and clearly ahead on winds
+        ($-5\%$ u10, $-12\%$ v10) and precipitation RMSE ($-7\%$).
+  \item \textbf{MeanFlow ($K{=}2$) posts the best precip hit rates of any head}
+        --- CSI-M $0.269$ and HSS-M $0.315$, both \emph{above} diffusion's
+        $0.262$/$0.293$ --- at \textbf{$\approx 10\times$} less cost
+        ($1.16$\,s vs $11.2$\,s per sequence).
+  \item \textbf{The trade is coherent, not a wash:} FlowCast is the
+        \emph{conservative} forecaster (lowest false alarms), diffusion and
+        MeanFlow-$K2$ are more \emph{aggressive} (more hits, more false alarms).
+        Which you want is an operational choice.
+  \item \textbf{MeanFlow's one concession:} rollout CRPS lags by $\approx 10\%$
+        --- a spread (calibration) gap, diagnosed later, not a skill gap.
+  \item Suggested visual: the 4-row scoreboard table or
+        \texttt{scoreboard\_3way.png}.
+\end{itemize}
+
+\subsection*{E3 --- Inference cost (the ``money'' slide)}
+\begin{itemize}
+  \item \textbf{The cost that motivated the thesis:} a 50-member, 24\,h ensemble
+        cycle. Diffusion does $50{\times}24{\times}35 = \mathbf{42{,}000}$
+        network calls per cycle; MeanFlow-$K2$ does just \textbf{2{,}400}
+        ($1{,}200$ at $K{=}1$).
+  \item \textbf{Wall-clock (A6000):} EDM $\approx 31.6$\,min $\rightarrow$
+        FlowCast-$K10$ $\approx 10.8$\,min ($2.9\times$) $\rightarrow$
+        \textbf{MeanFlow-$K2$ $\approx 4.0$\,min ($7.9\times$)},
+        MeanFlow-$K1$ $\approx 3.2$\,min ($9.9\times$).
+  \item \textbf{Hardware-independent, and the gap \emph{widens} on faster
+        silicon:} on the H100 the speedups grow to $3.1\times$ / $8.5\times$ /
+        $\mathbf{10.8\times}$ (diffusion stays compute-bound on its many calls).
+  \item \textbf{No second training stage:} these speedups are \emph{intrinsic}
+        to the straight-line / average-velocity model --- no distillation, no
+        teacher. ``A path worth turning twice: first straightened, then jumped.''
+  \item Suggested visual: \texttt{timing\_speedup.png} (log-axis bars, both GPUs).
+\end{itemize}
+
+\subsection*{E4 --- Where the differences live (precip skill + rollout)}
+\begin{itemize}
+  \item \textbf{Light/moderate rain:} flow heads have a clear false-alarm
+        advantage (FlowCast FAR $0.20$ vs diffusion $0.29$ at $0.1$\,mm\,h$^{-1}$)
+        --- they don't paint speculative drizzle on dry pixels.
+  \item \textbf{Heavy rain ($\geq 5$\,mm\,h$^{-1}$) is hard for everyone} at
+        this budget --- a genuine, honest weakness; neighbourhood pooling
+        (recovering displacement) and longer training are the levers.
+  \item \textbf{Rollout is stable:} all heads grow error monotonically, none
+        blows up; the cleaned flow heads avoid the legacy baseline's unphysical
+        \texttt{qpepre} excursion at $+4$\,h.
+  \item \textbf{Qualitative case (2022-10-15, $\approx 80$\,mm\,h$^{-1}$ peak):}
+        diffusion spreads broad rain, FlowCast damps the intense cores,
+        \textbf{MeanFlow-$K2$ keeps the most high-intensity structure at 2 calls}
+        --- and is \emph{not} visibly blurrier than FlowCast's 10-step fields.
+\end{itemize}
+
+\subsection*{E5 --- Ablations (optional / backup)}
+\begin{itemize}
+  \item \textbf{log1p encoding is the single biggest preprocessing win:}
+        compresses qpepre's std from $9.12$ to $\approx 0.37$ and improves
+        \emph{every} channel ($\sim 20$--$25\%$ on t2m) --- the badly-scaled raw
+        channel otherwise contaminates the shared U-Net trunk.
+  \item \textbf{Precip weight $w_{\text{pr}}$:} no clean monotone trend;
+        $w_{\text{pr}}{=}2.0$ is the all-round default (best t2m, competitive
+        qpepre), $1.4$ is the wind sweet spot. MeanFlow reuses $2.0$ unchanged
+        so the A/B stays clean.
+  \item \textbf{Legacy $\rightarrow$ cleaned pipeline} is a large step on its
+        own (CRPS $0.63{\to}0.55$, CSI-M $0.14{\to}0.26$), \emph{independent} of
+        the head --- MeanFlow adds a $17\times$ end-to-end speedup on top.
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section*{DISCUSSION}
+
+\subsection*{D1 --- What the evidence says}
+\begin{itemize}
+  \item \textbf{Answer to the thesis question: a qualified ``yes.''} At
+        $1$--$2$ calls MeanFlow reaches the diffusion baseline's deterministic
+        \emph{and} categorical skill class, with the best precip hit rates and
+        near-best temperature, at $\approx 1/10$ the cost.
+  \item \textbf{FlowCast marks the intermediate point on the same axis:} the
+        straight-line path already recovers most of the diffusion skill ($K{=}10$,
+        $3.7\times$); the average-velocity jump removes the \emph{last} of the
+        integration cost.
+  \item \textbf{The one honest concession is calibration, not skill:}
+        MeanFlow's rollout CRPS gap is a spread problem (next slide), most
+        of it closed by the second segment.
+\end{itemize}
+
+\subsection*{D2 --- Failure modes (be honest)}
+\begin{itemize}
+  \item \textbf{Heavy-rain under-detection} --- all heads converge to low CSI
+        above $5$\,mm\,h$^{-1}$ at $2$\,M samples; flow heads' conservatism
+        costs hits.
+  \item \textbf{MeanFlow under-dispersion at $K{=}1$} --- one average-velocity
+        jump lands each noise draw near the conditional mean, narrowing
+        ensemble spread; it \emph{compounds} under autoregression. $\Rightarrow$
+        \textbf{$K{=}2$ is the recommended operating point.}
+  \item \textbf{FlowCast \texttt{t2m} rollout drift} ($1.73$\,K vs $1.60$\,K at
+        $+6$\,h) --- but MeanFlow does \emph{not} inherit it despite sharing the
+        backbone, so it's a property of the learned \emph{trajectory}, not the
+        architecture.
+  \item \textbf{Three caveats bounding all claims:} single $2$\,M snapshot
+        ($10$--$30\%$ noise); one regression mean / one domain (Taiwan); the
+        log1p encoding must match between regression and residual head.
+\end{itemize}
+
+% ------------------------------------------------------------------
+\section*{CONCLUSION}
+
+\subsection*{C1 --- Contributions}
+\begin{itemize}
+  \item \textbf{First application of the MeanFlow objective to a weather
+        forecaster:} a single-run, teacher-free average-velocity residual head
+        for StormCast, sampling in $1$--$2$ calls with \emph{no} ODE solver.
+  \item \textbf{A controlled three-head comparison} (EDM / FlowCast / MeanFlow)
+        sharing regression mean, backbone, and $\sigma_{\text{data}}$ --- so
+        MeanFlow-vs-FlowCast is an A/B on the training objective alone.
+  \item \textbf{A precipitation-aware loss \& evaluation suite}
+        (channel-weighted L2 $+$ radial log-PSD; RMSE/CRPS/CSI/FSS/HSS/spectral/
+        rollout) plus log1p and $w_{\text{pr}}$ ablations.
+  \item \textbf{The headline finding:} diffusion-class skill at a tenth of the
+        cost, teacher-free.
+\end{itemize}
+
+\subsection*{C2 --- Future work}
+\begin{itemize}
+  \item \textbf{Train to convergence and re-score} (FlowCast already at
+        $\approx 13.4$\,M) --- the single most important step to harden the
+        provisional headline against snapshot noise.
+  \item \textbf{Restore low-NFE rollout spread} --- stochastic single-segment
+        sampler / noise re-injection / spread-aware loss, to make the true
+        $1$--$2$-NFE regime probabilistically competitive end to end.
+  \item \textbf{Close the heavy-rain gap} (tail-quantile / focal loss on
+        \texttt{qpepre}) and \textbf{exploit cheap sampling for large-ensemble
+        calibration} (50--100 members, rank histograms).
+  \item \textbf{Isolate the loss recipe} (re-train EDM with the same rain-aware
+        terms) and \textbf{test transfer} to another domain (HRRR/CONUS).
+\end{itemize}
+
+\subsection*{C3 --- Closing line (one slide, big text)}
+\begin{itemize}
+  \item Generative modelling is the right inductive bias for convective-scale
+        forecasting; the \emph{multi-step sampler} was the obstacle.
+  \item \textbf{The path from noise to weather is a dial worth turning twice:
+        first straightened (FlowCast), then jumped (MeanFlow).}
+  \item Sharp, probabilistic, regional forecasting \emph{fast enough to run
+        between radar volumes} is now within reach --- with no teacher.
+\end{itemize}
 
 \end{document}
