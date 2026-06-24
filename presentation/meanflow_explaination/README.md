@@ -27,7 +27,7 @@ bodies matching `meanflow_from_flowmatching.tex` equation-for-equation.
 
 ```bash
 cd individual_equations
-python3 build_equations.py            # build all 13
+python3 build_equations.py            # build all 14
 python3 build_equations.py 08_mf_identity   # or a subset
 ```
 
@@ -51,9 +51,10 @@ The chain, in order:
 | `08_mf_identity` | **The MeanFlow identity** `u = v + (t−r) du/dr` |
 | `09_mf_jvp` | Total derivative = one JVP, tangent `(v,1,0)` |
 | `10_mf_boundary` | `r→t` recovers flow matching exactly |
-| `11_mf_target` | Stop-gradient bootstrap target |
-| `12_mf_loss` | The MeanFlow loss (adaptive + channel weights) |
-| `13_mf_sampler` | One/two-step sampler + field reconstruction |
+| `11_mf_target` | Bootstrap target `u_tgt` (the target line of the loss) |
+| `12_mf_loss` | **The MeanFlow loss** — verbatim thesis Eq. (3.13), with `sg(u_tgt)` + `λ_spec L_spec` |
+| `13_mf_weight` | Adaptive per-sample weight `w` |
+| `14_mf_sampler` | One/two-step sampler + field reconstruction |
 
 ## Background / provenance
 

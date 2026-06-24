@@ -1,0 +1,21 @@
+\documentclass[border=10pt,varwidth=\maxdimen]{standalone}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{siunitx}
+\usepackage{xcolor}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\Ebb}{\mathbb{E}}
+\newcommand{\Rbb}{\mathbb{R}}
+\newcommand{\Nbb}{\mathcal{N}}
+\newcommand{\Dnet}{D_{\theta}}
+\newcommand{\Dedm}{D_{\psi}}
+\newcommand{\Dteach}{D_{\psi}}
+\newcommand{\vnet}{v_{\theta}}
+\newcommand{\unet}{u_{\theta}}
+\newcommand{\Freg}{F_{\xi}}
+
+
+\begin{document}
+\(\displaystyle \mathcal{L}_{\text{MF}} = \Ebb\Bigl[\, \mathrm{sg}(w)\, \bigl\| u_\theta(z_r, r, t, c_t) - \mathrm{sg}(u_{\text{tgt}}) \bigr\|_{2,\beta}^2 \,\Bigr] + \lambda_{\text{spec}}\, \mathcal{L}_{\text{spec}}, \qquad u_{\text{tgt}} = v + (t - r)\bigl( v\, \partial_z u_\theta + \partial_r u_\theta \bigr), \)
+\end{document}

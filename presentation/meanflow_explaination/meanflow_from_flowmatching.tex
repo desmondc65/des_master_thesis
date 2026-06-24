@@ -70,7 +70,7 @@ and the network is regressed straight onto that velocity,
 \begin{equation}
   \mathcal{L}_{\mathrm{FC}}
    = \Exp_{t,\,x_0,\,x_1}\,
-        \bnormb{\,v_\theta(x_t,t;\ct) - (x_1 - x_0)\,}^2
+        \bnormb{\,v_\theta(x_t,t,\ct) - (x_1 - x_0)\,}^2
      \;(+\,\lambda_{\mathrm{spec}}\mathcal{L}_{\mathrm{spec}}),
   \label{eq:fm_loss}
 \end{equation}
@@ -79,7 +79,7 @@ with the precipitation-aware channel weights $\beta=(1,1,1,2)$ and a shared
 The catch is the \emph{sampler}: knowing only the instantaneous velocity,
 generation must integrate it,
 \begin{equation}
-  x_{t+\Delta t} = x_t + \Delta t\;v_\theta(x_t,t;\ct),
+  x_{t+\Delta t} = x_t + \Delta t\;v_\theta(x_t,t,\ct),
   \qquad \Delta t = 1/K,
   \label{eq:fm_sampler}
 \end{equation}
@@ -157,30 +157,36 @@ objective.
 %----------------------------------------------------------------------
 \section{The training objective}
 
-Regress the network onto its own identity, holding the right-hand side constant
-with a stop-gradient $\sg[\cdot]$:
+Regress the network onto its own identity. With the bootstrap target
 \begin{equation}
-  u_{\mathrm{tgt}} \;=\; \sg\!\Big[\,v + (t-r)\big(v\,\partial_z u_\theta + \partial_r u_\theta\big)\Big],
+  u_{\mathrm{tgt}} \;=\; v + (t-r)\big(v\,\partial_z u_\theta + \partial_r u_\theta\big),
   \label{eq:mf_target}
 \end{equation}
+the loss is the thesis MeanFlow objective (Chapter~3, Eq.~(3.13)),
 \begin{equation}
   \mathcal{L}_{\mathrm{MF}}
    \;=\; \Exp\Big[\,\sg(w)\,
-        \bnormb{\,u_\theta(z_r,r,t;\ct) - u_{\mathrm{tgt}}\,}^2\,\Big],
-  \qquad w = \big(\lVert\Delta\rVert_{2,\beta}^2 + \varepsilon_w\big)^{-p}.
+        \bnormb{\,u_\theta(z_r,r,t,\ct) - \sg(u_{\mathrm{tgt}})\,}^2\,\Big]
+   \;+\; \lambda_{\mathrm{spec}}\,\mathcal{L}_{\mathrm{spec}}.
   \label{eq:mf_loss}
 \end{equation}
-The adaptive weight $w$ (exponent $p=1$, $\varepsilon_w=10^{-3}$) down-weights
-high-error samples; $p=0$ recovers plain weighted MSE. The derivative inside
+Here $\sg[\cdot]$ is stop-gradient --- the whole target is a constant --- the
+adaptive weight
+\begin{equation}
+  w \;=\; \big(\lVert\Delta\rVert_{2,\beta}^2 + \varepsilon_w\big)^{-p},
+  \qquad p=1,\;\;\varepsilon_w=10^{-3},
+  \label{eq:mf_weight}
+\end{equation}
+down-weights high-error samples ($p=0$ recovers plain weighted MSE), and
+$\lambda_{\mathrm{spec}}\mathcal{L}_{\mathrm{spec}}$ is the \code{qpepre} log-PSD
+term inherited from FlowCast (active on the $r=t$ subset). The derivative inside
 $u_{\mathrm{tgt}}$ is one forward-mode \code{torch.func.jvp} with tangent
-$(v,1,0)$, evaluated under \code{no\_grad} on the bare module. Two flow times are
-drawn per sample and sorted to $r\le t$; a fraction $\rho_{\mathrm{MF}}=0.25$
-keeps $r<t$ (the bootstrapped, finite-interval target), and the other $75\%$
-collapse to $r=t$, where \eqref{eq:mf_boundary} makes the loss \emph{exactly}
-the FlowCast I-CFM regression. The diagonal supplies the clean, data-grounded
-anchor; the off-diagonal teaches the finite-interval average velocity that
-one-step sampling actually invokes. Channel weights and the \code{qpepre} log-PSD
-term are inherited unchanged from FlowCast.
+$(v,1,0)$, under \code{no\_grad} on the bare module. Two flow times are drawn per
+sample and sorted to $r\le t$; a fraction $\rho_{\mathrm{MF}}=0.25$ keeps $r<t$
+(the bootstrapped, finite-interval target), and the other $75\%$ collapse to
+$r=t$, where \eqref{eq:mf_boundary} makes the loss \emph{exactly} the FlowCast
+I-CFM regression --- the clean, data-grounded anchor the off-diagonal samples
+propagate outward.
 
 %----------------------------------------------------------------------
 \section{Sampling}
@@ -189,12 +195,12 @@ Starting from $z_0\sim\Norm(0,I)$, integrate the learned average velocity over
 $[0,1]$ in $K$ equal jumps,
 \begin{equation}
   z_{(i+1)/K} \;=\; z_{i/K} + \tfrac{1}{K}\,
-      u_\theta\!\big(z_{i/K},\,\tfrac{i}{K},\,\tfrac{i+1}{K};\,\ct\big),
+      u_\theta\!\big(z_{i/K},\,\tfrac{i}{K},\,\tfrac{i+1}{K},\,\ct\big),
   \qquad i=0,\dots,K-1,
   \label{eq:mf_sampler}
 \end{equation}
 and reconstruct the field as $\widehat{X}_t=\Mt+\sigd\,z_1$. The headline setting
-is $K=1$ (one network evaluation, $\widehat{x}_1=x_0+u_\theta(x_0,0,1;\ct)$);
+is $K=1$ (one network evaluation, $\widehat{x}_1=x_0+u_\theta(x_0,0,1,\ct)$);
 $K=2$ is the validation sweet spot. Unlike FlowCast's Euler sampler, raising $K$
 removes no truncation error --- each jump is exact under a perfect $u$ --- it
 only shortens the intervals over which the \emph{learned} $u_\theta$ must hold.

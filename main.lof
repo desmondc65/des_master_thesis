@@ -3,15 +3,15 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Per-channel Gaussianity diagnostics for HighRes targets}}{42}{figure.caption.49}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Three-way scoreboard plot}}{66}{figure.caption.85}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Per-channel RMSE and CRPS}}{68}{figure.caption.90}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces FlowCast and MeanFlow NFE Pareto sweep}}{69}{figure.caption.91}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Categorical precipitation skill by threshold}}{72}{figure.caption.94}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Heavy-rain Fractions Skill Score}}{74}{figure.caption.97}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Rollout RMSE versus lead time}}{74}{figure.caption.98}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Qualitative precipitation panels}}{79}{figure.caption.106}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Qualitative wind panel}}{80}{figure.caption.107}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces FlowCast training curves and spectrum}}{80}{figure.caption.109}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Headline scoreboard plot}}{66}{figure.caption.85}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Per-channel RMSE and CRPS}}{69}{figure.caption.90}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Inference cost and speedup}}{71}{figure.caption.93}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Categorical precipitation skill by threshold}}{74}{figure.caption.97}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Heavy-rain Fractions Skill Score}}{76}{figure.caption.102}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Rollout RMSE versus lead time}}{78}{figure.caption.104}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Qualitative precipitation rollout case study}}{84}{figure.caption.114}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Qualitative wind rollout case study}}{85}{figure.caption.115}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces FlowCast training curves}}{86}{figure.caption.117}%
 \addvspace {10\p@ }
 \contentsfinish 
 \contentsfinish 

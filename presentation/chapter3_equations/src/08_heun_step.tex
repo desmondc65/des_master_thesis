@@ -1,0 +1,21 @@
+\documentclass[border=10pt,varwidth=\maxdimen]{standalone}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{siunitx}
+\usepackage{xcolor}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\Ebb}{\mathbb{E}}
+\newcommand{\Rbb}{\mathbb{R}}
+\newcommand{\Nbb}{\mathcal{N}}
+\newcommand{\Dnet}{D_{\theta}}
+\newcommand{\Dedm}{D_{\psi}}
+\newcommand{\Dteach}{D_{\psi}}
+\newcommand{\vnet}{v_{\theta}}
+\newcommand{\unet}{u_{\theta}}
+\newcommand{\Freg}{F_{\xi}}
+
+
+\begin{document}
+\(\displaystyle v_{1/2} = v_\theta(x_t, t, c_t),\quad \tilde{x} = x_t + \tfrac{1}{2}\Delta t\,v_{1/2},\quad x_{t + \Delta t} = x_t + \Delta t\,v_\theta(\tilde{x}, t + \tfrac{1}{2}\Delta t, c_t), \)
+\end{document}

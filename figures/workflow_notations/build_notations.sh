@@ -20,6 +20,7 @@ mu_tp1	\mu_{t+1}
 D_phi	D_\phi
 sigma_noise	\sigma\,\mathcal{N}(0, I)
 r_tp1	r_{t+1}
+residual_def	r_{t+1} = M_{t+1} - \mu_{t+1}
 p_residual	p\left( r_{t+1} \,\middle|\, \mu_{t+1},\, M_t \right)
 MF_theta	MF_\theta
 concatenate	\odot

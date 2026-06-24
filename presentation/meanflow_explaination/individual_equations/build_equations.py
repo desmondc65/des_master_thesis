@@ -45,9 +45,9 @@ FORMULAS = {
     "02_fm_velocity":        # instantaneous velocity = constant along the line
         r"v \;=\; \frac{dx_t}{dt} \;=\; x_1 - x_0 \qquad (\text{constant per pair: a straight line})",
     "03_fm_loss":            # conditional flow-matching objective (FlowCast head)
-        r"\mathcal{L}_{\mathrm{FC}} \;=\; \mathbb{E}_{t,\,x_0,\,x_1}\!\left[\,\big\lVert v_\theta(x_t, t; c_t) - (x_1 - x_0) \big\rVert_{2,\beta}^2\,\right] \;\;(+\,\lambda_{\mathrm{spec}}\mathcal{L}_{\mathrm{spec}})",
+        r"\mathcal{L}_{\mathrm{FC}} \;=\; \mathbb{E}_{t,\,x_0,\,x_1}\!\left[\,\big\lVert v_\theta(x_t, t, c_t) - (x_1 - x_0) \big\rVert_{2,\beta}^2\,\right] \;\;(+\,\lambda_{\mathrm{spec}}\mathcal{L}_{\mathrm{spec}})",
     "04_fm_sampler":         # the cost we want to remove: K Euler steps
-        r"x_{t+\Delta t} \;=\; x_t + \Delta t\; v_\theta(x_t, t; c_t), \qquad \Delta t = 1/K, \quad K \approx 10",
+        r"x_{t+\Delta t} \;=\; x_t + \Delta t\; v_\theta(x_t, t, c_t), \qquad \Delta t = 1/K, \quad K \approx 10",
 
     # === Part B: the one idea -- the average velocity =======================
     "05_mf_avgvel":          # average velocity over the interval [r, t]
@@ -66,12 +66,16 @@ FORMULAS = {
         r"\lim_{r \to t} u(z_r, r, t) \;=\; u(z_t, t, t) \;=\; v \qquad (\text{the diagonal } r=t \text{ is exactly flow matching})",
 
     # === Part D: the objective and the sampler ==============================
-    "11_mf_target":          # stop-gradient bootstrap target
-        r"u_{\mathrm{tgt}} \;=\; \mathrm{sg}\!\Big[\, v + (t - r)\big(v\,\partial_z u_\theta + \partial_r u_\theta\big) \Big]",
-    "12_mf_loss":            # the MeanFlow training loss (adaptive, channel-weighted)
-        r"\mathcal{L}_{\mathrm{MF}} \;=\; \mathbb{E}\!\left[\,\mathrm{sg}(w)\,\big\lVert u_\theta(z_r, r, t; c_t) - u_{\mathrm{tgt}} \big\rVert_{2,\beta}^2\,\right], \qquad w = \big(\lVert \Delta \rVert_{2,\beta}^2 + \varepsilon_w\big)^{-p}",
-    "13_mf_sampler":         # one/two-step generation; reconstruct the field
-        r"z_{(i+1)/K} \;=\; z_{i/K} + \tfrac{1}{K}\, u_\theta\!\big(z_{i/K},\, \tfrac{i}{K},\, \tfrac{i+1}{K};\, c_t\big), \qquad \widehat{X}_t = M_t + \sigma_{\mathrm{data}}\, z_1",
+    # (11 + 12 together are the thesis MeanFlow loss, Chapter 3 Eq. (3.13):
+    #  the loss line carries sg(u_tgt) and the + lambda_spec L_spec term.)
+    "11_mf_target":          # the u_tgt line of thesis Eq. (3.13)
+        r"u_{\mathrm{tgt}} \;=\; v + (t - r)\big(v\,\partial_z u_\theta + \partial_r u_\theta\big)",
+    "12_mf_loss":            # the MeanFlow loss, verbatim thesis Eq. (3.13)
+        r"\mathcal{L}_{\mathrm{MF}} \;=\; \mathbb{E}\!\left[\,\mathrm{sg}(w)\,\big\lVert u_\theta(z_r, r, t, c_t) - \mathrm{sg}(u_{\mathrm{tgt}}) \big\rVert_{2,\beta}^2\,\right] + \lambda_{\mathrm{spec}}\,\mathcal{L}_{\mathrm{spec}}",
+    "13_mf_weight":          # adaptive per-sample weight (stop-gradient)
+        r"w \;=\; \big(\lVert \Delta \rVert_{2,\beta}^2 + \varepsilon_w\big)^{-p}, \qquad p = 1, \;\; \varepsilon_w = 10^{-3}",
+    "14_mf_sampler":         # one/two-step generation; reconstruct the field
+        r"z_{(i+1)/K} \;=\; z_{i/K} + \tfrac{1}{K}\, u_\theta\!\big(z_{i/K},\, \tfrac{i}{K},\, \tfrac{i+1}{K},\, c_t\big), \qquad \widehat{X}_t = M_t + \sigma_{\mathrm{data}}\, z_1",
 }
 
 # Captions for the README / slide notes (kept here so there is one source).
@@ -86,9 +90,10 @@ CAPTIONS = {
     "08_mf_identity":     "Differentiate w.r.t. r at fixed t -> the MeanFlow identity.",
     "09_mf_jvp":          "The total derivative is one Jacobian-vector product, tangent (v,1,0).",
     "10_mf_boundary":     "Zero-width interval recovers flow matching: MeanFlow generalises it.",
-    "11_mf_target":       "Stop-gradient bootstrap target built from the identity.",
-    "12_mf_loss":         "The MeanFlow loss: adaptive weight, precipitation channel weights.",
-    "13_mf_sampler":      "One/two-step sampler, then rebuild the field X_t = M_t + sigma_data z_1.",
+    "11_mf_target":       "Bootstrap target u_tgt: the target line of the thesis loss (Eq. 3.13).",
+    "12_mf_loss":         "The MeanFlow loss, verbatim thesis Eq. 3.13: stop-grad target + spectral term.",
+    "13_mf_weight":       "Adaptive per-sample weight; p=1 down-weights hard samples, p=0 is plain MSE.",
+    "14_mf_sampler":      "One/two-step sampler, then rebuild the field X_t = M_t + sigma_data z_1.",
 }
 
 TEX_TEMPLATE = r"""\documentclass[border=10pt,varwidth=\maxdimen]{standalone}
