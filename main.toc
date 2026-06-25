@@ -10,198 +10,181 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Weather Forecasting and Its Societal Stakes}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}A Brief History of Weather Prediction Methods}{2}{section.1.2}%
-\contentsline {paragraph}{Numerical Weather Prediction (NWP).}{2}{paragraph*.9}%
-\contentsline {paragraph}{Statistical and classical machine-learning post-processing.}{2}{paragraph*.10}%
-\contentsline {paragraph}{The deep-learning era.}{3}{paragraph*.11}%
-\contentsline {paragraph}{The generative turn.}{3}{paragraph*.12}%
-\contentsline {section}{\numberline {1.3}Diffusion Models for Weather: Intuition}{4}{section.1.3}%
-\contentsline {section}{\numberline {1.4}The Inference-Cost Problem}{4}{section.1.4}%
-\contentsline {section}{\numberline {1.5}From Diffusion to Flow Matching}{5}{section.1.5}%
-\contentsline {section}{\numberline {1.6}Contributions}{7}{section.1.6}%
-\contentsline {section}{\numberline {1.7}Thesis Outline}{9}{section.1.7}%
-\contentsline {chapter}{\numberline {2}Background and Related Work}{11}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Numerical Weather Prediction}{12}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Data-Driven Global Weather Models}{12}{section.2.2}%
-\contentsline {paragraph}{FourCastNet.}{13}{paragraph*.13}%
-\contentsline {paragraph}{Pangu-Weather.}{13}{paragraph*.14}%
-\contentsline {paragraph}{GraphCast.}{13}{paragraph*.15}%
-\contentsline {section}{\numberline {2.3}Regional and Convective-Scale Forecasting}{13}{section.2.3}%
-\contentsline {paragraph}{Nowcasting models.}{13}{paragraph*.16}%
-\contentsline {paragraph}{StormCast.}{14}{paragraph*.17}%
-\contentsline {section}{\numberline {2.4}GenCast and the Generative Turn}{15}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Score-Based Diffusion: A Primer}{15}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}DDPM and the Discrete-Time Construction}{16}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}DDIM and the Deterministic ODE View}{17}{subsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.5.3}Continuous-Time View: VE-SDE and PF-ODE}{17}{subsection.2.5.3}%
-\contentsline {paragraph}{Score--denoiser equivalence (Tweedie).}{18}{paragraph*.18}%
-\contentsline {section}{\numberline {2.6}EDM: The Elucidated Formulation}{19}{section.2.6}%
-\contentsline {paragraph}{Noise schedule.}{19}{paragraph*.19}%
-\contentsline {paragraph}{Preconditioning.}{20}{paragraph*.20}%
-\contentsline {paragraph}{Training loss.}{20}{paragraph*.21}%
-\contentsline {paragraph}{Heun sampler.}{21}{paragraph*.22}%
-\contentsline {section}{\numberline {2.7}Conditioning in Diffusion Models}{21}{section.2.7}%
-\contentsline {section}{\numberline {2.8}Flow Matching, FlowCast, and MeanFlow}{22}{section.2.8}%
-\contentsline {paragraph}{Continuous normalising flows, simulation-free training.}{22}{paragraph*.23}%
-\contentsline {paragraph}{Independent CFM (I-CFM) and the straight-line path.}{23}{paragraph*.24}%
-\contentsline {paragraph}{FlowCast.}{24}{paragraph*.25}%
-\contentsline {paragraph}{MeanFlow: average velocity for one-step generation.}{24}{paragraph*.26}%
-\contentsline {section}{\numberline {2.9}Flow Matching versus Diffusion: Why Straight-Line Paths Help}{26}{section.2.9}%
-\contentsline {paragraph}{The diffusion path is curved.}{26}{paragraph*.27}%
-\contentsline {paragraph}{The I-CFM path is a straight line.}{26}{paragraph*.28}%
-\contentsline {paragraph}{No teacher, one training run.}{27}{paragraph*.29}%
-\contentsline {section}{\numberline {2.10}Prior Generative Models for Precipitation Nowcasting}{27}{section.2.10}%
-\contentsline {section}{\numberline {2.11}Evaluation of Precipitation Forecasts}{28}{section.2.11}%
-\contentsline {paragraph}{Categorical skill scores.}{28}{paragraph*.30}%
-\contentsline {paragraph}{Fractions Skill Score.}{29}{paragraph*.31}%
-\contentsline {paragraph}{Spectral diagnostics.}{29}{paragraph*.32}%
-\contentsline {paragraph}{Rollout error growth.}{29}{paragraph*.33}%
-\contentsline {paragraph}{Probabilistic scores (optional).}{29}{paragraph*.34}%
-\contentsline {chapter}{\numberline {3}Method}{31}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Problem Setup}{32}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Dataset: Taiwan RWRF}{33}{section.3.2}%
-\contentsline {paragraph}{LowRes conditioning $S_t$.}{34}{paragraph*.35}%
-\contentsline {paragraph}{HighRes target $X_t$.}{34}{paragraph*.36}%
-\contentsline {paragraph}{Invariants $I$.}{34}{paragraph*.37}%
-\contentsline {paragraph}{Normalisation.}{34}{paragraph*.38}%
-\contentsline {paragraph}{Cleaned variant used for the reported experiments.}{35}{paragraph*.39}%
-\contentsline {section}{\numberline {3.3}Data Sources and Preprocessing Pipeline}{35}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Raw data sources}{36}{subsection.3.3.1}%
-\contentsline {paragraph}{ERA5 (low-resolution input, $S_t$).}{36}{paragraph*.40}%
-\contentsline {paragraph}{RWRF (high-resolution target, part of $X_t$).}{36}{paragraph*.41}%
-\contentsline {paragraph}{QPEPRE (high-resolution target, precipitation channel).}{36}{paragraph*.42}%
-\contentsline {paragraph}{Invariants $I$.}{37}{paragraph*.43}%
-\contentsline {subsection}{\numberline {3.3.2}Preprocessing pipeline}{37}{subsection.3.3.2}%
-\contentsline {paragraph}{Stage 1: monthly-to-hourly split.}{37}{paragraph*.45}%
-\contentsline {paragraph}{Stage 2: unified NetCDF-to-Zarr assembly.}{38}{paragraph*.46}%
-\contentsline {paragraph}{Output layout.}{40}{paragraph*.47}%
-\contentsline {paragraph}{Why this matters here.}{41}{paragraph*.48}%
-\contentsline {subsection}{\numberline {3.3.3}Target Distributions: Sparsity, Gaussianity, and the Diffusion Prior}{41}{subsection.3.3.3}%
-\contentsline {section}{\numberline {3.4}Regression Mean and the EDM Diffusion Baseline}{44}{section.3.4}%
-\contentsline {paragraph}{Why the baseline matters for a fair comparison.}{45}{paragraph*.51}%
-\contentsline {section}{\numberline {3.5}The FlowCast Baseline (Conditional Flow Matching)}{46}{section.3.5}%
-\contentsline {paragraph}{Conditioning bundle.}{46}{paragraph*.52}%
-\contentsline {paragraph}{Standardised-residual pipeline.}{47}{paragraph*.53}%
-\contentsline {paragraph}{Velocity predictor.}{48}{paragraph*.54}%
-\contentsline {paragraph}{Loss.}{48}{paragraph*.55}%
-\contentsline {paragraph}{Optimisation.}{49}{paragraph*.56}%
-\contentsline {paragraph}{EMA shadow network.}{50}{paragraph*.57}%
-\contentsline {paragraph}{Sampling.}{50}{paragraph*.58}%
-\contentsline {paragraph}{Why a straight-line flow is the right residual head.}{51}{paragraph*.59}%
-\contentsline {paragraph}{Implementation pointers.}{51}{paragraph*.60}%
-\contentsline {section}{\numberline {3.6}The MeanFlow Residual (Average-Velocity Flow Matching)}{52}{section.3.6}%
-\contentsline {paragraph}{Average velocity.}{52}{paragraph*.61}%
-\contentsline {paragraph}{The MeanFlow identity.}{53}{paragraph*.62}%
-\contentsline {paragraph}{Training objective.}{54}{paragraph*.63}%
-\contentsline {paragraph}{Network parameterisation: two times into one backbone.}{55}{paragraph*.64}%
-\contentsline {paragraph}{Sampling.}{56}{paragraph*.65}%
-\contentsline {paragraph}{Optimisation and checkpoints.}{57}{paragraph*.66}%
-\contentsline {paragraph}{Why average velocity for this residual.}{57}{paragraph*.67}%
-\contentsline {paragraph}{Implementation pointers.}{58}{paragraph*.68}%
-\contentsline {section}{\numberline {3.7}Loss Design for the Precipitation Channel}{58}{section.3.7}%
-\contentsline {paragraph}{Channel-weighted L2.}{59}{paragraph*.69}%
-\contentsline {paragraph}{Radial log-PSD regulariser.}{59}{paragraph*.70}%
-\contentsline {paragraph}{Monitoring for mode collapse.}{60}{paragraph*.71}%
-\contentsline {section}{\numberline {3.8}Training Infrastructure}{60}{section.3.8}%
-\contentsline {chapter}{\numberline {4}Experiments and Results}{61}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Experimental Protocol}{61}{section.4.1}%
-\contentsline {paragraph}{Validation split.}{61}{paragraph*.72}%
-\contentsline {paragraph}{Matched training-sample budget.}{62}{paragraph*.73}%
-\contentsline {paragraph}{Single-snapshot noise.}{62}{paragraph*.74}%
-\contentsline {paragraph}{NFE budgets and samplers.}{62}{paragraph*.75}%
-\contentsline {paragraph}{Rollouts and ensembling.}{63}{paragraph*.76}%
-\contentsline {paragraph}{Hardware.}{63}{paragraph*.77}%
-\contentsline {section}{\numberline {4.2}Evaluation Metrics}{63}{section.4.2}%
-\contentsline {paragraph}{RMSE and MAE.}{64}{paragraph*.78}%
-\contentsline {paragraph}{CRPS.}{64}{paragraph*.79}%
-\contentsline {paragraph}{Categorical precipitation scores.}{64}{paragraph*.80}%
-\contentsline {paragraph}{Fractions Skill Score.}{65}{paragraph*.81}%
-\contentsline {paragraph}{Radial log-PSD.}{65}{paragraph*.82}%
-\contentsline {paragraph}{Rollout metrics.}{65}{paragraph*.83}%
-\contentsline {section}{\numberline {4.3}MeanFlow versus Diffusion and FlowCast: Headline Comparison}{65}{section.4.3}%
-\contentsline {paragraph}{Read.}{67}{paragraph*.86}%
-\contentsline {paragraph}{Read (MeanFlow rows).}{67}{paragraph*.87}%
-\contentsline {paragraph}{Interpretation.}{68}{paragraph*.88}%
-\contentsline {paragraph}{Per-channel RMSE and CRPS.}{69}{paragraph*.89}%
-\contentsline {section}{\numberline {4.4}Inference Cost: Wall-Clock and NFE Ablation}{70}{section.4.4}%
-\contentsline {paragraph}{Read.}{70}{paragraph*.94}%
-\contentsline {paragraph}{Operational consequence.}{72}{paragraph*.95}%
-\contentsline {paragraph}{Cross-hardware.}{72}{paragraph*.96}%
-\contentsline {section}{\numberline {4.5}Precipitation Skill by Threshold and Neighbourhood}{73}{section.4.5}%
-\contentsline {paragraph}{Neighbourhood dependence.}{73}{paragraph*.98}%
-\contentsline {paragraph}{Light to moderate rain.}{75}{paragraph*.100}%
-\contentsline {paragraph}{Heavy rain.}{76}{paragraph*.101}%
-\contentsline {section}{\numberline {4.6}Autoregressive Rollout}{76}{section.4.6}%
-\contentsline {paragraph}{Read.}{76}{paragraph*.105}%
-\contentsline {section}{\numberline {4.7}Ablation: \texttt {log1p} Precipitation Encoding}{78}{section.4.7}%
-\contentsline {paragraph}{Read.}{79}{paragraph*.107}%
-\contentsline {section}{\numberline {4.8}Ablation: Precipitation Channel Weight}{80}{section.4.8}%
-\contentsline {paragraph}{Read.}{80}{paragraph*.109}%
-\contentsline {section}{\numberline {4.9}Comparison Against the Legacy Baseline}{81}{section.4.9}%
-\contentsline {paragraph}{Read.}{81}{paragraph*.111}%
-\contentsline {section}{\numberline {4.10}Qualitative Case Studies}{82}{section.4.10}%
-\contentsline {paragraph}{Precipitation.}{82}{paragraph*.112}%
-\contentsline {paragraph}{Wind.}{83}{paragraph*.113}%
-\contentsline {paragraph}{Training dynamics.}{83}{paragraph*.116}%
-\contentsline {section}{\numberline {4.11}Failure Modes}{86}{section.4.11}%
-\contentsline {paragraph}{Heavy-rain under-detection.}{86}{paragraph*.118}%
-\contentsline {paragraph}{\texttt {t2m} rollout drift.}{86}{paragraph*.119}%
-\contentsline {paragraph}{One-evaluation under-dispersion (MeanFlow).}{87}{paragraph*.120}%
-\contentsline {paragraph}{EMA dependence.}{87}{paragraph*.121}%
-\contentsline {section}{\numberline {4.12}Discussion}{88}{section.4.12}%
-\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{91}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Summary of Contributions}{91}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Limitations}{92}{section.5.2}%
-\contentsline {paragraph}{Single training snapshot.}{93}{paragraph*.122}%
-\contentsline {paragraph}{Single regression mean and single domain.}{93}{paragraph*.123}%
-\contentsline {paragraph}{Heavy-rain detection.}{93}{paragraph*.124}%
-\contentsline {paragraph}{Limited probabilistic evaluation.}{93}{paragraph*.125}%
-\contentsline {paragraph}{Under-dispersion at low NFE (MeanFlow).}{94}{paragraph*.126}%
-\contentsline {paragraph}{No distilled-diffusion comparator.}{94}{paragraph*.127}%
-\contentsline {section}{\numberline {5.3}Future Work}{94}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Closing Remarks}{96}{section.5.4}%
-\contentsline {chapter}{References}{97}{section*.128}%
-\contentsline {chapter}{Appendix~{A}~---~Hyperparameters and Training Configuration}{103}{section*.131}%
-\contentsline {section}{\numberline {A.1}EDM Diffusion Baseline Hyperparameters}{103}{section.5.1}%
-\contentsline {section}{\numberline {A.2}FlowCast (Conditional Flow Matching)}{104}{section.5.2}%
-\contentsline {section}{\numberline {A.3}MeanFlow (Average-Velocity Flow Matching)}{106}{section.5.3}%
-\contentsline {section}{\numberline {A.4}Ablation Grids}{108}{section.5.4}%
-\contentsline {section}{\numberline {A.5}Per-Channel Dataset Statistics}{108}{section.5.5}%
-\contentsline {chapter}{Appendix~{B}~---~Reproducibility}{109}{section*.133}%
-\contentsline {section}{\numberline {B.1}Code Availability}{109}{section.5.1}%
-\contentsline {section}{\numberline {B.2}Dataset and Checkpoints}{110}{section.5.2}%
-\contentsline {paragraph}{Zarr store.}{110}{paragraph*.134}%
-\contentsline {paragraph}{Checkpoints (cleaned, log1p, $\approx 2\,\text {M}$-sample anchor).}{111}{paragraph*.135}%
-\contentsline {section}{\numberline {B.3}Commands}{111}{section.5.3}%
-\contentsline {paragraph}{Regression mean (pre-train once).}{111}{paragraph*.136}%
-\contentsline {paragraph}{EDM diffusion baseline.}{112}{paragraph*.137}%
-\contentsline {paragraph}{FlowCast.}{112}{paragraph*.138}%
-\contentsline {paragraph}{MeanFlow.}{112}{paragraph*.139}%
-\contentsline {paragraph}{Auto-resume.}{113}{paragraph*.140}%
-\contentsline {paragraph}{Head-to-head evaluation.}{113}{paragraph*.141}%
-\contentsline {paragraph}{NFE Pareto sweeps.}{113}{paragraph*.142}%
-\contentsline {paragraph}{Figure and results regeneration.}{114}{paragraph*.143}%
-\contentsline {chapter}{Appendix~{C}~---~Detailed Derivations}{115}{section*.145}%
-\contentsline {section}{\numberline {C.1}Tweedie's Formula: Score and Denoiser}{115}{section.5.1}%
-\contentsline {section}{\numberline {C.2}Probability-Flow ODE from the VE-SDE}{116}{section.5.2}%
-\contentsline {section}{\numberline {C.3}EDM Preconditioning Derivation}{117}{section.5.3}%
-\contentsline {paragraph}{Requirement 1: unit-variance input to $F_\theta $.}{118}{paragraph*.146}%
-\contentsline {paragraph}{Requirement 2: unit-variance target for $F_\theta $.}{118}{paragraph*.147}%
-\contentsline {paragraph}{Requirement 3: minimise the error amplification $c_{\text {out}}$.}{118}{paragraph*.148}%
-\contentsline {paragraph}{Noise scaling.}{119}{paragraph*.149}%
-\contentsline {paragraph}{Loss weighting.}{119}{paragraph*.150}%
-\contentsline {section}{\numberline {C.4}Karras $\rho $-Spaced Noise Schedule}{120}{section.5.4}%
-\contentsline {section}{\numberline {C.5}CFM Theorem: Conditional $=$ Marginal Gradient}{120}{section.5.5}%
-\contentsline {paragraph}{Theorem.}{121}{paragraph*.151}%
-\contentsline {paragraph}{Proof.}{121}{paragraph*.152}%
-\contentsline {section}{\numberline {C.6}Independent CFM: Straight-Line Path and Target}{121}{section.5.6}%
-\contentsline {paragraph}{Target vector field.}{122}{paragraph*.153}%
-\contentsline {paragraph}{Why $\sigma _{\text {path}} > 0$.}{122}{paragraph*.154}%
-\contentsline {paragraph}{Compared to diffusion.}{122}{paragraph*.155}%
-\contentsline {section}{\numberline {C.7}FlowCast's Standardised-Residual Adaptation}{123}{section.5.7}%
-\contentsline {section}{\numberline {C.8}The MeanFlow Average-Velocity Identity}{124}{section.5.8}%
-\contentsline {paragraph}{Setup.}{124}{paragraph*.156}%
-\contentsline {paragraph}{Differentiating away the integral.}{125}{paragraph*.157}%
-\contentsline {paragraph}{Why this is trainable.}{126}{paragraph*.158}%
-\contentsline {paragraph}{Boundary condition and the FlowCast special case.}{126}{paragraph*.159}%
-\contentsline {paragraph}{Convention note.}{126}{paragraph*.160}%
+\contentsline {section}{\numberline {1.3}Diffusion Models for Weather: Intuition}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}The Inference-Cost Problem}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.5}From Diffusion to Flow Matching}{4}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Contributions}{6}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Thesis Outline}{8}{section.1.7}%
+\contentsline {chapter}{\numberline {2}Background and Related Work}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Numerical Weather Prediction}{10}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Data-Driven Global Weather Models}{10}{section.2.2}%
+\contentsline {paragraph}{FourCastNet.}{11}{paragraph*.9}%
+\contentsline {paragraph}{Pangu-Weather.}{11}{paragraph*.10}%
+\contentsline {paragraph}{GraphCast.}{11}{paragraph*.11}%
+\contentsline {section}{\numberline {2.3}Regional and Convective-Scale Forecasting}{11}{section.2.3}%
+\contentsline {paragraph}{Nowcasting models.}{11}{paragraph*.12}%
+\contentsline {paragraph}{StormCast.}{12}{paragraph*.13}%
+\contentsline {section}{\numberline {2.4}GenCast and the Generative Turn}{13}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Score-Based Diffusion: A Primer}{13}{section.2.5}%
+\contentsline {section}{\numberline {2.6}EDM: The Elucidated Formulation}{14}{section.2.6}%
+\contentsline {paragraph}{Noise schedule.}{15}{paragraph*.14}%
+\contentsline {paragraph}{Preconditioning.}{15}{paragraph*.15}%
+\contentsline {paragraph}{Training loss.}{15}{paragraph*.16}%
+\contentsline {paragraph}{Heun sampler.}{16}{paragraph*.17}%
+\contentsline {section}{\numberline {2.7}Conditioning in Diffusion Models}{16}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Flow Matching, FlowCast, and MeanFlow}{17}{section.2.8}%
+\contentsline {paragraph}{Continuous normalising flows, simulation-free training.}{17}{paragraph*.18}%
+\contentsline {paragraph}{Independent CFM (I-CFM) and the straight-line path.}{18}{paragraph*.19}%
+\contentsline {paragraph}{FlowCast.}{19}{paragraph*.20}%
+\contentsline {paragraph}{MeanFlow: average velocity for one-step generation.}{19}{paragraph*.21}%
+\contentsline {section}{\numberline {2.9}Flow Matching versus Diffusion: Why Straight-Line Paths Help}{21}{section.2.9}%
+\contentsline {paragraph}{The diffusion path is curved.}{21}{paragraph*.22}%
+\contentsline {paragraph}{The I-CFM path is a straight line.}{21}{paragraph*.23}%
+\contentsline {paragraph}{No teacher, one training run.}{22}{paragraph*.24}%
+\contentsline {section}{\numberline {2.10}Prior Generative Models for Precipitation Nowcasting}{22}{section.2.10}%
+\contentsline {section}{\numberline {2.11}Evaluation of Precipitation Forecasts}{23}{section.2.11}%
+\contentsline {paragraph}{Categorical skill scores.}{23}{paragraph*.25}%
+\contentsline {paragraph}{Fractions Skill Score.}{24}{paragraph*.26}%
+\contentsline {paragraph}{Spectral diagnostics.}{24}{paragraph*.27}%
+\contentsline {paragraph}{Rollout error growth.}{24}{paragraph*.28}%
+\contentsline {paragraph}{Probabilistic scores (optional).}{24}{paragraph*.29}%
+\contentsline {chapter}{\numberline {3}Method}{25}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Problem Setup}{26}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Dataset: Taiwan RWRF}{27}{section.3.2}%
+\contentsline {paragraph}{LowRes conditioning $S_t$.}{28}{paragraph*.30}%
+\contentsline {paragraph}{HighRes target $X_t$.}{28}{paragraph*.31}%
+\contentsline {paragraph}{Invariants $I$.}{28}{paragraph*.32}%
+\contentsline {paragraph}{Normalisation.}{28}{paragraph*.33}%
+\contentsline {paragraph}{Cleaned variant used for the reported experiments.}{29}{paragraph*.34}%
+\contentsline {section}{\numberline {3.3}Data Sources and Preprocessing Pipeline}{29}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Raw data sources}{30}{subsection.3.3.1}%
+\contentsline {paragraph}{ERA5 (low-resolution input, $S_t$).}{30}{paragraph*.35}%
+\contentsline {paragraph}{RWRF (high-resolution target, part of $X_t$).}{30}{paragraph*.36}%
+\contentsline {paragraph}{QPEPRE (high-resolution target, precipitation channel).}{30}{paragraph*.37}%
+\contentsline {paragraph}{Invariants $I$.}{31}{paragraph*.38}%
+\contentsline {subsection}{\numberline {3.3.2}Preprocessing pipeline}{31}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Target Distributions: Sparsity, Gaussianity, and the Diffusion Prior}{32}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}Regression Mean and the EDM Diffusion Baseline}{35}{section.3.4}%
+\contentsline {paragraph}{Why the baseline matters for a fair comparison.}{36}{paragraph*.42}%
+\contentsline {section}{\numberline {3.5}The FlowCast Baseline (Conditional Flow Matching)}{37}{section.3.5}%
+\contentsline {paragraph}{Conditioning bundle.}{37}{paragraph*.43}%
+\contentsline {paragraph}{Standardised-residual pipeline.}{38}{paragraph*.44}%
+\contentsline {paragraph}{Velocity predictor.}{39}{paragraph*.45}%
+\contentsline {paragraph}{Loss.}{39}{paragraph*.46}%
+\contentsline {paragraph}{Optimisation.}{40}{paragraph*.47}%
+\contentsline {paragraph}{EMA shadow network.}{41}{paragraph*.48}%
+\contentsline {paragraph}{Sampling.}{41}{paragraph*.49}%
+\contentsline {paragraph}{Why a straight-line flow is the right residual head.}{42}{paragraph*.50}%
+\contentsline {section}{\numberline {3.6}The MeanFlow Residual (Average-Velocity Flow Matching)}{42}{section.3.6}%
+\contentsline {paragraph}{Average velocity.}{43}{paragraph*.51}%
+\contentsline {paragraph}{The MeanFlow identity.}{44}{paragraph*.52}%
+\contentsline {paragraph}{Training objective.}{44}{paragraph*.53}%
+\contentsline {paragraph}{Network parameterisation: two times into one backbone.}{46}{paragraph*.54}%
+\contentsline {paragraph}{Sampling.}{47}{paragraph*.55}%
+\contentsline {paragraph}{Optimisation and checkpoints.}{47}{paragraph*.56}%
+\contentsline {paragraph}{Why average velocity for this residual.}{48}{paragraph*.57}%
+\contentsline {section}{\numberline {3.7}Loss Design for the Precipitation Channel}{48}{section.3.7}%
+\contentsline {paragraph}{Channel-weighted L2.}{49}{paragraph*.58}%
+\contentsline {paragraph}{Radial log-PSD regulariser.}{49}{paragraph*.59}%
+\contentsline {paragraph}{Monitoring for mode collapse.}{49}{paragraph*.60}%
+\contentsline {section}{\numberline {3.8}Training Infrastructure}{50}{section.3.8}%
+\contentsline {chapter}{\numberline {4}Experiments and Results}{51}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Experimental Protocol}{51}{section.4.1}%
+\contentsline {paragraph}{Validation split.}{51}{paragraph*.61}%
+\contentsline {paragraph}{Matched training-sample budget.}{52}{paragraph*.62}%
+\contentsline {paragraph}{Single-snapshot noise.}{52}{paragraph*.63}%
+\contentsline {paragraph}{NFE budgets and samplers.}{52}{paragraph*.64}%
+\contentsline {paragraph}{Rollouts and ensembling.}{53}{paragraph*.65}%
+\contentsline {paragraph}{Hardware.}{53}{paragraph*.66}%
+\contentsline {section}{\numberline {4.2}Evaluation Metrics}{53}{section.4.2}%
+\contentsline {paragraph}{RMSE and MAE.}{54}{paragraph*.67}%
+\contentsline {paragraph}{CRPS.}{54}{paragraph*.68}%
+\contentsline {paragraph}{Categorical precipitation scores.}{54}{paragraph*.69}%
+\contentsline {paragraph}{Fractions Skill Score.}{55}{paragraph*.70}%
+\contentsline {paragraph}{Radial log-PSD.}{55}{paragraph*.71}%
+\contentsline {paragraph}{Rollout metrics.}{55}{paragraph*.72}%
+\contentsline {section}{\numberline {4.3}MeanFlow versus Diffusion and FlowCast: Headline Comparison}{55}{section.4.3}%
+\contentsline {paragraph}{Read.}{57}{paragraph*.75}%
+\contentsline {paragraph}{Read (MeanFlow rows).}{57}{paragraph*.76}%
+\contentsline {paragraph}{Interpretation.}{58}{paragraph*.77}%
+\contentsline {paragraph}{Per-channel RMSE and CRPS.}{59}{paragraph*.78}%
+\contentsline {section}{\numberline {4.4}Inference Cost: Wall-Clock and NFE Ablation}{60}{section.4.4}%
+\contentsline {paragraph}{Read.}{60}{paragraph*.83}%
+\contentsline {paragraph}{Operational consequence.}{62}{paragraph*.84}%
+\contentsline {paragraph}{Cross-hardware.}{62}{paragraph*.85}%
+\contentsline {section}{\numberline {4.5}Precipitation Skill by Threshold and Neighbourhood}{63}{section.4.5}%
+\contentsline {paragraph}{Neighbourhood dependence.}{63}{paragraph*.87}%
+\contentsline {paragraph}{Light to moderate rain.}{65}{paragraph*.89}%
+\contentsline {paragraph}{Heavy rain.}{66}{paragraph*.90}%
+\contentsline {section}{\numberline {4.6}Autoregressive Rollout}{66}{section.4.6}%
+\contentsline {paragraph}{Read.}{66}{paragraph*.94}%
+\contentsline {section}{\numberline {4.7}Ablation: \texttt {log1p} Precipitation Encoding}{68}{section.4.7}%
+\contentsline {paragraph}{Read.}{69}{paragraph*.96}%
+\contentsline {section}{\numberline {4.8}Ablation: Precipitation Channel Weight}{70}{section.4.8}%
+\contentsline {paragraph}{Read.}{70}{paragraph*.98}%
+\contentsline {section}{\numberline {4.9}Comparison Against the Legacy Baseline}{71}{section.4.9}%
+\contentsline {paragraph}{Read.}{71}{paragraph*.100}%
+\contentsline {section}{\numberline {4.10}Qualitative Case Studies}{72}{section.4.10}%
+\contentsline {paragraph}{Precipitation.}{72}{paragraph*.101}%
+\contentsline {paragraph}{Wind.}{73}{paragraph*.102}%
+\contentsline {paragraph}{Training dynamics.}{73}{paragraph*.105}%
+\contentsline {section}{\numberline {4.11}Failure Modes}{76}{section.4.11}%
+\contentsline {paragraph}{Heavy-rain under-detection.}{76}{paragraph*.107}%
+\contentsline {paragraph}{\texttt {t2m} rollout drift.}{76}{paragraph*.108}%
+\contentsline {paragraph}{One-evaluation under-dispersion (MeanFlow).}{77}{paragraph*.109}%
+\contentsline {paragraph}{EMA dependence.}{77}{paragraph*.110}%
+\contentsline {section}{\numberline {4.12}Discussion}{78}{section.4.12}%
+\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{81}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Summary of Contributions}{81}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Limitations}{83}{section.5.2}%
+\contentsline {paragraph}{Single training snapshot.}{83}{paragraph*.111}%
+\contentsline {paragraph}{Single regression mean and single domain.}{83}{paragraph*.112}%
+\contentsline {paragraph}{Heavy-rain detection.}{83}{paragraph*.113}%
+\contentsline {paragraph}{Limited probabilistic evaluation.}{83}{paragraph*.114}%
+\contentsline {paragraph}{Under-dispersion at low NFE (MeanFlow).}{84}{paragraph*.115}%
+\contentsline {paragraph}{No distilled-diffusion comparator.}{84}{paragraph*.116}%
+\contentsline {section}{\numberline {5.3}Future Work}{84}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Closing Remarks}{86}{section.5.4}%
+\contentsline {chapter}{References}{87}{section*.117}%
+\contentsline {chapter}{Appendix~{A}~---~Hyperparameters and Training Configuration}{93}{section*.119}%
+\contentsline {section}{\numberline {A.1}EDM Diffusion Baseline Hyperparameters}{93}{section.A.1}%
+\contentsline {section}{\numberline {A.2}FlowCast (Conditional Flow Matching)}{94}{section.A.2}%
+\contentsline {section}{\numberline {A.3}MeanFlow (Average-Velocity Flow Matching)}{96}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Ablation Grids}{98}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Per-Channel Dataset Statistics}{98}{section.A.5}%
+\contentsline {chapter}{Appendix~{B}~---~Reproducibility}{99}{section*.121}%
+\contentsline {section}{\numberline {B.1}Code Availability}{99}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Dataset and Checkpoints}{100}{section.B.2}%
+\contentsline {paragraph}{Zarr store.}{100}{paragraph*.123}%
+\contentsline {paragraph}{Checkpoints (cleaned, log1p, $\approx 2\,\text {M}$-sample anchor).}{101}{paragraph*.124}%
+\contentsline {section}{\numberline {B.3}Preprocessing Pipeline Details}{101}{section.B.3}%
+\contentsline {paragraph}{Stage 1: monthly-to-hourly split.}{101}{paragraph*.125}%
+\contentsline {paragraph}{Stage 2: unified NetCDF-to-Zarr assembly.}{102}{paragraph*.126}%
+\contentsline {paragraph}{Output layout.}{104}{paragraph*.127}%
+\contentsline {section}{\numberline {B.4}Commands}{105}{section.B.4}%
+\contentsline {paragraph}{Regression mean (pre-train once).}{105}{paragraph*.128}%
+\contentsline {paragraph}{EDM diffusion baseline.}{105}{paragraph*.129}%
+\contentsline {paragraph}{FlowCast.}{105}{paragraph*.130}%
+\contentsline {paragraph}{MeanFlow.}{106}{paragraph*.131}%
+\contentsline {paragraph}{Auto-resume.}{106}{paragraph*.132}%
+\contentsline {paragraph}{Head-to-head evaluation.}{106}{paragraph*.133}%
+\contentsline {paragraph}{NFE-versus-quality sweeps.}{107}{paragraph*.134}%
+\contentsline {paragraph}{Figure and results regeneration.}{107}{paragraph*.135}%
+\contentsline {chapter}{Appendix~{C}~---~Detailed Derivations}{109}{section*.136}%
+\contentsline {section}{\numberline {C.1}Tweedie's Formula: Score and Denoiser}{110}{section.C.1}%
+\contentsline {section}{\numberline {C.2}Probability-Flow ODE from the VE-SDE}{110}{section.C.2}%
+\contentsline {section}{\numberline {C.3}CFM Theorem: Conditional $=$ Marginal Gradient}{111}{section.C.3}%
+\contentsline {paragraph}{Theorem.}{111}{paragraph*.138}%
+\contentsline {paragraph}{Proof.}{112}{paragraph*.139}%
+\contentsline {section}{\numberline {C.4}Independent CFM: Straight-Line Path and Target}{112}{section.C.4}%
+\contentsline {paragraph}{Target vector field.}{113}{paragraph*.140}%
+\contentsline {paragraph}{Why $\sigma _{\text {path}} > 0$.}{113}{paragraph*.141}%
+\contentsline {paragraph}{Compared to diffusion.}{113}{paragraph*.142}%
+\contentsline {section}{\numberline {C.5}FlowCast's Standardised-Residual Adaptation}{114}{section.C.5}%
+\contentsline {section}{\numberline {C.6}The MeanFlow Average-Velocity Identity}{115}{section.C.6}%
+\contentsline {paragraph}{Setup.}{115}{paragraph*.143}%
+\contentsline {paragraph}{Differentiating away the integral.}{116}{paragraph*.144}%
+\contentsline {paragraph}{Why this is trainable.}{117}{paragraph*.145}%
+\contentsline {paragraph}{Boundary condition and the FlowCast special case.}{117}{paragraph*.146}%
+\contentsline {paragraph}{Convention note.}{117}{paragraph*.147}%
 \contentsfinish 

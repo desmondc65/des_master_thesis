@@ -1,17 +1,17 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Raw data sources used for training. Low-resolution ERA5 provides synoptic conditioning; RWRF and QPEPRE together supply the convection-permitting target.}}{37}{table.caption.44}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Gaussianity statistics of HighRes target channels}}{42}{table.caption.50}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Raw data sources used for training. Low-resolution ERA5 provides synoptic conditioning; RWRF and QPEPRE together supply the convection-permitting target.}}{31}{table.caption.39}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Gaussianity statistics of HighRes target channels}}{32}{table.caption.41}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces MeanFlow, FlowCast and EDM diffusion scoreboard}}{67}{table.caption.84}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Inference timing ablation (A6000)}}{70}{table.caption.91}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces Inference timing ablation (H100)}}{71}{table.caption.92}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces Precipitation skill across pooling windows}}{75}{table.caption.99}%
-\contentsline {table}{\numberline {4.5}{\ignorespaces Rollout RMSE versus lead time}}{77}{table.caption.103}%
-\contentsline {table}{\numberline {4.6}{\ignorespaces log1p versus raw-mm/h encoding ablation}}{79}{table.caption.106}%
-\contentsline {table}{\numberline {4.7}{\ignorespaces Precipitation channel-weight ablation}}{80}{table.caption.108}%
-\contentsline {table}{\numberline {4.8}{\ignorespaces Legacy versus cleaned pipeline}}{81}{table.caption.110}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces MeanFlow, FlowCast and EDM diffusion scoreboard}}{57}{table.caption.73}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Inference timing ablation (A6000)}}{60}{table.caption.80}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Inference timing ablation (H100)}}{61}{table.caption.81}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Precipitation skill across pooling windows}}{65}{table.caption.88}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Rollout RMSE versus lead time}}{67}{table.caption.92}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces log1p versus raw-mm/h encoding ablation}}{69}{table.caption.95}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces Precipitation channel-weight ablation}}{70}{table.caption.97}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces Legacy versus cleaned pipeline}}{71}{table.caption.99}%
 \addvspace {10\p@ }
 \contentsfinish 
 \contentsfinish 

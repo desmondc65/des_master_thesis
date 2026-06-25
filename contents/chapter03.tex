@@ -31,7 +31,7 @@ In all cases the full prediction at each step is $\hat{X}_t = M_t + \hat{R}_t$, 
 
 The training data live in a Zarr store under the project directory (see Appendix~\ref{app:repro}). The store has three top-level groups.
 
-\paragraph{LowRes conditioning $S_t$.} Shape $(T, 24, 224, 128)$, where $T$ is the hourly time index and the 24 channels are mean sea-level pressure, two-metre temperature, ten-metre winds, and the specific humidity, temperature, and zonal and meridional winds at four pressure levels (\SIlist{1000;850;500;250}{\hecto\pascal}). These channels are low-resolution re-gridded ERA5 fields that serve as synoptic-scale boundary conditioning.
+\paragraph{LowRes conditioning $S_t$.} Shape $(T, 24, 224, 128)$, where $T$ is the hourly time index and the 24 channels are low-resolution re-gridded ERA5 fields serving as synoptic-scale boundary conditioning: four surface variables plus humidity, temperature, winds, and geopotential at four pressure levels (\SIlist{1000;850;500;250}{\hecto\pascal}). The exact variable list and provenance are given in Section~\ref{sec:method-datasources}.
 
 \paragraph{HighRes target $X_t$.} Shape $(T, 4, 224, 128)$, with four channels: two-metre temperature (\texttt{t2m}), ten-metre zonal and meridional winds (\texttt{u10}, \texttt{v10}), and hourly accumulated precipitation (\texttt{qpepre}). The horizontal grid covers Taiwan from \SI{21.6}{\degree} to \SI{25.6}{\degree}N and \SI{119.75}{\degree} to \SI{122.25}{\degree}E at approximately \SI{2}{\kilo\metre} resolution. The dataset splits into 21{,}216 training hours (2019-08 through 2021-12) and 8{,}760 validation hours (calendar year 2022).
 
@@ -56,7 +56,7 @@ Section~\ref{sec:method-data} described the Zarr store consumed by the training 
 \subsection{Raw data sources}
 \label{sec:method-datasources-raw}
 
-\paragraph{ERA5 (low-resolution input, $S_t$).} The ECMWF ERA5 reanalysis~\citep{hersbach2020era5} at approximately \SI{25}{\kilo\metre} spatial resolution supplies the synoptic-scale environmental state. From ERA5 we take four surface variables (mean sea-level pressure \texttt{mslp}, two-metre temperature \texttt{t2m}, and ten-metre winds \texttt{u10}, \texttt{v10}) and five upper-air variables (specific humidity \texttt{q}, temperature \texttt{t}, zonal wind \texttt{u}, meridional wind \texttt{v}, and geopotential height \texttt{z}) at four pressure levels \{1000, 850, 500, 250\}\,\si{\hecto\pascal}, for a total of $4 + 5 \times 4 = 24$ channels. These are the 24 LowRes channels listed in Section~\ref{sec:method-data}.
+\paragraph{ERA5 (low-resolution input, $S_t$).} The ECMWF ERA5 reanalysis~\citep{hersbach2020era5} at approximately \SI{25}{\kilo\metre} spatial resolution supplies the synoptic-scale environmental state. From ERA5 we take four surface variables (mean sea-level pressure \texttt{mslp}, two-metre temperature \texttt{t2m}, and ten-metre winds \texttt{u10}, \texttt{v10}) and five upper-air variables (specific humidity \texttt{q}, temperature \texttt{t}, zonal wind \texttt{u}, meridional wind \texttt{v}, and geopotential height \texttt{z}) at four pressure levels \{1000, 850, 500, 250\}\,\si{\hecto\pascal}, for a total of $4 + 5 \times 4 = 24$ channels --- the LowRes bundle $S_t$ of Section~\ref{sec:method-data}.
 
 \paragraph{RWRF (high-resolution target, part of $X_t$).} The Radar-assimilated Weather Research and Forecasting (RWRF) numerical model provides convection-permitting ($\approx$\SI{2}{\kilo\metre}) analyses over Taiwan. We use hourly RWRF output (\texttt{wrfout\_d01\_*\_interp}) for the three near-surface dynamical channels: \texttt{t2m}, \texttt{u10}, \texttt{v10}. RWRF contains the fine-scale dynamic and thermodynamic structures that the complex Taiwan terrain imprints on near-surface weather, which is exactly what a regional convective-scale forecaster must learn.
 
@@ -86,60 +86,11 @@ Native format & NetCDF & NetCDF (\texttt{wrfout}) & ASCII text \\
 \subsection{Preprocessing pipeline}
 \label{sec:method-datasources-pipeline}
 
-The project ships two preprocessing stages under \texttt{data\_preprocessing/}:
-\begin{enumerate}
-  \item \texttt{nc\_month\_to\_day/} --- split monthly ERA5 NetCDF files into single-hour files.
-  \item \texttt{nc\_to\_zarr/} --- harmonise ERA5, RWRF, and QPEPRE onto a common Taiwan grid and write a StormCast-style Zarr store.
-\end{enumerate}
-
-\paragraph{Stage 1: monthly-to-hourly split.} ERA5 is distributed as monthly NetCDF files, each containing an hourly time axis. The script \texttt{split\_era5\_monthly\_to\_daily.py} walks a root directory, opens every file matching a configured pattern, decodes the \texttt{time} axis with \texttt{netCDF4.num2date}, and writes one file per hour with a canonical \texttt{\{variable\}\_YYYYMMDDTHH.nc} filename. The output uses uniform \texttt{hours since 1970-01-01 00:00:00} time units so that downstream indexing does not have to handle per-file calendar differences. The split runs in parallel via a \texttt{multiprocessing.Pool} whose worker count is configurable (typically 20 processes on a workstation). Driver: \texttt{nc\_month\_to\_day/split\_era5\_monthly\_to\_daily.py}; configuration: \texttt{nc\_month\_to\_day/config.yaml}.
-
-\paragraph{Stage 2: unified NetCDF-to-Zarr assembly.} The main pipeline is \texttt{nc\_to\_zarr/nc\_to\_zarr\_pipeline.py}, driven by \texttt{config.yaml}. It is parameterised by four paths and a domain description:
-\begin{verbatim}
-era5-path, rwrf-path, qpepre-path, output-path
-domain-size: [224, 128]
-lon-bounds: [119.75, 122.25]
-lat-bounds: [21.6, 25.6]
-train-ranges / valid-ranges
-\end{verbatim}
-For each requested split (train, valid, or combined), the pipeline performs the following steps.
-
-\begin{enumerate}
-  \item \textbf{Time-stamp generation.} The configured date ranges are expanded into a dense hourly list between the start and end of each range.
-  \item \textbf{File indexing.} Three in-memory indices are built --- one per source --- that map timestamps to absolute file paths. For ERA5 this is a nested \{variable $\to$ \{date-key $\to$ path\}\} dictionary built by a regex on filenames; for RWRF it is \{folder-name $\to$ path\}; for QPEPRE it is \{time-key $\to$ path\} derived from the \texttt{qpepre\_\{start\}-\{end\}\_1\_h.txt} filename convention. When multiprocessing is enabled the indices are serialised to a single JSON file \texttt{.shared\_index.json} in the output directory so that worker processes can mmap-read the index instead of receiving a pickled copy.
-  \item \textbf{Combined validity precomputation.} Before processing anything, the pipeline walks the timestamp list once and flags every hour for which \emph{any} of the required ERA5 variables, RWRF file, or QPEPRE file is missing. Only timesteps that pass this joint check are processed, and the Zarr store carries an explicit per-timestamp \texttt{valid} mask so that downstream code can skip gaps without re-scanning the raw files.
-  \item \textbf{Per-timestep field extraction.}
-    \begin{itemize}
-      \item \emph{ERA5:} open the NetCDF, select the target time index, select the correct pressure level from the level dimension (for upper-air variables), crop to the latitude/longitude bounds, and resample to the configured $224 \times 128$ target grid.
-      \item \emph{RWRF:} read \texttt{XLAT} and \texttt{XLONG} to cache the native latitude/longitude, find the target \texttt{Time} index from the \texttt{Times} character variable, slice each requested variable to the domain, optionally apply per-variable transforms, and resample to the target grid.
-      \item \emph{QPEPRE:} load the text file, parse it into a \{lat, lon, rain\} scatter, grid it onto the native QPEPRE resolution, and resample to the $224 \times 128$ target grid. Because QPEPRE is already an observational product, we use it directly as the \texttt{qpepre} HighRes channel rather than the RWRF precipitation field.
-    \end{itemize}
-  \item \textbf{Grid harmonisation.} All three sources are resampled to a shared $H \times W = 224 \times 128$ grid covering lat~$[21.6, 25.6]^{\circ}$N, lon~$[119.75, 122.25]^{\circ}$E at approximately \SI{2}{\kilo\metre} spacing. This guarantees that the LowRes, HighRes, and invariant arrays share a pixel-aligned coordinate system, which is essential because the diffusion network conditions on LowRes and invariants by channel-wise concatenation.
-  \item \textbf{Streaming statistics.} As each training sample is filled into the data cube, a \texttt{StreamingStats} accumulator updates per-channel running means and standard deviations in single-pass Welford form. After the train split finishes, the stats are written to \texttt{stats/means.npy} and \texttt{stats/stds.npy} alongside the Zarr store. These are the normalisation statistics quoted in Equation~\ref{eq:hr-stats}.
-  \item \textbf{Zarr writing.} The assembled cube is written as an \texttt{xarray.Dataset} with dimensions \texttt{(time, channel, y, x)}, chunked along time and space for efficient random access, and consolidated (\texttt{zarr.consolidate\_metadata}) so that the training loader can open the store with a single metadata read. Invariants are written once, without a time dimension, as a separate Zarr store under \texttt{invariants/invariants.zarr}.
-\end{enumerate}
-
-\paragraph{Output layout.} A successful run produces the tree
-\begin{verbatim}
-<output-path>/
-  LowRes/
-    stormcast_test_train.zarr     # (T_train, 24, 224, 128)
-    stormcast_test_valid.zarr     # (T_valid, 24, 224, 128)
-    stats/{means.npy,stds.npy,channels.txt}
-  HighRes/
-    stormcast_test_train.zarr     # (T_train, 4,  224, 128)
-    stormcast_test_valid.zarr     # (T_valid, 4,  224, 128)
-    stats/{means.npy,stds.npy,channels.txt}
-  invariants/
-    invariants.zarr               # (2, 224, 128)
-\end{verbatim}
-which matches the layout documented in \texttt{zarr\_metadata.json} and consumed by \texttt{data\_loader\_rwrf\_era5\_stable.Dataset}. For the experiment used in this thesis the pipeline produces $T_{\text{train}} = 21{,}216$ hourly samples (2019-08-01 through 2021-12-31) and $T_{\text{valid}} = 8{,}760$ hourly samples (calendar year 2022).
-
-\paragraph{Why this matters here.} Three features of this pipeline are load-bearing for the work in this thesis:
+Two staged scripts under \texttt{data\_preprocessing/} assemble the store: \texttt{nc\_month\_to\_day/} splits monthly ERA5 NetCDF files into single-hour files, and \texttt{nc\_to\_zarr/} harmonises ERA5, RWRF, and QPEPRE onto a shared $224 \times 128$ Taiwan grid (lat~$[21.6, 25.6]^{\circ}$N, lon~$[119.75, 122.25]^{\circ}$E at $\approx$\SI{2}{\kilo\metre}) and writes a consolidated StormCast-style Zarr store with $T_{\text{train}} = 21{,}216$ training hours (2019-08-01 through 2021-12-31) and $T_{\text{valid}} = 8{,}760$ validation hours (calendar year 2022). The full step-by-step pipeline (file indexing, joint-validity precomputation, per-source extraction and re-gridding, streaming statistics, and Zarr writing) and the on-disk layout are documented in Appendix~\ref{app:repro}. Three of its properties are load-bearing for the work here:
 \begin{itemize}
-  \item \emph{Pixel-aligned multi-source grids.} The diffusion baseline and FlowCast both consume conditioning and target on the same grid, so residual losses can be computed pixel-wise without any on-the-fly re-gridding.
-  \item \emph{Explicit \texttt{valid} mask.} Roughly 10--15\,\% of hours fail the joint-validity check (usually a missing QPEPRE file). Both loaders and metrics respect the mask, so downstream scores are never contaminated by NaN-filled cells.
-  \item \emph{Frozen training-split statistics.} Because the Zarr store commits to a single pair of $(\mu_{\text{HR}}, \sigma_{\text{HR}})$ at write time, all residual heads see identical normalised inputs --- a prerequisite for the $\sigma_{\text{data}}$-matching discussion in Section~\ref{sec:method-baseline}.
+  \item \emph{Pixel-aligned multi-source grids.} All heads consume conditioning and target on the same grid, so residual losses are computed pixel-wise with no on-the-fly re-gridding.
+  \item \emph{Explicit \texttt{valid} mask.} Roughly 10--15\,\% of hours fail the joint-validity check (usually a missing QPEPRE file); both loaders and metrics respect the mask, so scores are never contaminated by NaN-filled cells.
+  \item \emph{Frozen training-split statistics.} The store commits to a single pair $(\mu_{\text{HR}}, \sigma_{\text{HR}})$ at write time (Equation~\ref{eq:hr-stats}), so all residual heads see identical normalised inputs --- a prerequisite for the $\sigma_{\text{data}}$-matching of Section~\ref{sec:method-baseline}.
 \end{itemize}
 
 \subsection{Target Distributions: Sparsity, Gaussianity, and the Diffusion Prior}
@@ -190,7 +141,7 @@ Diffusion models place a Gaussian prior on their target: the forward process is 
 
 The three near-surface state channels are \emph{approximately} Gaussian. \texttt{u10} is the closest: almost zero skewness, mild leptokurtosis, and a QQ plot that tracks the diagonal out to roughly $\pm 4\sigma$ before fanning into the heavy tails associated with gust events. \texttt{v10} is almost symmetric with essentially zero excess kurtosis. \texttt{t2m} is the least symmetric of the three: left-skewed (skew $= -0.99$) with a secondary mode around 280\,K corresponding to winter cold surges over northern Taiwan and the surrounding sea. For all three channels the empirical $1\sigma/2\sigma/3\sigma$ coverage agrees with the Gaussian reference to within a percentage point, which is exactly the regime for which the EDM noise schedule with $\sigma_{\text{data}}=0.5$ was designed: the generative residual head sees each channel as a mild deformation of a unit-variance Gaussian after normalisation, and the standard $\ell_2$ objective is a reasonable fit.
 
-\texttt{qpepre} is a different object entirely. Its marginal is dominated by an atom at zero --- the overwhelming majority of pixel-hours are dry --- with a long, very sparse tail of heavy rainfall events. The raw statistics make this quantitative: the coverage inside $\pm 1\sigma$ is $99.4\,\%$ rather than the Gaussian $68.3\,\%$, which is the signature of a near-delta distribution whose standard deviation is inflated entirely by the tail. The empirical moments reported in Table~\ref{tab:highres-gaussian-stats} (skewness $\approx -867$, excess kurtosis $\approx 10^{6}$) are formally enormous because the raw \texttt{qpepre} field uses a $-9999$ sentinel for missing observations that is only filtered at the next pipeline stage; the \emph{physical} tail above zero is still extreme (excursions beyond 100\,mm\,h$^{-1}$ occur during typhoon landfalls), but the numbers headline the practical message: the \texttt{qpepre} histogram looks nothing like a Gaussian, and the QQ plot sits on a flat shelf near zero that peels almost vertically at the upper end.
+\texttt{qpepre} is a different object entirely. Its marginal is dominated by an atom at zero --- the overwhelming majority of pixel-hours are dry --- with a long, very sparse tail of heavy rainfall events. The raw statistics make this quantitative: the coverage inside $\pm 1\sigma$ is $99.4\,\%$ rather than the Gaussian $68.3\,\%$, which is the signature of a near-delta distribution whose standard deviation is inflated entirely by the tail. The empirical moments reported in Table~\ref{tab:highres-gaussian-stats} (skewness $\approx -867$, excess kurtosis $\approx 10^{6}$) are formally enormous because the raw \texttt{qpepre} field uses a $-9999$ sentinel for missing observations that is only filtered at the next pipeline stage; for the same reason the diagnostic's \texttt{qpepre} standard deviation here ($6.86$) is computed by this offline inspection pass and need not equal the stored normalisation $\sigma_{\texttt{qpepre}} = 9.12$ of Equation~\ref{eq:hr-stats}, which the pipeline commits separately on the filtered training split --- both are dominated by the tail, and only the stored value feeds normalisation. The \emph{physical} tail above zero is still extreme (excursions beyond 100\,mm\,h$^{-1}$ occur during typhoon landfalls), but the numbers headline the practical message: the \texttt{qpepre} histogram looks nothing like a Gaussian, and the QQ plot sits on a flat shelf near zero that peels almost vertically at the upper end.
 
 This mismatch has three consequences for residual generative modelling that recur throughout the rest of this thesis:
 \begin{enumerate}
@@ -279,24 +230,16 @@ where $\|\cdot\|_{2,\beta}$ is the per-channel-weighted L2 norm from Section~\re
 
 \paragraph{EMA shadow network.} A second \texttt{FlowCastPrecond} instance is kept as an exponential-moving-average shadow of the online weights, with a \emph{fixed} decay of $0.999$. The shadow is updated after every optimiser step by \texttt{ExponentialMovingAverage.update} and copied into the shadow network by \texttt{apply\_shadow} (\texttt{stormcast/utils/ema.py}). A single fixed decay suffices throughout training because the FlowCast target --- the straight-line velocity field --- is stationary; there is no shrinking time discretisation for the decay to track. The shadow weights, not the online weights, are used at validation and inference time, and are saved to \texttt{ema\_state.pt} alongside each regular checkpoint. Loading the raw \texttt{checkpoint\_*.pt} instead of \texttt{ema\_state.pt} yields visibly noisier samples.
 
-\paragraph{Sampling.} Generation integrates the learned ODE $\dot{x}_t = v_\theta(x_t, t, c_t)$ from $t = 0$ to $t = 1$ with a fixed-step solver. The implementation \texttt{flowcast\_model\_forward} in \texttt{stormcast/utils/nn.py} exposes two choices. The default is explicit Euler with $K$ steps:
+\paragraph{Sampling.} Generation integrates the learned ODE $\dot{x}_t = v_\theta(x_t, t, c_t)$ from $t = 0$ to $t = 1$ with a fixed-step solver. The default in \texttt{flowcast\_model\_forward} (\texttt{stormcast/utils/nn.py}) is explicit Euler with $K$ steps:
 \begin{equation}
   x_{t + \Delta t} = x_t + \Delta t\;v_\theta(x_t, t, c_t),
   \qquad \Delta t = 1 / K,
   \qquad x_{t=0} \sim \Nbb(0, I),
   \label{eq:flowcast-sampler}
 \end{equation}
-which costs $K$ NFEs. The alternative \texttt{solver="midpoint"} is a single-stage Runge--Kutta second-order scheme:
-\begin{equation}
-  v_{1/2} = v_\theta(x_t, t, c_t),\quad
-  \tilde{x} = x_t + \tfrac{1}{2}\Delta t\,v_{1/2},\quad
-  x_{t + \Delta t} = x_t + \Delta t\,v_\theta(\tilde{x}, t + \tfrac{1}{2}\Delta t, c_t),
-\end{equation}
-which costs $2K$ NFEs but is globally second-order accurate ($O(\Delta t^{2})$ global error, versus explicit Euler's $O(\Delta t)$). The sampler finishes by de-standardising: $\hat{R}_t = \sigma_{\text{data}}\,x_{t=1}$ and $\hat{X}_t = M_t + \hat{R}_t$. Validation inside the training loop uses $K = \texttt{valid\_num\_steps} = 10$ Euler steps, while the main experiments report the scoreboard at $K \in \{10, 15, 20\}$ and sweep $K$ from $1$ to $50$, placing each cost point against the EDM Heun baseline on the NFE/wall-clock--quality trade-off of Chapter~\ref{ch:experiments}.
+which costs $K$ NFEs (a second-order \texttt{solver="midpoint"} variant at $2K$ NFEs is also implemented but unused in the reported experiments). The sampler finishes by de-standardising: $\hat{R}_t = \sigma_{\text{data}}\,x_{t=1}$ and $\hat{X}_t = M_t + \hat{R}_t$. Validation inside the training loop uses $K = \texttt{valid\_num\_steps} = 10$ Euler steps, while the main experiments report the scoreboard at $K \in \{10, 15, 20\}$ and sweep $K$ from $1$ to $50$, placing each cost point against the EDM Heun baseline on the NFE/wall-clock--quality trade-off of Chapter~\ref{ch:experiments}.
 
 \paragraph{Why a straight-line flow is the right residual head.} Three properties of I-CFM make FlowCast attractive against the diffusion baseline rather than merely a faster imitation of it. First, the straight-line probability path is by construction what a one-step deterministic generator is trying to approximate, so the FlowCast $K = 1$ and $K = 2$ numbers are a strong reference point for the best a few-step ODE sampler trained on the same data can do --- and the gap to the $K = 10$ sampler is small (Chapter~\ref{ch:experiments}), unlike the steep degradation a diffusion sampler suffers below $\approx 20$ NFE. Second, the training is teacher-free and single-stage, so FlowCast avoids the second training run, the sampler/preconditioning matching, and the EMA-coupling subtleties that a distillation of the diffusion baseline would require. Third, and specific to precipitation, \citet{ribeiro2025flowcast} report that I-CFM is noticeably more stable than score matching on sparse heavy-tailed fields --- a claim directly relevant to the \texttt{qpepre} channel and one we re-test on the Taiwan domain.
-
-\paragraph{Implementation pointers.} Entry point \texttt{stormcast/train\_flowcast.py}; training loop \texttt{stormcast/utils/trainer\_flowcast.py} (\texttt{flowcast\_training\_loop}); loss \texttt{stormcast/utils/flowcast\_loss.py} (\texttt{FlowCastLoss}); preconditioner \texttt{stormcast/utils/flowcast\_precond.py} (\texttt{FlowCastPrecond}); EMA helper \texttt{stormcast/utils/ema.py} (\texttt{ExponentialMovingAverage}); configs \texttt{stormcast/config/flowcast.yaml}, \texttt{stormcast/config/model/flowcast.yaml}, \texttt{stormcast/config/training/flowcast.yaml}; sampler \texttt{flowcast\_model\_forward} in \texttt{stormcast/utils/nn.py}. The numerical hyperparameters are tabulated in Appendix~\ref{app:hyperparams}.
 
 % ==================================================
 \section{The MeanFlow Residual (Average-Velocity Flow Matching)}
@@ -387,8 +330,6 @@ at exactly one NFE per segment. $K = 1$ is the pure one-step sampler $\hat{x}_1 
 
 \paragraph{Why average velocity for this residual.} First, it attacks the only cost FlowCast leaves on the table. The straight-line path made each Euler step cheap to take; MeanFlow removes the need to take many of them, compressing the residual head to $1$--$2$ NFE per forecast hour --- the regime where large ensembles between radar volumes stop being a budget question. Second, it is the right shape for a controlled study: because the $t = r$ subset of the objective \emph{is} FlowCast's objective, MeanFlow is a strict generalisation trained under identical hyperparameters, and any skill difference in Chapter~\ref{ch:experiments} is attributable to the average-velocity bootstrap alone. Third, the principled alternative to it --- consistency-style models --- impose network-behaviour constraints with curriculum schedules that are notoriously unstable on heavy-tailed targets; MeanFlow's target is a property of the underlying field, needs no curriculum, and trains with the same loss machinery (channel weights, spectral term) already validated on \texttt{qpepre}.
 
-\paragraph{Implementation pointers.} Entry point \texttt{stormcast/train\_meanflow.py}; training loop \texttt{stormcast/utils/trainer\_meanflow.py}; loss \texttt{stormcast/utils/meanflow\_loss.py} (\texttt{MeanFlowLoss}); preconditioner \texttt{stormcast/utils/meanflow\_precond.py} (\texttt{MeanFlowPrecond}); configs \texttt{stormcast/config/meanflow.yaml}, \texttt{stormcast/config/model/meanflow.yaml}, \texttt{stormcast/config/training/meanflow.yaml}; sampler \texttt{meanflow\_model\_forward} in \texttt{stormcast/utils/nn.py}. The numerical hyperparameters are tabulated in Appendix~\ref{app:hyperparams}.
-
 % ==================================================
 \section{Loss Design for the Precipitation Channel}
 \label{sec:method-qpepre}
@@ -399,7 +340,7 @@ The four-channel RWRF target makes per-channel loss engineering cheap, and we us
 \begin{equation}
   \|a\|_{2,\beta}^2 = \sum_{k=1}^{4} \beta_k\,\|a_k\|^2,
 \end{equation}
-where the sum runs over the four output channels and the norm inside each term is the ordinary spatial L2. The default configuration uses $\beta = (1, 1, 1, w_{\text{pr}})$, with the precipitation weight $w_{\text{pr}}$ exposed as the last entry of \texttt{channel\_weights} in \texttt{stormcast/config/model/flowcast.yaml}. The headline FlowCast run uses $w_{\text{pr}} = 2$; Section~\ref{sec:exp-qpw} sweeps $w_{\text{pr}} \in [1.0, 2.4]$ to locate the precipitation/wind trade-off. A robust Pseudo-Huber variant $\rho_{c_{\text{h}}, \beta}(a, b) = \sum_k \beta_k(\sqrt{\|a_k - b_k\|^2 + c_{\text{h}}^2} - c_{\text{h}})$ with a small $c_{\text{h}}$ is also available for bounded gradients on extreme tail events, but is not used in the headline run.
+where the sum runs over the four output channels and the norm inside each term is the ordinary spatial L2. The default configuration uses $\beta = (1, 1, 1, w_{\text{pr}})$, with the precipitation weight $w_{\text{pr}}$ exposed as the last entry of \texttt{channel\_weights} in \texttt{stormcast/config/model/flowcast.yaml}. The headline FlowCast run uses $w_{\text{pr}} = 2$; Section~\ref{sec:exp-qpw} sweeps $w_{\text{pr}} \in [1.0, 2.4]$ to locate the precipitation/wind trade-off.
 
 \paragraph{Radial log-PSD regulariser.} Because RMSE-like losses reward smooth, low-amplitude precipitation outputs, we add a spectral-matching regulariser that penalises the L1 distance between the radial log-PSD of the predicted and target \texttt{qpepre} fields:
 \begin{equation}

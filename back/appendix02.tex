@@ -16,7 +16,7 @@ The full training and evaluation code for this thesis lives in the \texttt{Storm
   \item \texttt{stormcast/utils/flowcast\_precond.py} / \texttt{meanflow\_precond.py} --- \texttt{FlowCastPrecond} velocity wrapper and \texttt{MeanFlowPrecond} two-time average-velocity wrapper.
   \item \texttt{stormcast/utils/nn.py} --- \texttt{get\_preconditioned\_architecture}, \texttt{build\_network\_condition\_and\_target}, and the samplers \texttt{diffusion\_model\_forward} / \texttt{flowcast\_model\_forward} / \texttt{meanflow\_model\_forward}.
   \item \texttt{experiment\_scripts/compare\_diffusion\_vs\_flowcast.py} --- the head-to-head rollout scoreboard harness used for Chapter~\ref{ch:experiments} (the MeanFlow leg is enabled with \texttt{--meanflow-checkpoint}).
-  \item \texttt{experiment\_scripts/flowcast\_nfe\_sweep.py} --- the NFE Pareto sweep behind Figure~\ref{fig:nfe} and Table~\ref{tab:nfe}; \texttt{--method meanflow} runs the identical sweep for the MeanFlow head.
+  \item \texttt{experiment\_scripts/flowcast\_nfe\_sweep.py} --- the NFE-versus-quality sweep underpinning the inference-cost analysis of Section~\ref{sec:exp-nfe}; \texttt{--method meanflow} runs the identical sweep for the MeanFlow head.
   \item \texttt{experiment\_scripts/thesis\_style.py} --- the single source of truth for figure colour: \texttt{viridis} for all two-dimensional fields (matching the trainer-time validation plots), a diverging map for signed error fields, and a categorical per-method palette sampled from the viridis ramp.
   \item \texttt{experiment\_scripts/make\_thesis\_figures.py} / \texttt{make\_thesis\_qualitative.sh} / \texttt{export\_results\_md.py} --- regenerate every result figure of Chapter~\ref{ch:experiments} and the consolidated \texttt{results.md} (see the regeneration commands below).
 \end{itemize}
@@ -36,6 +36,53 @@ with sub-groups \texttt{LowRes/}, \texttt{HighRes/}, and \texttt{invariants/}, a
   \item FlowCast: \texttt{FlowCastPrecond.0.20000.mdlus}; the sibling \texttt{ema\_state.pt} holds the EMA shadow used by the in-training validation sampler. The canonical FlowCast run continues to \texttt{FlowCastPrecond.0.140000.mdlus}.
   \item MeanFlow: \texttt{MeanFlowPrecond.0.20000.mdlus} ($\approx 2.24$\,M samples at batch 112) with its sibling \texttt{ema\_state.pt}. The Chapter~\ref{ch:experiments} harness loads the FlowCast and MeanFlow online checkpoints symmetrically.
 \end{itemize}
+
+\section{Preprocessing Pipeline Details}
+\label{app:preprocessing}
+
+This section gives the full preprocessing pipeline summarised in Section~\ref{sec:method-datasources-pipeline}. The project ships two stages under \texttt{data\_preprocessing/}: \texttt{nc\_month\_to\_day/} (split monthly ERA5 NetCDF files into single-hour files) and \texttt{nc\_to\_zarr/} (harmonise ERA5, RWRF, and QPEPRE onto a common Taiwan grid and write a StormCast-style Zarr store).
+
+\paragraph{Stage 1: monthly-to-hourly split.} ERA5 is distributed as monthly NetCDF files, each containing an hourly time axis. The script \texttt{split\_era5\_monthly\_to\_daily.py} walks a root directory, opens every file matching a configured pattern, decodes the \texttt{time} axis with \texttt{netCDF4.num2date}, and writes one file per hour with a canonical \texttt{\{variable\}\_YYYYMMDDTHH.nc} filename. The output uses uniform \texttt{hours since 1970-01-01 00:00:00} time units so that downstream indexing does not have to handle per-file calendar differences. The split runs in parallel via a \texttt{multiprocessing.Pool} whose worker count is configurable (typically 20 processes on a workstation). Configuration: \texttt{nc\_month\_to\_day/config.yaml}.
+
+\paragraph{Stage 2: unified NetCDF-to-Zarr assembly.} The main pipeline is \texttt{nc\_to\_zarr/nc\_to\_zarr\_pipeline.py}, driven by \texttt{config.yaml}. It is parameterised by four paths and a domain description:
+\begin{verbatim}
+era5-path, rwrf-path, qpepre-path, output-path
+domain-size: [224, 128]
+lon-bounds: [119.75, 122.25]
+lat-bounds: [21.6, 25.6]
+train-ranges / valid-ranges
+\end{verbatim}
+For each requested split (train, valid, or combined), the pipeline performs the following steps.
+\begin{enumerate}
+  \item \textbf{Time-stamp generation.} The configured date ranges are expanded into a dense hourly list between the start and end of each range.
+  \item \textbf{File indexing.} Three in-memory indices are built --- one per source --- that map timestamps to absolute file paths. For ERA5 this is a nested \{variable $\to$ \{date-key $\to$ path\}\} dictionary built by a regex on filenames; for RWRF it is \{folder-name $\to$ path\}; for QPEPRE it is \{time-key $\to$ path\} derived from the \texttt{qpepre\_\{start\}-\{end\}\_1\_h.txt} filename convention. When multiprocessing is enabled the indices are serialised to a single JSON file \texttt{.shared\_index.json} in the output directory so that worker processes can mmap-read the index instead of receiving a pickled copy.
+  \item \textbf{Combined validity precomputation.} Before processing anything, the pipeline walks the timestamp list once and flags every hour for which \emph{any} of the required ERA5 variables, RWRF file, or QPEPRE file is missing. Only timesteps that pass this joint check are processed, and the Zarr store carries an explicit per-timestamp \texttt{valid} mask so that downstream code can skip gaps without re-scanning the raw files.
+  \item \textbf{Per-timestep field extraction.}
+    \begin{itemize}
+      \item \emph{ERA5:} open the NetCDF, select the target time index, select the correct pressure level from the level dimension (for upper-air variables), crop to the latitude/longitude bounds, and resample to the configured $224 \times 128$ target grid.
+      \item \emph{RWRF:} read \texttt{XLAT} and \texttt{XLONG} to cache the native latitude/longitude, find the target \texttt{Time} index from the \texttt{Times} character variable, slice each requested variable to the domain, optionally apply per-variable transforms, and resample to the target grid.
+      \item \emph{QPEPRE:} load the text file, parse it into a \{lat, lon, rain\} scatter, grid it onto the native QPEPRE resolution, and resample to the $224 \times 128$ target grid. Because QPEPRE is already an observational product, we use it directly as the \texttt{qpepre} HighRes channel rather than the RWRF precipitation field.
+    \end{itemize}
+  \item \textbf{Grid harmonisation.} All three sources are resampled to a shared $H \times W = 224 \times 128$ grid covering lat~$[21.6, 25.6]^{\circ}$N, lon~$[119.75, 122.25]^{\circ}$E at approximately \SI{2}{\kilo\metre} spacing, guaranteeing that the LowRes, HighRes, and invariant arrays share a pixel-aligned coordinate system (essential because the network conditions on LowRes and invariants by channel-wise concatenation).
+  \item \textbf{Streaming statistics.} As each training sample is filled into the data cube, a \texttt{StreamingStats} accumulator updates per-channel running means and standard deviations in single-pass Welford form. After the train split finishes, the stats are written to \texttt{stats/means.npy} and \texttt{stats/stds.npy} alongside the Zarr store. These are the normalisation statistics quoted in Equation~\ref{eq:hr-stats}.
+  \item \textbf{Zarr writing.} The assembled cube is written as an \texttt{xarray.Dataset} with dimensions \texttt{(time, channel, y, x)}, chunked along time and space for efficient random access, and consolidated (\texttt{zarr.consolidate\_metadata}) so the training loader can open the store with a single metadata read. Invariants are written once, without a time dimension, under \texttt{invariants/invariants.zarr}.
+\end{enumerate}
+
+\paragraph{Output layout.} A successful run produces the tree
+\begin{verbatim}
+<output-path>/
+  LowRes/
+    stormcast_test_train.zarr     # (T_train, 24, 224, 128)
+    stormcast_test_valid.zarr     # (T_valid, 24, 224, 128)
+    stats/{means.npy,stds.npy,channels.txt}
+  HighRes/
+    stormcast_test_train.zarr     # (T_train, 4,  224, 128)
+    stormcast_test_valid.zarr     # (T_valid, 4,  224, 128)
+    stats/{means.npy,stds.npy,channels.txt}
+  invariants/
+    invariants.zarr               # (2, 224, 128)
+\end{verbatim}
+which matches the layout documented in \texttt{zarr\_metadata.json} and consumed by \texttt{data\_loader\_rwrf\_era5\_stable.Dataset}.
 
 \section{Commands}
 
@@ -80,7 +127,7 @@ bash experiment_scripts/run_main_experiment.sh
 \end{verbatim}
 which runs \texttt{compare\_diffusion\_vs\_flowcast.py} (with the MeanFlow leg at \texttt{MEANFLOW\_NFES="1 2"} by default) and writes \texttt{scoreboard.\{md,csv\}}, \texttt{per\_threshold.csv}, \texttt{fss\_p16.csv}, \texttt{rmse\_per\_step.csv}, \texttt{crps\_per\_channel.csv}, and a \texttt{panels/} tree in physical units (qpepre in mm\,h$^{-1}$ after inverse-\texttt{log1p}).
 
-\paragraph{NFE Pareto sweeps.} The data behind Figure~\ref{fig:nfe} and Tables~\ref{tab:nfe}--\ref{tab:nfe-meanflow} come from
+\paragraph{NFE-versus-quality sweeps.} The sweeps that underpin the convergence claims of Section~\ref{sec:exp-nfe} --- that FlowCast is essentially converged by $K \approx 10$ while MeanFlow operates at $K \in \{1, 2\}$ --- come from
 \begin{verbatim}
 python experiment_scripts/flowcast_nfe_sweep.py \
     --flowcast-checkpoint .../FlowCastPrecond.0.20000.mdlus \
@@ -98,4 +145,4 @@ The matched $\approx 2\,\text{M}$-sample checkpoints (step 20{,}000) are passed 
 bash experiment_scripts/make_thesis_figures.sh      # CPU only
 bash experiment_scripts/make_thesis_qualitative.sh  # one GPU, ~2 min
 \end{verbatim}
-The first rebuilds the data-driven figures (scoreboard, per-channel RMSE/CRPS, CSI/FAR/HSS by threshold, heavy-rain FSS, rollout RMSE, NFE Pareto with both flow heads) directly from the harness CSVs --- no inference --- writing them into the thesis \texttt{figures/results/} tree, and then re-exports \texttt{experiment\_scripts/results.md}, a single Markdown document collecting every scoreboard with its provenance. The second re-runs the cleaned-leg models for one generative step and re-renders the qualitative truth/diffusion/FlowCast/MeanFlow field panels. All plotting reads its colours from \texttt{thesis\_style.py}, so the entire figure set stays on one palette by construction.
+The first rebuilds the data-driven figures (scoreboard, per-channel RMSE/CRPS, CSI/FAR/HSS by threshold, heavy-rain FSS, rollout RMSE, inference-cost speedup) directly from the harness CSVs --- no inference --- writing them into the thesis \texttt{figures/results/} tree, and then re-exports \texttt{experiment\_scripts/results.md}, a single Markdown document collecting every scoreboard with its provenance. The second re-runs the cleaned-leg models for one generative step and re-renders the qualitative truth/diffusion/FlowCast/MeanFlow field panels. All plotting reads its colours from \texttt{thesis\_style.py}, so the entire figure set stays on one palette by construction.

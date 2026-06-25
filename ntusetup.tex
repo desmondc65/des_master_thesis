@@ -60,3 +60,26 @@
 \newcommand{\vnet}{v_{\theta}}        % FlowCast (I-CFM baseline) instantaneous velocity field
 \newcommand{\unet}{u_{\theta}}        % MeanFlow average-velocity field
 \newcommand{\Freg}{F_{\xi}}
+
+% --------------------------------------------------
+% Template fix: appendix cross-reference numbering
+% --------------------------------------------------
+% The template's \appendix (ntuthesis.cls) uses \chapter* (which steps no
+% counter) and never sets \@currentlabel, so a \label placed after
+% \appendix{X}{...} inherited the previous chapter's last section number
+% (e.g. \ref{app:hyperparams} resolved to "5.4" instead of "A", making the
+% appendices appear to point into Chapter 5). We re-define it to (i) set
+% \@currentlabel to the appendix letter so \ref gives "A"/"B"/"C", and
+% (ii) place the hyperref anchor at the top of the appendix page.
+\makeatletter
+\renewcommand{\appendix}[2]{%
+  \cleardoublepage
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\ntu@appendix~{#1}~---~#2}%
+  \chapter*{\ntu@appendix~{#1}~---~#2}%
+  \setcounter{section}{0}%
+  \renewcommand{\thechapter}{#1}%
+  \renewcommand{\theHchapter}{#1}%
+  \def\@currentlabel{#1}%
+}
+\makeatother

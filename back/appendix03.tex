@@ -3,7 +3,7 @@
 \appendix{C}{Detailed Derivations}
 \label{app:derivations}
 
-This appendix collects line-by-line derivations of the identities the method of this thesis rests on, without passing through to the literature. The goal is that any reader with a working knowledge of multivariate Gaussians and basic It\^o calculus can reconstruct, from scratch, the score--denoiser (Tweedie) identity and the probability-flow ODE that define the EDM diffusion baseline, the EDM preconditioning and noise schedule, the Conditional Flow Matching theorem and its straight-line Independent-CFM instantiation (the FlowCast baseline), and finally the MeanFlow average-velocity identity at the centre of the thesis. The discrete-time DDPM/DDIM machinery is omitted, as neither MeanFlow nor the continuous-time EDM baseline relies on it; the condensed summary in Chapter~\ref{ch:background} suffices for context. Notation in each section is local; all symbols have the same meaning as in Chapters~\ref{ch:background}--\ref{ch:method} unless otherwise specified.
+This appendix collects line-by-line derivations of the identities the method of this thesis rests on, without passing through to the literature. The goal is that any reader with a working knowledge of multivariate Gaussians and basic It\^o calculus can reconstruct, from scratch, the score--denoiser (Tweedie) identity and the probability-flow ODE that define the EDM diffusion baseline, the Conditional Flow Matching theorem and its straight-line Independent-CFM instantiation (the FlowCast baseline), and finally the MeanFlow average-velocity identity at the centre of the thesis. The EDM preconditioning scalars and $\rho$-spaced noise schedule (baseline-only machinery, stated in full in Section~\ref{sec:bg-edm} with the original reference) and the discrete-time DDPM/DDIM construction are omitted, as the method does not rely on them; the condensed treatment in Chapter~\ref{ch:background} suffices for context. Notation in each section is local; all symbols have the same meaning as in Chapters~\ref{ch:background}--\ref{ch:method} unless otherwise specified.
 
 % ==================================================
 \section{Tweedie's Formula: Score and Denoiser}
@@ -28,23 +28,7 @@ Because the Bayes-optimal denoiser is the conditional expectation, \emph{score m
 \section{Probability-Flow ODE from the VE-SDE}
 \label{app:pfode}
 
-The variance-exploding forward SDE is
-\begin{equation*}
-  dx = g(\sigma)\,dW, \qquad g(\sigma) = \sqrt{\tfrac{d\sigma^2}{dt}},
-\end{equation*}
-where we indexed time by $\sigma$. The corresponding Fokker--Planck equation for the marginal $p_t(x) = p_\sigma(x)$ is
-\begin{equation*}
-  \frac{\partial p_\sigma}{\partial t} = \frac{1}{2}\,g(\sigma)^2\,\Delta_x p_\sigma.
-\end{equation*}
-For the deterministic PF-ODE $dx/dt = f(x, \sigma)$ the continuity equation is
-\begin{equation*}
-  \frac{\partial p_\sigma}{\partial t} = -\nabla_x \cdot (f\,p_\sigma).
-\end{equation*}
-Requiring both to produce the same marginals and rearranging,
-\begin{equation*}
-  -\nabla_x \cdot (f\,p_\sigma) = \tfrac{1}{2} g^2\,\Delta_x p_\sigma = \tfrac{1}{2} g^2\,\nabla_x \cdot (\nabla_x p_\sigma) = \tfrac{1}{2} g^2\,\nabla_x \cdot (p_\sigma \nabla_x \log p_\sigma),
-\end{equation*}
-which is solved by $f = -\tfrac{1}{2}g^2\,\nabla_x \log p_\sigma$. Switching to $\sigma$ as the time variable ($d/dt = (d\sigma/dt)\,d/d\sigma$ and $g^2 = 2\sigma\,d\sigma/dt$) yields the clean form
+The variance-exploding forward SDE $dx = g(\sigma)\,dW$ with $g(\sigma) = \sqrt{d\sigma^2/dt}$ admits a deterministic probability-flow ODE that shares its time marginals $p_\sigma$: matching the Fokker--Planck equation of the SDE to the continuity equation of the candidate ODE $dx/dt = f(x,\sigma)$ \citep{song2021scoresde} forces the drift $f = -\tfrac{1}{2}g^2\,\nabla_x\log p_\sigma$, which in $\sigma$-time ($g^2 = 2\sigma\,d\sigma/dt$) collapses to the clean form
 \begin{equation}
   \boxed{\;\frac{dx}{d\sigma} = -\sigma\,\nabla_x \log p_\sigma(x).\;}
   \label{eq:app-pfode}
@@ -54,77 +38,7 @@ Combining~\eqref{eq:app-pfode} with Tweedie~\eqref{eq:app-tweedie} gives the \em
   \frac{dx}{d\sigma} = \frac{x - D^\star(x; \sigma)}{\sigma},
   \label{eq:app-pfode-denoiser}
 \end{equation}
-which is the form that first-order (Euler / DDIM) and second-order (Heun) integrators actually evaluate at inference.
-
-% ==================================================
-\section{EDM Preconditioning Derivation}
-\label{app:edm-preconditioning}
-
-\citet{karras2022elucidating} parameterise the denoiser through an inner network $F_\theta$ with skip, input, output, and noise scalings:
-\begin{equation*}
-  D_\theta(x; \sigma) = c_{\text{skip}}(\sigma)\,x + c_{\text{out}}(\sigma)\,F_\theta\bigl(c_{\text{in}}(\sigma)\,x,\; c_{\text{noise}}(\sigma)\bigr).
-\end{equation*}
-We derive $(c_{\text{skip}}, c_{\text{in}}, c_{\text{out}})$ from three requirements.
-
-\paragraph{Requirement 1: unit-variance input to $F_\theta$.} The network input $c_{\text{in}}(\sigma)\,x = c_{\text{in}}(\sigma)(x_0 + \sigma\epsilon)$ has variance $c_{\text{in}}(\sigma)^2(\sigma_{\text{data}}^2 + \sigma^2)$. Setting this to 1 gives
-\begin{equation}
-  c_{\text{in}}(\sigma) = \frac{1}{\sqrt{\sigma^2 + \sigma_{\text{data}}^2}}.
-  \label{eq:app-cin}
-\end{equation}
-
-\paragraph{Requirement 2: unit-variance target for $F_\theta$.} The squared loss $\|D_\theta(x; \sigma) - x_0\|^2$ can be written in terms of the network's effective target:
-\begin{equation*}
-  F^\star(x; \sigma) \;=\; \frac{x_0 - c_{\text{skip}}(\sigma)\,x}{c_{\text{out}}(\sigma)}.
-\end{equation*}
-For the $F_\theta$-regression loss to remain well-conditioned across $\sigma$, $\mathrm{Var}(F^\star) = 1$:
-\begin{align*}
-  \mathrm{Var}(F^\star) &= \frac{1}{c_{\text{out}}^2}\,\mathrm{Var}(x_0 - c_{\text{skip}}\,x)\\
-  &= \frac{1}{c_{\text{out}}^2}\Bigl[(1 - c_{\text{skip}})^2\sigma_{\text{data}}^2 + c_{\text{skip}}^2\sigma^2\Bigr].
-\end{align*}
-Setting this equal to 1 is \emph{one equation in two unknowns} $(c_{\text{skip}}, c_{\text{out}})$; we need the third requirement to pin them down.
-
-\paragraph{Requirement 3: minimise the error amplification $c_{\text{out}}$.} Requirement 2 fixed $c_{\text{out}}^2$ as a function of $c_{\text{skip}}$; \citet{karras2022elucidating} pin $c_{\text{skip}}$ down by minimising $c_{\text{out}}$, so the inner network's prediction error is amplified as little as possible on the way to $D_\theta$:
-\begin{equation*}
-  c_{\text{out}}^2 = (1 - c_{\text{skip}})^2\sigma_{\text{data}}^2 + c_{\text{skip}}^2\sigma^2.
-\end{equation*}
-Differentiating in $c_{\text{skip}}$ and setting to zero,
-\begin{equation*}
-  -2(1 - c_{\text{skip}})\sigma_{\text{data}}^2 + 2 c_{\text{skip}}\sigma^2 = 0 \;\Longrightarrow\; c_{\text{skip}}(\sigma) = \frac{\sigma_{\text{data}}^2}{\sigma^2 + \sigma_{\text{data}}^2}.
-\end{equation*}
-Substituting back into the unit-variance requirement,
-\begin{equation*}
-  c_{\text{out}}^2 = \Bigl(\frac{\sigma^2}{\sigma^2 + \sigma_{\text{data}}^2}\Bigr)^2\sigma_{\text{data}}^2 + \Bigl(\frac{\sigma_{\text{data}}^2}{\sigma^2 + \sigma_{\text{data}}^2}\Bigr)^2\sigma^2 = \frac{\sigma^2\sigma_{\text{data}}^2}{\sigma^2 + \sigma_{\text{data}}^2},
-\end{equation*}
-so
-\begin{equation}
-  c_{\text{skip}}(\sigma) = \frac{\sigma_{\text{data}}^2}{\sigma^2 + \sigma_{\text{data}}^2},
-  \qquad
-  c_{\text{out}}(\sigma) = \frac{\sigma\,\sigma_{\text{data}}}{\sqrt{\sigma^2 + \sigma_{\text{data}}^2}}.
-  \label{eq:app-cskip-cout}
-\end{equation}
-
-\paragraph{Noise scaling.} $c_{\text{noise}}(\sigma) = \tfrac{1}{4}\log\sigma$ is an empirically-motivated choice to equalise the dynamic range of the time-embedding input across $\sigma \in [\sigma_{\min}, \sigma_{\max}]$ (the log compresses orders of magnitude; the $\tfrac{1}{4}$ puts typical values in a band that matches the embedding frequencies).
-
-\paragraph{Loss weighting.} The EDM loss is
-\begin{equation*}
-  \mathcal{L}_{\text{EDM}} = \Ebb_\sigma\Bigl[\lambda(\sigma)\,\|D_\theta(x_0 + \sigma\epsilon;\sigma) - x_0\|^2\Bigr].
-\end{equation*}
-Substituting $D_\theta = c_{\text{skip}}x + c_{\text{out}}F_\theta(\cdot)$ and the target $F^\star$, the inner squared error is $c_{\text{out}}^2\,\|F_\theta - F^\star\|^2$. To make the $F_\theta$-regression effectively unit-weighted, we choose
-\begin{equation}
-  \lambda(\sigma) = \frac{1}{c_{\text{out}}(\sigma)^2} = \frac{\sigma^2 + \sigma_{\text{data}}^2}{\sigma^2\,\sigma_{\text{data}}^2}.
-  \label{eq:app-edm-weight}
-\end{equation}
-With the Karras log-normal sampling $\log\sigma \sim \Nbb(P_{\text{mean}}, P_{\text{std}}^2)$, the training-time distribution of $\sigma$ combined with~\eqref{eq:app-edm-weight} concentrates the learning signal at mid-range $\sigma$, which is where the denoiser has the highest leverage on the final sample quality. This concludes the derivation; the five preconditioning scalars $(c_{\text{skip}}, c_{\text{in}}, c_{\text{out}}, c_{\text{noise}}, \lambda)$ of Equation~\eqref{eq:edm-precond} of the main text are now all justified from first principles.
-
-% ==================================================
-\section{Karras $\rho$-Spaced Noise Schedule}
-\label{app:edm-schedule}
-
-The sampling schedule $\{\sigma_i\}$ is chosen to equalise \emph{truncation error per step} of a first-order ODE integrator of Equation~\eqref{eq:app-pfode-denoiser}. Under the ansatz
-\begin{equation*}
-  \sigma_i = \Bigl(\sigma_{\max}^{1/\rho} + \tfrac{i}{N-1}(\sigma_{\min}^{1/\rho} - \sigma_{\max}^{1/\rho})\Bigr)^{\rho},
-\end{equation*}
-the change of variables $u = \sigma^{1/\rho}$ makes the index $i$ linear in $u$, and the per-step truncation error of Euler integration is approximately constant in $u$ for $\rho$ tuned to the curvature of the trajectory. \citet{karras2022elucidating} show empirically that $\rho = 7$ gives the lowest terminal FID among $\rho \in \{1, 3, 5, 7, 9\}$ across diverse datasets; we adopt it unchanged for the StormCast diffusion baseline, following \citet{pathak2024stormcast}.
+the form that first-order (Euler / DDIM) and second-order (Heun) integrators evaluate at inference.
 
 % ==================================================
 \section{CFM Theorem: Conditional $=$ Marginal Gradient}
