@@ -153,7 +153,7 @@ The three near-surface state channels are \emph{approximately} Gaussian. \texttt
 This mismatch has three consequences for residual generative modelling that recur throughout the rest of this thesis:
 \begin{enumerate}
   \item \emph{Score matching on raw \texttt{qpepre} is ill-posed at small $\sigma$.} When the target distribution is almost a point mass at zero, the diffusion score $\nabla_x \log p_\sigma(x)$ diverges as $\sigma \to \sigma_{\min}$ --- one reason the EDM baseline needs many small-$\sigma$ steps to render precipitation. Learning the residual relative to the regression mean $\mu_t$ partially absorbs this, but the residual inherits the same atom-plus-tail shape, and the $\log(1+x)$ encoding of Section~\ref{sec:method-qpepre} is what finally compresses its dynamic range. The straight-line FlowCast velocity field has no score term and is correspondingly better-behaved on this channel.
-  \item \emph{Pixel-wise losses undersell the tail.} Because dry pixels vastly outnumber rainy ones, an $\ell_2$ loss converges to a ``slightly wet everywhere'' solution that scores well on RMSE but destroys the convective structure we actually care about. This is the motivation for the radial log-PSD spectral regulariser applied specifically to \texttt{qpepre} in the FlowCast loss (Section~\ref{sec:method-qpepre}), and for the precipitation-specific metrics (CSI, FSS, HSS, frequency-of-exceedance at fixed rainfall thresholds) reported in Chapter~\ref{ch:experiments}.
+  \item \emph{Pixel-wise losses undersell the tail.} Because dry pixels vastly outnumber rainy ones, an $\ell_2$ loss converges to a ``slightly wet everywhere'' solution that scores well on RMSE but destroys the convective structure we actually care about. This is the motivation for up-weighting \texttt{qpepre} in the loss (Section~\ref{sec:method-qpepre}), and for the precipitation-specific metrics (CSI, FSS, HSS, frequency-of-exceedance at fixed rainfall thresholds) reported in Chapter~\ref{ch:experiments}.
   \item \emph{The channel budget matters.} Because only one of the four output channels is pathological, per-channel loss weights $\beta_k$ are a natural knob: the three near-Gaussian fields can be trained with a standard denoising objective while \texttt{qpepre} receives heavier regularisation and, if needed, an $\operatorname{asinh}$ or $\log(1+x)$ transform to compress its dynamic range before the noise is added. Having only four target channels (versus the 99 of global StormCast) makes such per-channel bespoke treatment computationally trivial.
 \end{enumerate}
 
@@ -208,16 +208,16 @@ where $\tau = 1000$ (the \texttt{time\_scale} field in \texttt{stormcast/config/
 
 \paragraph{Loss.} The training loss is the standardised-space I-CFM regression
 \begin{equation}
-  \mathcal{L}_{\text{FC}} = \Ebb\bigl[\,\|v_\theta(x_t, t, c_t) - (x_1 - x_0)\|_{2,\beta}^2\,\bigr] + \lambda_{\text{spec}}\,\mathcal{L}_{\text{spec}}\bigl(\hat{x}_1,\, x_1\bigr),
+  \mathcal{L}_{\text{FC}} = \Ebb\bigl[\,\|v_\theta(x_t, t, c_t) - (x_1 - x_0)\|_{2,\beta}^2\,\bigr],
   \label{eq:flowcast-loss}
 \end{equation}
-where $\|\cdot\|_{2,\beta}$ is the per-channel-weighted L2 norm from Section~\ref{sec:method-qpepre} with $\beta = (1, 1, 1, 2)$ (the \texttt{channel\_weights} field), $\hat{x}_1 = x_t + (1 - t)\,v_\theta$ is the flow's implied clean-residual estimate at the current time, and $\mathcal{L}_{\text{spec}}$ is the radial log-PSD regulariser of Section~\ref{sec:method-qpepre} with \texttt{spectral\_channels}~$= \{\texttt{qpepre}\}$ and $\lambda_{\text{spec}} = 0.1$. Operating the spectral term on the implied-clean field $\hat{x}_1$ rather than on the raw velocity keeps the spectrum interpretable. Algorithm~\ref{alg:flowcast} summarises the per-step update.
+where $\|\cdot\|_{2,\beta}$ is the per-channel-weighted L2 norm from Section~\ref{sec:method-qpepre} with $\beta = (1, 1, 1, 2)$ (the \texttt{channel\_weights} field). Algorithm~\ref{alg:flowcast} summarises the per-step update.
 
 \begin{algorithm}[t]
 \caption{FlowCast training step (I-CFM on the standardised residual)}
 \label{alg:flowcast}
 \begin{algorithmic}[1]
-\Require frozen $\Freg$, FlowCast velocity field $v_\theta$, schedule $(\sigma_{\text{data}}, \sigma_{\text{path}}, t_\varepsilon)$, channel weights $\beta$, spectral weight $\lambda_{\text{spec}}$
+\Require frozen $\Freg$, FlowCast velocity field $v_\theta$, schedule $(\sigma_{\text{data}}, \sigma_{\text{path}}, t_\varepsilon)$, channel weights $\beta$
 \State sample mini-batch $\{(M_{t-1}, S_t, M_t)\}$; form $\mu_t \gets \Freg(M_{t-1}, S_t, I)$, $R_t \gets M_t - \mu_t$
 \State build conditioning $c_t \gets \mathrm{concat}(M_{t-1}, \mu_t, I)$ \Comment{note: $S_t$ reaches $v_\theta$ only via $\mu_t$}
 \State standardise: $x_1 \gets R_t / \sigma_{\text{data}}$
@@ -225,10 +225,7 @@ where $\|\cdot\|_{2,\beta}$ is the per-channel-weighted L2 norm from Section~\re
 \State build interpolant: $x_t \gets (1 - t)\,x_0 + t\,x_1 + \sigma_{\text{path}}\,\eta$
 \State target field: $u_t \gets x_1 - x_0$
 \State predict: $\hat{v} \gets v_\theta(x_t, t, c_t)$
-\State pointwise: $\mathcal{L}_{\text{pw}} \gets \|\hat{v} - u_t\|_{2,\beta}^2$
-\State implied clean: $\hat{x}_1 \gets x_t + (1 - t)\,\hat{v}$
-\State spectral: $\mathcal{L}_{\text{spec}} \gets \frac{1}{|\mathcal{K}|}\sum_{\kappa}\bigl|\log P_{\hat{x}_1^{\text{qpepre}}}(\kappa) - \log P_{x_1^{\text{qpepre}}}(\kappa)\bigr|$
-\State $\mathcal{L} \gets \mathcal{L}_{\text{pw}} + \lambda_{\text{spec}}\,\mathcal{L}_{\text{spec}}$
+\State loss: $\mathcal{L} \gets \|\hat{v} - u_t\|_{2,\beta}^2$
 \State AdamW step on $\theta$; EMA update $\theta^{-} \gets 0.999\,\theta^{-} + 0.001\,\theta$
 \end{algorithmic}
 \end{algorithm}
@@ -252,7 +249,7 @@ which costs $K$ NFEs (a second-order \texttt{solver="midpoint"} variant at $2K$ 
 \section{The MeanFlow Residual (Average-Velocity Flow Matching)}
 \label{sec:method-meanflow}
 
-FlowCast still pays for its samples with $K \approx 10$ Euler steps, because what it learns is the \emph{instantaneous} velocity of a marginal field whose trajectories are curved (Section~\ref{sec:bg-flowmatching}): every Euler step incurs truncation error against that curvature, and the error only vanishes as $K$ grows. MeanFlow \citep{geng2025meanflow} removes the integration from the sampler instead of refining it. It trains the network to predict the \emph{average} velocity of the flow over a whole interval $[r, t]$, so that a single evaluation transports the state across the interval exactly --- no ODE solver, and therefore no discretisation error to amortise. We adapt MeanFlow to the StormCast residual pipeline as the generative residual head of this thesis: it reuses the conditioning bundle $c_t$, the standardised-residual convention, the SongUNet backbone, the per-channel loss weights, and the spectral regulariser of the FlowCast baseline \emph{unchanged}, and differs from it only in the training objective and the (correspondingly cheaper) sampler. MeanFlow is likewise teacher-free and trained from scratch in a single run.
+FlowCast still pays for its samples with $K \approx 10$ Euler steps, because what it learns is the \emph{instantaneous} velocity of a marginal field whose trajectories are curved (Section~\ref{sec:bg-flowmatching}): every Euler step incurs truncation error against that curvature, and the error only vanishes as $K$ grows. MeanFlow \citep{geng2025meanflow} removes the integration from the sampler instead of refining it. It trains the network to predict the \emph{average} velocity of the flow over a whole interval $[r, t]$, so that a single evaluation transports the state across the interval exactly --- no ODE solver, and therefore no discretisation error to amortise. We adapt MeanFlow to the StormCast residual pipeline as the generative residual head of this thesis: it reuses the conditioning bundle $c_t$, the standardised-residual convention, the SongUNet backbone, and the per-channel loss weights of the FlowCast baseline \emph{unchanged}, and differs from it only in the training objective and the (correspondingly cheaper) sampler. MeanFlow is likewise teacher-free and trained from scratch in a single run.
 
 \paragraph{Average velocity.} Work in the standardised residual space of Section~\ref{sec:method-flowcast}: $x_1 = R_t / \sigma_{\text{data}}$ is the data endpoint, $x_0 \sim \Nbb(0, I)$ the prior, and the linear path $z_s = (1 - s)\,x_0 + s\,x_1$ runs from noise at $s = 0$ to data at $s = 1$ with conditional velocity $v = x_1 - x_0$. (MeanFlow uses the pure interpolant, $\sigma_{\text{path}} = 0$: the identity below differentiates along the exact trajectory, so the Gaussian thickening used by FlowCast is dropped.) For two times $r \le t$ the \emph{average velocity} is the displacement over $[r, t]$ divided by the interval length,
 \begin{equation}
@@ -282,8 +279,7 @@ Equation~\eqref{eq:meanflow-identity} is the MeanFlow identity of \citet{geng202
 \paragraph{Training objective.} A network $u_\theta(z_r, r, t, c_t)$ is encouraged to satisfy Eq.~\eqref{eq:meanflow-identity} by regressing onto the identity's right-hand side with the network's own derivative bootstrapped in:
 \begin{equation}
   \mathcal{L}_{\text{MF}}
-  = \Ebb\Bigl[\, \mathrm{sg}(w)\, \bigl\| u_\theta(z_r, r, t, c_t) - \mathrm{sg}(u_{\text{tgt}}) \bigr\|_{2,\beta}^2 \,\Bigr]
-  + \lambda_{\text{spec}}\, \mathcal{L}_{\text{spec}},
+  = \Ebb\Bigl[\, \mathrm{sg}(w)\, \bigl\| u_\theta(z_r, r, t, c_t) - \mathrm{sg}(u_{\text{tgt}}) \bigr\|_{2,\beta}^2 \,\Bigr],
   \qquad
   u_{\text{tgt}} = v + (t - r)\bigl( v\, \partial_z u_\theta + \partial_r u_\theta \bigr),
   \label{eq:meanflow-loss}
@@ -294,13 +290,13 @@ where $v = x_1 - x_0$ is the conditional I-CFM velocity standing in for the marg
   \item \textbf{Two-time sampling with partial collapse.} Each sample draws two i.i.d.\ times from $\mathcal{U}(t_\varepsilon, 1 - t_\varepsilon)$ and sorts them into $r \le t$. Only a fraction $\rho_{\text{MF}} = 0.25$ of the batch keeps $r < t$ and trains on the bootstrapped target; the remaining $75\%$ collapses $t \leftarrow r$, for which $u_{\text{tgt}} = v$ and the objective reduces \emph{exactly} to the FlowCast I-CFM regression. The collapsed subset pins the boundary condition $u(\cdot, r, r) = v$ that the $r < t$ subset propagates outward; \citet{geng2025meanflow} find $\rho_{\text{MF}} = 0.25$ optimal, and the JVP overhead is confined to a quarter of the batch. The prediction pass itself runs once over the full batch, which keeps distributed training simple.
   \item \textbf{Adaptive weighting.} The per-sample weight $w = (\|\Delta\|_{2,\beta}^2 + \varepsilon_w)^{-p}$ with $p = 1$, $\varepsilon_w = 10^{-3}$, applied with stop-gradient, implements the adapted-loss-weight scheme that \citet{geng2025meanflow} found necessary for stable bootstrapped training (their Tab.~1e); $p = 0$ recovers plain weighted MSE.
 \end{itemize}
-The spectral term $\mathcal{L}_{\text{spec}}$ is the radial log-PSD regulariser of Section~\ref{sec:method-qpepre}, applied --- as in FlowCast --- on the implied clean residual $\hat{x}_1 = z_r + (1 - r)\, u_\theta$, but restricted to the collapsed ($t = r$) subset of the batch where that extrapolation is the flow-matching one and the construction stays directly comparable to Eq.~\eqref{eq:flowcast-loss}. Algorithm~\ref{alg:meanflow} summarises the update.
+Algorithm~\ref{alg:meanflow} summarises the update.
 
 \begin{algorithm}[t]
 \caption{MeanFlow training step (average-velocity matching on the standardised residual)}
 \label{alg:meanflow}
 \begin{algorithmic}[1]
-\Require frozen $\Freg$, average-velocity network $u_\theta$, scale $\sigma_{\text{data}}$, clamp $t_\varepsilon$, MeanFlow ratio $\rho_{\text{MF}}$, adaptive $(p, \varepsilon_w)$, channel weights $\beta$, spectral weight $\lambda_{\text{spec}}$
+\Require frozen $\Freg$, average-velocity network $u_\theta$, scale $\sigma_{\text{data}}$, clamp $t_\varepsilon$, MeanFlow ratio $\rho_{\text{MF}}$, adaptive $(p, \varepsilon_w)$, channel weights $\beta$
 \State sample mini-batch $\{(M_{t-1}, S_t, M_t)\}$; form $\mu_t \gets \Freg(M_{t-1}, S_t, I)$, $R_t \gets M_t - \mu_t$
 \State build conditioning $c_t \gets \mathrm{concat}(M_{t-1}, \mu_t, I)$; standardise $x_1 \gets R_t / \sigma_{\text{data}}$
 \State sample $x_0 \sim \Nbb(0, I)$; set $v \gets x_1 - x_0$
@@ -310,9 +306,7 @@ The spectral term $\mathcal{L}_{\text{spec}}$ is the radial log-PSD regulariser 
 \State \hspace{\algorithmicindent} $u_{\text{tgt}} \gets v + (t - r)\, \frac{d}{dr}u$ \quad \textbf{else}: $u_{\text{tgt}} \gets v$
 \State predict (single forward over the full batch): $\hat{u} \gets u_\theta(z_r, r, t, c_t)$
 \State per-sample error: $\Delta^2 \gets \|\hat{u} - \mathrm{sg}(u_{\text{tgt}})\|_{2,\beta}^2$; weight $w \gets (\Delta^2 + \varepsilon_w)^{-p}$
-\State pointwise: $\mathcal{L}_{\text{pw}} \gets \mathrm{mean}\bigl(\mathrm{sg}(w)\, \Delta^2\bigr)$
-\State spectral (collapsed subset only): $\hat{x}_1 \gets z_r + (1 - r)\, \hat{u}$; $\mathcal{L}_{\text{spec}}$ per Section~\ref{sec:method-qpepre}
-\State $\mathcal{L} \gets \mathcal{L}_{\text{pw}} + \lambda_{\text{spec}}\, \mathcal{L}_{\text{spec}}$
+\State loss: $\mathcal{L} \gets \mathrm{mean}\bigl(\mathrm{sg}(w)\, \Delta^2\bigr)$
 \State AdamW step on $\theta$; EMA update $\theta^{-} \gets 0.999\, \theta^{-} + 0.001\, \theta$
 \end{algorithmic}
 \end{algorithm}
@@ -333,15 +327,15 @@ This is the $(r, \Delta)$ variant of the two-time embeddings ablated by \citet{g
 \end{equation}
 at exactly one NFE per segment. $K = 1$ is the pure one-step sampler $\hat{x}_1 = x_0 + u_\theta(x_0, 0, 1, c_t)$; $K = 2$ trades one extra evaluation for a mid-trajectory correction and is the validation default. Unlike the FlowCast Euler sampler, increasing $K$ here does not reduce a truncation error --- each segment is already exact under a perfect $u$ --- it instead shortens the intervals over which the \emph{learned} $u_\theta$ must be accurate. The sampler finishes identically to FlowCast: $\hat{R}_t = \sigma_{\text{data}}\, x_{t=1}$ and $\hat{M}_t = \mu_t + \hat{R}_t$.
 
-\paragraph{Optimisation and checkpoints.} Everything FlowCast-side is kept: AdamW with $\beta_{\text{Adam}} = (0.9, 0.999)$, learning rate $5 \times 10^{-4}$, weight decay $10^{-4}$, a 4{,}000-step linear warmup into cosine decay, global gradient clipping at $1.0$, and a fixed-decay $0.999$ EMA shadow whose weights are saved to \texttt{ema\_state.pt} and used by the in-training validation sampler. The production run trains on 7 GPUs at a global batch of 112; its step-to-sample conversion places the Chapter~\ref{ch:experiments} checkpoint (step 20{,}000, $\approx 2.24$\,M samples) just above the $\approx 2$\,M-sample anchor shared by the EDM and FlowCast checkpoints --- within $12\%$, which is small against the snapshot noise quantified in Section~\ref{sec:exp-protocol}. In the head-to-head harness the FlowCast and MeanFlow students are loaded from their online checkpoints in exactly the same way, so the A/B comparison is symmetric end to end.
+\paragraph{Optimisation and checkpoints.} Everything FlowCast-side is kept: AdamW with $\beta_{\text{Adam}} = (0.9, 0.999)$, learning rate $5 \times 10^{-4}$, weight decay $10^{-4}$, a 4{,}000-step linear warmup into cosine decay, global gradient clipping at $1.0$, and a fixed-decay $0.999$ EMA shadow whose weights are saved to \texttt{ema\_state.pt} and used by the in-training validation sampler. The production run trains on 7 GPUs at a global batch of 112; its step-to-sample conversion places the Chapter~\ref{ch:experiments} checkpoint (step 18{,}000, $\approx 2.0$\,M samples) essentially on the $\approx 2$\,M-sample anchor shared by the EDM and FlowCast checkpoints. In the head-to-head harness the FlowCast and MeanFlow students are loaded from their online checkpoints in exactly the same way, so the A/B comparison is symmetric end to end.
 
-\paragraph{Why average velocity for this residual.} First, it attacks the only cost FlowCast leaves on the table. The straight-line path made each Euler step cheap to take; MeanFlow removes the need to take many of them, compressing the residual head to $1$--$2$ NFE per forecast hour --- the regime where large ensembles between radar volumes stop being a budget question. Second, it is the right shape for a controlled study: because the $t = r$ subset of the objective \emph{is} FlowCast's objective, MeanFlow is a strict generalisation trained under identical hyperparameters, and any skill difference in Chapter~\ref{ch:experiments} is attributable to the average-velocity bootstrap alone. Third, the principled alternative to it --- consistency-style models --- impose network-behaviour constraints with curriculum schedules that are notoriously unstable on heavy-tailed targets; MeanFlow's target is a property of the underlying field, needs no curriculum, and trains with the same loss machinery (channel weights, spectral term) already validated on \texttt{qpepre}.
+\paragraph{Why average velocity for this residual.} First, it attacks the only cost FlowCast leaves on the table. The straight-line path made each Euler step cheap to take; MeanFlow removes the need to take many of them, compressing the residual head to $1$--$2$ NFE per forecast hour --- the regime where large ensembles between radar volumes stop being a budget question. Second, it is the right shape for a controlled study: because the $t = r$ subset of the objective \emph{is} FlowCast's objective, MeanFlow is a strict generalisation trained under identical hyperparameters, and any skill difference in Chapter~\ref{ch:experiments} is attributable to the average-velocity bootstrap alone. Third, the principled alternative to it --- consistency-style models --- impose network-behaviour constraints with curriculum schedules that are notoriously unstable on heavy-tailed targets; MeanFlow's target is a property of the underlying field, needs no curriculum, and trains with the same loss machinery (the channel-weighted L2 regression) already validated on \texttt{qpepre}.
 
 % ==================================================
 \section{Loss Design for the Precipitation Channel}
 \label{sec:method-qpepre}
 
-The four-channel RWRF target makes per-channel loss engineering cheap, and we use this budget to attack the hardest channel, \texttt{qpepre}, from two directions. Both terms below are shared by the EDM baseline, FlowCast, and MeanFlow where applicable; the two flow heads use the channel-weighted L2 form on their velocity regression plus the spectral term on the implied clean residual (for MeanFlow, on the $t = r$ subset of the batch; Section~\ref{sec:method-meanflow}).
+The four-channel RWRF target makes per-channel loss engineering cheap, and we use this budget to attack the hardest channel, \texttt{qpepre}, through a per-channel weight in the regression loss. The channel-weighted L2 term below is shared by the EDM baseline, FlowCast, and MeanFlow; the two flow heads apply it to their velocity regression.
 
 \paragraph{Channel-weighted L2.} Let $\beta = (\beta_{\text{t2m}}, \beta_{\text{u10}}, \beta_{\text{v10}}, \beta_{\text{qpepre}})$ be a vector of non-negative per-channel weights. The weighted L2 norm used by the FlowCast velocity loss is
 \begin{equation}
@@ -349,13 +343,7 @@ The four-channel RWRF target makes per-channel loss engineering cheap, and we us
 \end{equation}
 where the sum runs over the four output channels and the norm inside each term is the ordinary spatial L2. The default configuration uses $\beta = (1, 1, 1, w_{\text{pr}})$, with the precipitation weight $w_{\text{pr}}$ exposed as the last entry of \texttt{channel\_weights} in \texttt{stormcast/config/model/flowcast.yaml}. The headline FlowCast run uses $w_{\text{pr}} = 2$; Section~\ref{sec:exp-qpw} sweeps $w_{\text{pr}} \in [1.0, 2.4]$ to locate the precipitation/wind trade-off.
 
-\paragraph{Radial log-PSD regulariser.} Because RMSE-like losses reward smooth, low-amplitude precipitation outputs, we add a spectral-matching regulariser that penalises the L1 distance between the radial log-PSD of the predicted and target \texttt{qpepre} fields:
-\begin{equation}
-  \mathcal{L}_{\text{spec}} = \frac{1}{|\mathcal{K}|}\sum_{\kappa \in \mathcal{K}} \bigl|\log P_{\text{pred}}(\kappa) - \log P_{\text{target}}(\kappa)\bigr|,
-\end{equation}
-where $P(\kappa)$ is the radially averaged 2D power spectral density at wavenumber $\kappa$ and $\mathcal{K}$ is the set of non-zero radial wavenumbers on the spatial grid. The regulariser is active only on channels listed in \texttt{spectral\_channels} and weighted by \texttt{spectral\_weight} $= \lambda_{\text{spec}}$ (default $0.1$). By default we apply it to \texttt{qpepre} only, on the flow's implied clean residual $\hat{x}_1$ rather than the raw velocity (Algorithm~\ref{alg:flowcast}).
-
-\paragraph{Monitoring for mode collapse.} Even with the above terms, sparse heavy-tailed precipitation is an invitation to mode collapse: the model can minimise the weighted L2 by producing a slightly-wet constant field. During training we therefore log the wet-pixel fraction at thresholds $\{0.1, 1.0, 5.0\}$\,\si{\milli\metre\per\hour} and the 95th and 99th percentiles of the output distribution, and compare them to the same quantities on the training batch. A large divergence is a collapse warning.
+\paragraph{Monitoring for mode collapse.} Even with this weighting, sparse heavy-tailed precipitation is an invitation to mode collapse: the model can minimise the weighted L2 by producing a slightly-wet constant field. During training we therefore log the wet-pixel fraction at thresholds $\{0.1, 1.0, 5.0\}$\,\si{\milli\metre\per\hour} and the 95th and 99th percentiles of the output distribution, and compare them to the same quantities on the training batch. A large divergence is a collapse warning.
 
 % ==================================================
 \section{Training Infrastructure}
