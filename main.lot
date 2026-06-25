@@ -7,7 +7,7 @@
 \contentsline {table}{\numberline {4.1}{\ignorespaces MeanFlow, FlowCast and EDM diffusion scoreboard}}{57}{table.caption.72}%
 \contentsline {table}{\numberline {4.2}{\ignorespaces Inference timing ablation (A6000)}}{62}{table.caption.79}%
 \contentsline {table}{\numberline {4.3}{\ignorespaces Inference timing ablation (H100)}}{62}{table.caption.80}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces Precipitation skill across pooling windows}}{66}{table.caption.87}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Precipitation skill across pooling windows}}{67}{table.caption.87}%
 \contentsline {table}{\numberline {4.5}{\ignorespaces Rollout RMSE versus lead time}}{69}{table.caption.91}%
 \contentsline {table}{\numberline {4.6}{\ignorespaces log1p versus raw-mm/h encoding ablation}}{71}{table.caption.94}%
 \contentsline {table}{\numberline {4.7}{\ignorespaces Precipitation channel-weight ablation}}{72}{table.caption.96}%

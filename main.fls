@@ -700,11 +700,11 @@ INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf
-INPUT ./figures/results/fss_p16.png
-INPUT ./figures/results/fss_p16.png
-INPUT ./figures/results/fss_p16.png
 INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf
+INPUT ./figures/results/fss_p16.png
+INPUT ./figures/results/fss_p16.png
+INPUT ./figures/results/fss_p16.png
 INPUT ./figures/results/rollout_rmse.png
 INPUT ./figures/results/rollout_rmse.png
 INPUT ./figures/results/rollout_rmse.png
@@ -746,6 +746,10 @@ INPUT ./contents/chapter05.tex
 INPUT ./contents/chapter05.tex
 INPUT ./contents/chapter05.tex
 INPUT contents/chapter05.tex
+INPUT ./figures/seal.pdf
+INPUT ./figures/seal.pdf
+INPUT ./figures/seal.pdf
+INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf
 INPUT ./figures/seal.pdf

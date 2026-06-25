@@ -183,38 +183,37 @@ Mean categorical scores hide both the threshold dependence and the neighbourhood
 
 \begin{table}[htbp]
   \centering
-  \caption[Precipitation skill across pooling windows]{Threshold-averaged categorical precipitation skill (mean over $\tau \in \{0.1, 1, 5, 10, 16\}$\,mm\,h$^{-1}$) at the four StormCast neighbourhood windows, with the heavy-rain FSS point (FSS-P16, $\tau = 16$\,mm\,h$^{-1}$) alongside, for the legacy and cleaned heads (five-member ensemble means, 2022 validation year). Every score improves as the window widens; the $15$\,km row is the headline of Table~\ref{tab:main-scoreboard}. FSS-P16 is near-zero for all heads (ensemble-mean smoothing of $\geq 16$\,mm\,h$^{-1}$ extremes; Figure~\ref{fig:fss}).}
+  \caption[Precipitation skill across pooling windows]{Threshold-averaged categorical precipitation skill (mean over $\tau \in \{0.1, 1, 5, 10, 16\}$\,mm\,h$^{-1}$) at the four StormCast neighbourhood windows, with the heavy-rain FSS point (FSS-P16, $\tau = 16$\,mm\,h$^{-1}$) alongside, for the legacy and cleaned heads (five-member ensemble means, 2022 validation year), grouped by neighbourhood window. \textbf{Bold} marks the best of the four cleaned heads for each metric within each window ($\uparrow$ better for CSI-M/HSS-M/FSS-P16, $\downarrow$ better for FAR-M); the legacy EDM row is on a different $224{\times}128$ grid and is shown for context only, excluded from the bolding. Every score improves as the window widens; the $15$\,km block is the headline window of Table~\ref{tab:main-scoreboard}. FSS-P16 is near-zero for all heads (ensemble-mean smoothing of $\geq 16$\,mm\,h$^{-1}$ extremes; Figure~\ref{fig:fss}).}
   \label{tab:precip-window}
   \small
   \setlength{\tabcolsep}{6pt}
   \begin{tabular}{llrrrr}
     \toprule
-    Method & Window & CSI-M$\uparrow$ & HSS-M$\uparrow$ & FAR-M$\downarrow$ & FSS-P16$\uparrow$ \\
+    Window & Method & CSI-M$\uparrow$ & HSS-M$\uparrow$ & FAR-M$\downarrow$ & FSS-P16$\uparrow$ \\
     \midrule
-    Legacy EDM ($224{\times}128$) & 3\,km  & 0.1008 & 0.1256 & 0.5768 & 0.0198 \\
-                                  & 15\,km & 0.1448 & 0.1397 & 0.4110 & 0.0273 \\
-                                  & 27\,km & 0.1791 & 0.1472 & 0.3349 & 0.0256 \\
-                                  & 45\,km & 0.2312 & 0.1571 & 0.2570 & 0.0230 \\
+    3\,km  & Legacy EDM ($224{\times}128$) & 0.1008 & 0.1256 & 0.5768 & 0.0198 \\
+           & EDM diffusion        & 0.1956 & 0.2384 & 0.4853 & 0.0088 \\
+           & FlowCast ($K{=}10$)  & 0.1960 & 0.2462 & 0.4340 & 0.0053 \\
+           & MeanFlow ($K{=}1$)   & 0.2127 & 0.2655 & 0.4620 & 0.0105 \\
+           & MeanFlow ($K{=}2$)   & \textbf{0.2141} & \textbf{0.2704} & \textbf{0.4192} & \textbf{0.0279} \\
     \midrule
-    EDM diffusion & 3\,km  & 0.1956 & 0.2384 & 0.4853 & 0.0088 \\
-                  & 15\,km & 0.2622 & 0.2926 & 0.3417 & 0.0076 \\
-                  & 27\,km & 0.2989 & 0.3151 & 0.2628 & 0.0065 \\
-                  & 45\,km & 0.3434 & 0.3320 & 0.1963 & 0.0053 \\
+    15\,km & Legacy EDM ($224{\times}128$) & 0.1448 & 0.1397 & 0.4110 & 0.0273 \\
+           & EDM diffusion        & 0.2622 & 0.2926 & 0.3417 & 0.0076 \\
+           & FlowCast ($K{=}10$)  & 0.2504 & 0.2889 & 0.3504 & 0.0038 \\
+           & MeanFlow ($K{=}1$)   & \textbf{0.2689} & \textbf{0.3131} & 0.2918 & 0.0099 \\
+           & MeanFlow ($K{=}2$)   & 0.2656 & 0.3128 & \textbf{0.2563} & \textbf{0.0242} \\
     \midrule
-    FlowCast ($K{=}10$) & 3\,km  & 0.1960 & 0.2462 & 0.4340 & 0.0053 \\
-                        & 15\,km & 0.2504 & 0.2889 & 0.3504 & 0.0038 \\
-                        & 27\,km & 0.2839 & 0.3129 & 0.2454 & 0.0040 \\
-                        & 45\,km & 0.3242 & 0.3337 & 0.1821 & 0.0043 \\
+    27\,km & Legacy EDM ($224{\times}128$) & 0.1791 & 0.1472 & 0.3349 & 0.0256 \\
+           & EDM diffusion        & 0.2989 & 0.3151 & 0.2628 & 0.0065 \\
+           & FlowCast ($K{=}10$)  & 0.2839 & 0.3129 & 0.2454 & 0.0040 \\
+           & MeanFlow ($K{=}1$)   & \textbf{0.3040} & \textbf{0.3403} & 0.2038 & 0.0082 \\
+           & MeanFlow ($K{=}2$)   & 0.2954 & 0.3332 & \textbf{0.1841} & \textbf{0.0210} \\
     \midrule
-    MeanFlow ($K{=}1$) & 3\,km  & 0.2127 & 0.2655 & 0.4620 & 0.0105 \\
-                       & 15\,km & 0.2689 & 0.3131 & 0.2918 & 0.0099 \\
-                       & 27\,km & 0.3040 & 0.3403 & 0.2038 & 0.0082 \\
-                       & 45\,km & 0.3443 & 0.3654 & 0.1349 & 0.0066 \\
-    \midrule
-    MeanFlow ($K{=}2$) & 3\,km  & 0.2141 & 0.2704 & 0.4192 & 0.0279 \\
-                       & 15\,km & 0.2656 & 0.3128 & 0.2563 & 0.0242 \\
-                       & 27\,km & 0.2954 & 0.3332 & 0.1841 & 0.0210 \\
-                       & 45\,km & 0.3307 & 0.3522 & 0.1247 & 0.0171 \\
+    45\,km & Legacy EDM ($224{\times}128$) & 0.2312 & 0.1571 & 0.2570 & 0.0230 \\
+           & EDM diffusion        & 0.3434 & 0.3320 & 0.1963 & 0.0053 \\
+           & FlowCast ($K{=}10$)  & 0.3242 & 0.3337 & 0.1821 & 0.0043 \\
+           & MeanFlow ($K{=}1$)   & \textbf{0.3443} & \textbf{0.3654} & 0.1349 & 0.0066 \\
+           & MeanFlow ($K{=}2$)   & 0.3307 & 0.3522 & \textbf{0.1247} & \textbf{0.0171} \\
     \bottomrule
   \end{tabular}
 \end{table}
