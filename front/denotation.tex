@@ -21,13 +21,13 @@
 \item[FAR]{False-Alarm Ratio}
 \item[CRPS]{Continuous Ranked Probability Score}
 
-\item[$X_t$]{High-resolution atmospheric state at time $t$ (target). Channels: \texttt{t2m}, \texttt{u10}, \texttt{v10}, \texttt{qpepre}.}
+\item[$M_t$]{High-resolution atmospheric state at time $t$ (target). Channels: \texttt{t2m}, \texttt{u10}, \texttt{v10}, \texttt{qpepre}.}
 \item[$S_t$]{Low-resolution conditioning state at time $t$ (24 channels).}
 \item[$I$]{Time-invariant fields (land--sea mask, orography).}
-\item[$\Freg$]{Deterministic regression network producing mean $M_t = \Freg(X_{t-1}, S_t, I)$.}
-\item[$M_t$]{Regression mean prediction.}
-\item[$R_t$]{Residual $R_t = X_t - M_t$ learned by the generative head.}
-\item[$c$]{Conditioning bundle for the generative head. All three heads (EDM diffusion, FlowCast, MeanFlow) use $\mathrm{concat}(X_{t-1}, M_t, I)$; the original StormCast additionally concatenates the low-resolution background $S_t$.}
+\item[$\Freg$]{Deterministic regression network producing mean $\mu_t = \Freg(M_{t-1}, S_t, I)$.}
+\item[$\mu_t$]{Regression mean prediction.}
+\item[$R_t$]{Residual $R_t = M_t - \mu_t$ learned by the generative head.}
+\item[$c$]{Conditioning bundle for the generative head. All three heads (EDM diffusion, FlowCast, MeanFlow) use $\mathrm{concat}(M_{t-1}, \mu_t, I)$; the original StormCast additionally concatenates the low-resolution background $S_t$.}
 \item[$\Dedm$]{EDM diffusion baseline denoiser (EDMPrecond SongUNet).}
 \item[$\vnet$]{FlowCast (I-CFM baseline) instantaneous velocity field (FlowCastPrecond SongUNet).}
 \item[$\unet$]{MeanFlow average-velocity field $u_\theta(z, r, t, c)$ (MeanFlowPrecond SongUNet); the network of this thesis.}

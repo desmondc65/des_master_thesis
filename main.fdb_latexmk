@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex main"] 1782395387.54162 "main.aux" "main.bbl" "main" 1782395396.43314 0
+["bibtex main"] 1782396474.91395 "main.aux" "main.bbl" "main" 1782396484.25521 0
   "./back/references.bib" 1782394106.24699 12977 83bd175f87a98fc3c6e1e3ad06af3331 ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/natbib/abbrvnat.bst" 1233624470 26532 66bed5cc59495faaa3f9ae9af9fa5e42 ""
-  "main.aux" 1782395389.18431 49643 fa9c7e202fb1fc087d2e363bb251cb23 "xelatex"
+  "main.aux" 1782396476.54864 50379 4cc35ae2c93ee107ca82a0356c42bcec "xelatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["xdvipdfmx"] 1782395389.33957 "main.xdv" "main.pdf" "main" 1782395396.4345 0
-  "main.xdv" 1782395389.18744 2195288 93a565fd4639705b2b148637905963ba "xelatex"
+["xdvipdfmx"] 1782396476.70176 "main.xdv" "main.pdf" "main" 1782396484.25662 0
+  "main.xdv" 1782396476.55146 2224168 86f29714c36c17924259858a0d25fe59 "xelatex"
   (generated)
   "main.pdf"
   (rewritten before read)
-["xelatex"] 1782395387.58112 "main.tex" "main.xdv" "main" 1782395396.43321 0
+["xelatex"] 1782396474.95283 "main.tex" "main.xdv" "main" 1782396484.25528 0
   "/etc/texmf/web2c/texmf.cnf" 1768728223.52462 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136768653 1528 f853c4d1b4e0550255e02831fdc8496f ""
@@ -240,17 +240,19 @@
   "/var/lib/texmf/web2c/xetex/xelatex.fmt" 1776292644 9193565 41d2956a5a492bccfa2084877aa6af28 ""
   "back/appendix01.tex" 1781729422.60225 5313 add271980396f78ca0bbae2e6b86043f ""
   "back/appendix02.tex" 1782395082.37484 13873 277965025291fb954e9013bb968eff06 ""
-  "back/appendix03.tex" 1782395341.18473 15778 607132de2024cbef535bbf32b16cf194 ""
+  "back/appendix03.tex" 1782396122.65994 15784 2c2bb5f1dbf62b5f52568e6e199a9875 ""
   "contents/chapter01.tex" 1782395360.90052 13687 332c2156e16a18829d711e63ac946ee2 ""
-  "contents/chapter02.tex" 1782395351.67333 30268 8ee147c6d17dc6a5c23a70276616fb33 ""
-  "contents/chapter03.tex" 1782395154.73419 54584 945e037318e0b1a83d07464b27d2d994 ""
-  "contents/chapter04.tex" 1782304706.39528 56333 5ef0d630c5d1a2ae9681aeb84c3aec58 ""
+  "contents/chapter02.tex" 1782396454.83765 31611 edd1812d955059e5a537af16f1b01db7 ""
+  "contents/chapter03.tex" 1782396171.49383 55859 323868e5a6c50f3030174fd2ae1c4150 ""
+  "contents/chapter04.tex" 1782396122.65973 56333 328d7a0ca093f908af7286bdf46b1a9b ""
   "contents/chapter05.tex" 1782390307.24201 10153 75d35a8875a765f5b6cfc30e893cbf0b ""
   "figures/flowcast/loss_curves.png" 1782304706.42022 81762 54b388b269bd380f4145e0221f4cb06e ""
   "figures/highres_distributions/stormcast_test_train_HighRes_qpepre_gaussian_check.png" 1781729422.62715 634200 7582bac885c23758f960d3ed27ddbef7 ""
   "figures/highres_distributions/stormcast_test_train_HighRes_t2m_gaussian_check.png" 1781729422.63025 847733 ae34a250a1ce942e5869bc06b2c53c56 ""
   "figures/highres_distributions/stormcast_test_train_HighRes_u10_gaussian_check.png" 1781729422.63329 839292 d92a81b9c9c5abf053d3825ad56065b0 ""
   "figures/highres_distributions/stormcast_test_train_HighRes_v10_gaussian_check.png" 1781729422.63626 831234 2f50c79531471066ae1721fa26e7ce98 ""
+  "figures/instantaneous_vs_average_velocity.png" 1782396035.62094 160600 327a1700e2d51ffcac1526ab3dd5a87b ""
+  "figures/meanflow_figs/meancasthd.png" 1782394183.19109 541380 f2ae1fec886f13dea2dfcefb64c49366 ""
   "figures/results/crps_per_channel.png" 1782304706.42052 53718 a55f7ad3bfb3ae67c949b13775eca819 ""
   "figures/results/csi_per_threshold.png" 1782304706.42374 838504 b818e5fc27715d4d867921f1d91b9043 ""
   "figures/results/fss_p16.png" 1782304706.42498 263765 afc853fe7ad609284154d52ca33ed79f ""
@@ -263,14 +265,14 @@
   "figures/seal.pdf" 1781729422.64654 54231 0e93cc5e3e16dce613ae774d5c606bb8 ""
   "front/abstract.tex" 1782374460.19079 8420 c49b014cfa498ff6f837ea83db7889c9 ""
   "front/acknowledgement.tex" 1782309674.82191 1333 c0341a99cc368afd79d631c2cd784e27 ""
-  "front/denotation.tex" 1782206473.22397 3490 42c336a47bca11c5de56fbc8020dbbc5 ""
-  "main.aux" 1782395389.18431 49643 fa9c7e202fb1fc087d2e363bb251cb23 "xelatex"
-  "main.bbl" 1782395387.57814 12012 2dc3018b9eccb228301a50a988f6fe85 "bibtex main"
-  "main.lof" 1782395389.18744 1295 bb0cf67a5681bc1fc4074406a17e7baf "xelatex"
-  "main.lot" 1782395389.18744 1425 2b82f40390be247c4001951aa70dcb6e "xelatex"
-  "main.out" 1782395389.18707 16188 078fe8575b78f90e5863d84b6cc0b4a2 "xelatex"
+  "front/denotation.tex" 1782396122.65982 3498 562f50248c8d100de2960595b10b09a1 ""
+  "main.aux" 1782396476.54864 50379 4cc35ae2c93ee107ca82a0356c42bcec "xelatex"
+  "main.bbl" 1782396474.94986 12012 2dc3018b9eccb228301a50a988f6fe85 "bibtex main"
+  "main.lof" 1782396476.55146 1543 0e783f669d40caf7cda885f471348503 "xelatex"
+  "main.lot" 1782396476.55146 1426 f5b95a8a4a4e255efbda8e61c6108bcf "xelatex"
+  "main.out" 1782396476.5511 16188 85e55454ae3111dd76a9ee2ee5407afe "xelatex"
   "main.tex" 1782123855.41561 1754 4395b8e4b6a7531e4fd5205d644d32d4 ""
-  "main.toc" 1782395389.18744 14824 587ac856326de2c4a1c3eae63b60bd5d "xelatex"
+  "main.toc" 1782396476.55146 14830 a9a452e3d849bb7d7f89aae359d6ce4f "xelatex"
   "ntusetup.tex" 1782392795.35974 3502 f465c750948beafe57f488aee31a99d5 ""
   "ntuthesis.cls" 1781729423.56317 27826 6500fc5cbfdd1bf82b1708432b431391 ""
   (generated)
