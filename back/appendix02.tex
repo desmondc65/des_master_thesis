@@ -11,8 +11,8 @@ The full training and evaluation code for this thesis lives in the \texttt{Storm
   \item \texttt{stormcast/train\_flowcast.py} --- FlowCast (Conditional Flow Matching) training.
   \item \texttt{stormcast/train\_meanflow.py} --- MeanFlow (average-velocity flow matching) training.
   \item \texttt{stormcast/utils/trainer\_flowcast.py} / \texttt{trainer\_meanflow.py} --- the two students' training loops with EMA.
-  \item \texttt{stormcast/utils/flowcast\_loss.py} --- \texttt{FlowCastLoss} (I-CFM + per-channel weights + radial log-PSD).
-  \item \texttt{stormcast/utils/meanflow\_loss.py} --- \texttt{MeanFlowLoss} (MeanFlow identity with JVP-bootstrapped stop-gradient target, adaptive weighting, same per-channel weights + log-PSD term on the $t = r$ subset).
+  \item \texttt{stormcast/utils/flowcast\_loss.py} --- \texttt{FlowCastLoss} (I-CFM + per-channel weights).
+  \item \texttt{stormcast/utils/meanflow\_loss.py} --- \texttt{MeanFlowLoss} (MeanFlow identity with JVP-bootstrapped stop-gradient target, adaptive weighting, same per-channel weights).
   \item \texttt{stormcast/utils/flowcast\_precond.py} / \texttt{meanflow\_precond.py} --- \texttt{FlowCastPrecond} velocity wrapper and \texttt{MeanFlowPrecond} two-time average-velocity wrapper.
   \item \texttt{stormcast/utils/nn.py} --- \texttt{get\_preconditioned\_architecture}, \texttt{build\_network\_condition\_and\_target}, and the samplers \texttt{diffusion\_model\_forward} / \texttt{flowcast\_model\_forward} / \texttt{meanflow\_model\_forward}.
   \item \texttt{experiment\_scripts/compare\_diffusion\_vs\_flowcast.py} --- the head-to-head rollout scoreboard harness used for Chapter~\ref{ch:experiments} (the MeanFlow leg is enabled with \texttt{--meanflow-checkpoint}).
@@ -32,9 +32,9 @@ with sub-groups \texttt{LowRes/}, \texttt{HighRes/}, and \texttt{invariants/}, a
 \paragraph{Checkpoints (cleaned, log1p, $\approx 2\,\text{M}$-sample anchor).}
 \begin{itemize}
   \item Regression mean: \texttt{StormCastUNet.0.8000.mdlus} (shared by all three heads).
-  \item EDM diffusion baseline: \texttt{EDMPrecond.0.31000.mdlus}.
-  \item FlowCast: \texttt{FlowCastPrecond.0.20000.mdlus}; the sibling \texttt{ema\_state.pt} holds the EMA shadow used by the in-training validation sampler. The canonical FlowCast run continues to \texttt{FlowCastPrecond.0.140000.mdlus}.
-  \item MeanFlow: \texttt{MeanFlowPrecond.0.20000.mdlus} ($\approx 2.24$\,M samples at batch 112) with its sibling \texttt{ema\_state.pt}. The Chapter~\ref{ch:experiments} harness loads the FlowCast and MeanFlow online checkpoints symmetrically.
+  \item EDM diffusion baseline: the $\approx 2\,\text{M}$-training-sample \texttt{EDMPrecond} checkpoint.
+  \item FlowCast: the $\approx 2\,\text{M}$-training-sample \texttt{FlowCastPrecond} checkpoint; the sibling \texttt{ema\_state.pt} holds the EMA shadow used by the in-training validation sampler. The canonical FlowCast run continues to the $\approx 13.4\,\text{M}$-sample checkpoint.
+  \item MeanFlow: the $\approx 2\,\text{M}$-training-sample \texttt{MeanFlowPrecond} checkpoint (batch 112) with its sibling \texttt{ema\_state.pt}. The Chapter~\ref{ch:experiments} harness loads the FlowCast and MeanFlow online checkpoints symmetrically.
 \end{itemize}
 
 \section{Preprocessing Pipeline Details}
@@ -130,15 +130,15 @@ which runs \texttt{compare\_diffusion\_vs\_flowcast.py} (with the MeanFlow leg a
 \paragraph{NFE-versus-quality sweeps.} The sweeps that underpin the convergence claims of Section~\ref{sec:exp-nfe} --- that FlowCast is essentially converged by $K \approx 10$ while MeanFlow operates at $K \in \{1, 2\}$ --- come from
 \begin{verbatim}
 python experiment_scripts/flowcast_nfe_sweep.py \
-    --flowcast-checkpoint .../FlowCastPrecond.0.20000.mdlus \
+    --flowcast-checkpoint .../FlowCastPrecond.<2M-sample>.mdlus \
     --nfes 1 2 3 4 5 6 8 10 12 16 20 25 32 40 50 \
     --n-sequences 12 --n-steps 1 --ensemble 10 --seed 0
 python experiment_scripts/flowcast_nfe_sweep.py --method meanflow \
-    --meanflow-checkpoint .../MeanFlowPrecond.0.20000.mdlus \
+    --meanflow-checkpoint .../MeanFlowPrecond.<2M-sample>.mdlus \
     --nfes 1 2 3 4 5 6 8 10 12 16 20 25 32 40 50 \
     --n-sequences 12 --n-steps 1 --ensemble 10 --seed 0
 \end{verbatim}
-The matched $\approx 2\,\text{M}$-sample checkpoints (step 20{,}000) are passed explicitly --- the script's FlowCast default points at the longer-trained step-140{,}000 checkpoint, which would not be comparable to the Chapter~\ref{ch:experiments} scoreboard. \texttt{run\_flowcast\_nfe\_sweep.sh} wraps both invocations (\texttt{METHODS="flowcast meanflow"}).
+The matched $\approx 2\,\text{M}$-sample checkpoints are passed explicitly --- the script's FlowCast default points at the longer-trained $\approx 13.4\,\text{M}$-sample checkpoint, which would not be comparable to the Chapter~\ref{ch:experiments} scoreboard. \texttt{run\_flowcast\_nfe\_sweep.sh} wraps both invocations (\texttt{METHODS="flowcast meanflow"}).
 
 \paragraph{Figure and results regeneration.} Every result figure of Chapter~\ref{ch:experiments} and the consolidated results document are regenerated end-to-end by two commands:
 \begin{verbatim}

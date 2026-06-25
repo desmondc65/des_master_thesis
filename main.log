@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.16)  25 JUN 2026 22:07
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.16)  26 JUN 2026 03:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1540,7 +1540,7 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 Overfull \hbox (20.61493pt too wide) in paragraph at lines 22--22
 \TU/BiauKai(0)/m/n/16 路 與 多 媒 體 研 究 所 完 成 之 碩 士 學 位 論 文，|  於 民 國 \TU/TimesNewRo
 man(0)/m/n/16 115 \TU/BiauKai(0)/m/n/16 年 \TU/TimesNewRoman(0)/m/n/16 6 \TU/Bia
-uKai(0)/m/n/16 月 \TU/TimesNewRoman(0)/m/n/16 25 \TU/BiauKai(0)/m/n/16 日
+uKai(0)/m/n/16 月 \TU/TimesNewRoman(0)/m/n/16 26 \TU/BiauKai(0)/m/n/16 日
  []
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
@@ -1671,7 +1671,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [19]
-Overfull \hbox (15.37598pt too wide) in paragraph at lines 27--28
+Overfull \hbox (15.37598pt too wide) in paragraph at lines 26--27
 []\TU/TimesNewRoman(0)/m/n/12 Deterministic regression network producing mean $
 \OML/cmm/m/it/12 ^^V[] \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 F[]\OT1/cmr/m/n/12 (\
 OML/cmm/m/it/12 M[]; S[]; I\OT1/cmr/m/n/12 )$\TU/TimesNewRoman(0)/m/n/12 . 
@@ -1683,7 +1683,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [20]
-Overfull \hbox (46.62202pt too wide) in paragraph at lines 33--34
+Overfull \hbox (46.62202pt too wide) in paragraph at lines 32--33
 []\TU/TimesNewRoman(0)/m/n/12 MeanFlow average-velocity field $\OML/cmm/m/it/12
  u[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 z; r; t; c\OT1/cmr/m/n/12 )$ \TU/TimesNew
 Roman(0)/m/n/12 (MeanFlowPrecond SongUNet);
@@ -1695,7 +1695,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [21]
-Overfull \hbox (4.72687pt too wide) in paragraph at lines 44--45
+Overfull \hbox (4.72687pt too wide) in paragraph at lines 43--44
 []\TU/TimesNewRoman(0)/m/n/12 Number of sampling network evaluations (NFE): Eul
 er steps for Flow-
  []
@@ -1780,14 +1780,9 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
 
 [6]
-Overfull \hbox (9.1188pt too wide) in paragraph at lines 53--54
-[]\TU/TimesNewRoman(0)/m/n/12 We exploit the four-channel target with a precipi
-tation-aware loss: a channel-weighted
- []
-
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[7]) (./contents/chapter02.tex
+ [7]) (./contents/chapter02.tex
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [8]
@@ -1880,21 +1875,17 @@ t/12 x\OT1/cmr/m/n/12 )$
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
 [22]
-Underfull \vbox (badness 1082) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [23]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-
-[24]
-Overfull \hbox (7.5807pt too wide) in paragraph at lines 181--182
-\TU/TimesNewRoman(0)/m/n/12 that produces blurry outputs will have a log-PSD th
-at drops off too quickly at high wavenum-
- []
-
-) (./contents/chapter03.tex
+ [24])
+(./contents/chapter03.tex
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [25]
@@ -1945,16 +1936,15 @@ month_to_day/
  []
 
 
-Underfull \vbox (badness 3333) has occurred while \output is active []
+Underfull \vbox (badness 4013) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [33]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [34]
+
+[34]
 File: figures/highres_distributions/stormcast_test_train_HighRes_t2m_gaussian_c
 heck.png Graphic file (type bmp)
 <figures/highres_distributions/stormcast_test_train_HighRes_t2m_gaussian_check.
@@ -1973,8 +1963,7 @@ n_check.png Graphic file (type bmp)
 ck.png>
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-
-[35]
+ [35]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
@@ -1984,6 +1973,9 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
 
 [37]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [38]
 Overfull \hbox (26.05408pt too wide) in paragraph at lines 173--174
 []\TU/TimesNewRoman(0)/m/n/12 Both networks are instantiated through the factor
 y \TU/lmtt/m/n/12 get_preconditioned_architecture
@@ -1996,9 +1988,9 @@ y \TU/lmtt/m/n/12 build_network_condition_and_target\TU/TimesNewRoman(0)/m/n/12
  ,
  []
 
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
-[38]
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [39]
@@ -2008,9 +2000,17 @@ nfig/ model/ flowcast.yaml \TU/TimesNewRoman(0)/m/n/12 and \TU/lmtt/m/n/12 stor
 mcast/ config/
  []
 
+
+Underfull \vbox (badness 2617) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[40]
+ [40]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [41]
 Overfull \hbox (19.57584pt too wide) in paragraph at lines 202--203
 [] [] \TU/TimesNewRoman(0)/b/n/12 Velocity predictor.[] \TU/TimesNewRoman(0)/m/
 n/12 The FlowCast network is the \TU/lmtt/m/n/12 FlowCastPrecond \TU/TimesNewRo
@@ -2031,41 +2031,41 @@ ils/ nn.py\TU/TimesNewRoman(0)/m/n/12 . The factory wraps a SongUNet with \TU/l
 mtt/m/n/12 channel_mult=[1,
  []
 
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
-[41]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 217.
 
-Overfull \hbox (3.32668pt too wide) in paragraph at lines 236--237
+Underfull \vbox (badness 3058) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [42]
+Overfull \hbox (3.32668pt too wide) in paragraph at lines 233--234
 [] [] \TU/TimesNewRoman(0)/b/n/12 Optimisation.[] \TU/TimesNewRoman(0)/m/n/12 F
 ollowing the FlowCast paper we use the AdamW optimiser with $\OML/cmm/m/it/12 ^
 ^L[] \OT1/cmr/m/n/12 =
  []
 
 
-Overfull \hbox (22.59566pt too wide) in paragraph at lines 236--237
+Overfull \hbox (22.59566pt too wide) in paragraph at lines 233--234
 \TU/lmtt/m/n/12 DistributedDataParallel\TU/TimesNewRoman(0)/m/n/12 ; the per-GP
 U micro-batch is \TU/lmtt/m/n/12 batch_size_per_gpu = "auto"\TU/TimesNewRoman(0
 )/m/n/12 ,
  []
 
 
-Underfull \vbox (badness 1062) has occurred while \output is active []
-
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [42]
-Overfull \hbox (1.54533pt too wide) in paragraph at lines 238--239
+Overfull \hbox (1.54533pt too wide) in paragraph at lines 235--236
 [] [] \TU/TimesNewRoman(0)/b/n/12 EMA shadow network.[] \TU/TimesNewRoman(0)/m/
 n/12 A second \TU/lmtt/m/n/12 FlowCastPrecond \TU/TimesNewRoman(0)/m/n/12 insta
 nce is kept as an exponential-
  []
 
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[43]
-Overfull \hbox (14.42024pt too wide) in paragraph at lines 246--248
+ [43]
+Overfull \hbox (14.42024pt too wide) in paragraph at lines 243--245
 \TU/TimesNewRoman(0)/m/n/12 plemented but unused in the reported experiments). 
 The sampler finishes by de-standardising:
  []
@@ -2076,50 +2076,38 @@ Underfull \vbox (badness 1062) has occurred while \output is active []
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [44]
-Overfull \hbox (19.05179pt too wide) in paragraph at lines 252--252
+Overfull \hbox (19.05179pt too wide) in paragraph at lines 249--249
 |[]\TU/TimesNewRoman(0)/b/n/17.28 The MeanFlow Residual (Average-Velocity Flow 
 Match-
  []
 
 
-Underfull \vbox (badness 1082) has occurred while \output is active []
+Underfull \vbox (badness 5203) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [45]
-Overfull \hbox (1.20279pt too wide) in paragraph at lines 270--271
+Overfull \hbox (1.20279pt too wide) in paragraph at lines 267--268
 [] [] \TU/TimesNewRoman(0)/b/n/12 The MeanFlow identity.[] \TU/TimesNewRoman(0)
 /m/n/12 The integral is eliminated by differentiation rather than quadra-
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[46]
+Underfull \vbox (badness 6461) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [46]
-Overfull \hbox (33.85258pt too wide) detected at line 290
-[][][]\OMS/cmsy/m/n/12 L[] \OT1/cmr/m/n/12 = \U/msb/m/n/12 E[] []\OT1/cmr/m/n/1
-2 (\OML/cmm/m/it/12 w\OT1/cmr/m/n/12 ) []\OML/cmm/m/it/12 u[]\OT1/cmr/m/n/12 (\
-OML/cmm/m/it/12 z[]; r; t; c[]\OT1/cmr/m/n/12 ) \OMS/cmsy/m/n/12 ^^@ []\OT1/cmr
-/m/n/12 (\OML/cmm/m/it/12 u[]\OT1/cmr/m/n/12 )[][] [] + \OML/cmm/m/it/12 ^^U[] 
-\OMS/cmsy/m/n/12 L[]\OML/cmm/m/it/12 ;  u[] \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 
-v \OT1/cmr/m/n/12 + (\OML/cmm/m/it/12 t \OMS/cmsy/m/n/12 ^^@ \OML/cmm/m/it/12 r
-\OT1/cmr/m/n/12 )[]\OML/cmm/m/it/12 v @[]u[] \OT1/cmr/m/n/12 + \OML/cmm/m/it/12
- @[]u[][];
- []
-
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
-[47]
-Overfull \hbox (53.01587pt too wide) in paragraph at lines 320--321
+ [47]
+Overfull \hbox (53.01587pt too wide) in paragraph at lines 314--315
 [] [] \TU/TimesNewRoman(0)/b/n/12 Network parameterisation: two times into one 
 backbone.[] \TU/TimesNewRoman(0)/m/n/12 The network is the \TU/lmtt/m/n/12 Mean
 FlowPrecond
  []
 
 
-Overfull \hbox (10.64813pt too wide) in paragraph at lines 320--321
+Overfull \hbox (10.64813pt too wide) in paragraph at lines 314--315
 \TU/TimesNewRoman(0)/m/n/12 module (\TU/lmtt/m/n/12 stormcast/ utils/ meanflow_
 precond.py\TU/TimesNewRoman(0)/m/n/12 ), wrapping the |   [] SongUNet back-
  []
@@ -2127,12 +2115,12 @@ precond.py\TU/TimesNewRoman(0)/m/n/12 ), wrapping the |   [] SongUNet back-
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
 [48]
-Underfull \vbox (badness 6461) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [49]
-Overfull \hbox (8.86574pt too wide) in paragraph at lines 336--337
+Overfull \hbox (8.86574pt too wide) in paragraph at lines 330--331
 [] [] \TU/TimesNewRoman(0)/b/n/12 Optimisation and checkpoints.[] \TU/TimesNewR
 oman(0)/m/n/12 Everything FlowCast-side is kept: AdamW with $\OML/cmm/m/it/12 ^
 ^L[] \OT1/cmr/m/n/12 =
@@ -2144,22 +2132,20 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [51]
-Overfull \hbox (36.20679pt too wide) in paragraph at lines 364--365
+Overfull \hbox (36.20679pt too wide) in paragraph at lines 352--353
 []\TU/TimesNewRoman(0)/m/n/12 All runs use PyTorch with \TU/lmtt/m/n/12 torchru
 n -- standalone -- nnodes=1 -- nproc_per_node=N
  []
 
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
-[52]) (./contents/chapter04.tex
-Overfull \hbox (8.06088pt too wide) in paragraph at lines 368--2
+) (./contents/chapter04.tex
+Overfull \hbox (8.06088pt too wide) in paragraph at lines 356--2
 \TU/TimesNewRoman(0)/m/n/12 together with CSV loss logs and, every $\OML/cmm/m/
 it/12 V$ \TU/TimesNewRoman(0)/m/n/12 iterations, validation heatmap and power-s
 pectrum
  []
 
 
-Overfull \hbox (26.01709pt too wide) in paragraph at lines 368--2
+Overfull \hbox (26.01709pt too wide) in paragraph at lines 356--2
 \TU/TimesNewRoman(0)/m/n/12 for FlowCast and MeanFlow, the EMA shadow (\TU/lmtt
 /m/n/12 ema_state.pt\TU/TimesNewRoman(0)/m/n/12 ) by a \TU/lmtt/m/n/12 checkpoi
 nt_latest.pt
@@ -2167,12 +2153,7 @@ nt_latest.pt
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[53]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [54
-
-]
+[52]
 Chapter 4.
 
 Overfull \hbox (22.78807pt too wide) in paragraph at lines 12--13
@@ -2185,22 +2166,22 @@ Underfull \vbox (badness 1577) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [55]
+ [53
+
+]
+Underfull \vbox (badness 1082) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-
-[56]
+ [54]
 Overfull \hbox (13.05392pt too wide) in paragraph at lines 28--29
 []\TU/TimesNewRoman(0)/m/n/12 All metrics are computed on denormalised fields w
 ith physical units (K, ms$[]$, mmh$[]$). 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [57]
+[55]
 Overfull \hbox (79.52882pt too wide) detected at line 43
 [][][][]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^\\OT1/cmr/m/n/12 ) = []\OML/cmm/m/i
 t/12 ;  []\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^\\OT1/cmr/m/n/12 ) = []\OML/cmm/m
@@ -2209,61 +2190,59 @@ t/12 ;  []\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^\\OT1/cmr/m/n/12 ) = []\OML/cmm/m
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 3058) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [58]
-Overfull \hbox (51.8948pt too wide) in paragraph at lines 68--79
+ [56]
+Overfull \hbox (61.00731pt too wide) in paragraph at lines 66--77
  [][] 
  []
 
 File: figures/results/scoreboard_3way.png Graphic file (type bmp)
 <figures/results/scoreboard_3way.png>
-
-Underfull \vbox (badness 2197) has occurred while \output is active []
-
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[57]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [58]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [59]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-
-[60]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [61]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [62]
+ [60]
 File: figures/results/rmse_per_channel.png Graphic file (type bmp)
 <figures/results/rmse_per_channel.png>
 File: figures/results/crps_per_channel.png Graphic file (type bmp)
 <figures/results/crps_per_channel.png>
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [63]
-Overfull \hbox (3.35812pt too wide) in paragraph at lines 124--136
+ [61]
+Overfull \hbox (3.35812pt too wide) in paragraph at lines 122--134
  [][] 
  []
 
 
-Overfull \hbox (3.35812pt too wide) in paragraph at lines 144--156
+Overfull \hbox (3.35812pt too wide) in paragraph at lines 142--154
  [][] 
  []
 
 File: figures/results/timing_speedup.png Graphic file (type bmp)
 <figures/results/timing_speedup.png>
+
+Underfull \vbox (badness 4060) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[64]
+ [62]
+Underfull \vbox (badness 4981) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [65]
-Overfull \hbox (31.13248pt too wide) in paragraph at lines 169--170
+ [63]
+Overfull \hbox (31.13248pt too wide) in paragraph at lines 167--168
 [] [] \TU/TimesNewRoman(0)/b/n/12 Cross-hardware.[] \TU/TimesNewRoman(0)/m/n/12
  The H100 leg (Table [][]4.3[][]) confirms that the ranking is hardware-indepen
 dent:
@@ -2271,98 +2250,112 @@ dent:
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[66]
+[64]
 File: figures/results/csi_per_threshold.png Graphic file (type bmp)
 <figures/results/csi_per_threshold.png>
-
-Underfull \hbox (badness 4084) in paragraph at lines 188--188
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [65]
+Underfull \hbox (badness 4084) in paragraph at lines 186--186
 []\TU/TimesNewRoman(0)/m/n/12 Table 4.4: |Threshold-averaged categorical precip
 itation skill (mean over $\OML/cmm/m/it/12 ^^\ \OMS/cmsy/m/n/12 2
  []
 
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
-[67]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [68]
-Underfull \vbox (badness 1454) has occurred while \output is active []
+
+Underfull \vbox (badness 4084) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [69]
+ [66]
 File: figures/results/fss_p16.png Graphic file (type bmp)
 <figures/results/fss_p16.png>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [67]
 File: figures/results/rollout_rmse.png Graphic file (type bmp)
 <figures/results/rollout_rmse.png>
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
 
-[70]
+[68]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [69]
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <17.28> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 298.
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [70]
+Underfull \vbox (badness 2050) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [71]
-LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <17.28> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 300.
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [72]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [73]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [74]
-Overfull \hbox (7.58835pt too wide) in paragraph at lines 357--358
+Overfull \hbox (7.58835pt too wide) in paragraph at lines 355--356
 []\TU/TimesNewRoman(0)/m/n/12 To place the cleaned-pipeline heads in context, T
 able [][]4.8[][] adds the legacy old-StormCast
  []
 
 
-Overfull \hbox (4.48808pt too wide) in paragraph at lines 365--375
+Underfull \vbox (badness 1509) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [72]
+Overfull \hbox (4.48808pt too wide) in paragraph at lines 363--373
  [][] 
  []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[75]
+[73]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [76]
+ [74]
 File: figures/results/rollout6h_qpepre.png Graphic file (type bmp)
 <figures/results/rollout6h_qpepre.png>
 File: figures/results/rollout6h_u10.png Graphic file (type bmp)
 <figures/results/rollout6h_u10.png>
 File: figures/flowcast/loss_curves.png Graphic file (type bmp)
 <figures/flowcast/loss_curves.png>
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [75]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [76]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [77]
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 418.
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [78]
+Overfull \hbox (11.98679pt too wide) in paragraph at lines 428--429
+[]\TU/TimesNewRoman(0)/m/n/12 The headline question of the thesis is whether a 
+single-run, teacher-free |   []
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[79]) (./contents/chapter05.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [80]
+Chapter 5.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [77]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
+ [81
 
-[78]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [79]
-LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 420.
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [80]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [81]
-Overfull \hbox (11.98679pt too wide) in paragraph at lines 430--431
-[]\TU/TimesNewRoman(0)/m/n/12 The headline question of the thesis is whether a 
-single-run, teacher-free |   []
- []
-
-) (./contents/chapter05.tex
-Underfull \vbox (badness 3138) has occurred while \output is active []
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
@@ -2373,31 +2366,10 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 [83]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [84
-
-]
-Chapter 5.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
+ [84]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [85]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [86]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
-
-[87]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [88]
-File: ./figures/seal.pdf Graphic file (type pdf)
-<use ./figures/seal.pdf>
- [89])
+ [85])
 Overfull \hbox (28.3981pt too wide) in paragraph at lines 46--45
 []\TU/TimesNewRoman(0)/m/n/12 Generative modelling is almost certainly the righ
 t inductive bias for short-range convective-
@@ -2405,10 +2377,10 @@ t inductive bias for short-range convective-
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[90] (./main.bbl
+[86] (./main.bbl
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [91
+ [87
 
 
 ]
@@ -2419,19 +2391,19 @@ Underfull \hbox (badness 1424) in paragraph at lines 84--87
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[92]
+[88]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [93]
+ [89]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [94]) (./back/appendix01.tex
+ [90]) (./back/appendix01.tex
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [95]
+ [91]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [96
+ [92
 
 ]
 Overfull \hbox (46.77966pt too wide) in paragraph at lines 28--29
@@ -2445,56 +2417,50 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [97
+ [93
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [98]
-Overfull \hbox (46.77966pt too wide) in paragraph at lines 62--63
+ [94]
+Overfull \hbox (46.77966pt too wide) in paragraph at lines 60--61
 []\TU/TimesNewRoman(0)/m/n/12 Hyperparameters copied from \TU/lmtt/m/n/12 storm
 cast/ config/ model/ meanflow.yaml \TU/TimesNewRoman(0)/m/n/12 and \TU/lmtt/m/n
 /12 stormcast/
  []
 
 
-Overfull \hbox (4.4379pt too wide) in paragraph at lines 62--63
+Overfull \hbox (4.4379pt too wide) in paragraph at lines 60--61
 \TU/lmtt/m/n/12 config/ training/ meanflow.yaml\TU/TimesNewRoman(0)/m/n/12 . Ev
 erything shared with FlowCast (optimiser, sched-
  []
 
 
-Overfull \hbox (20.57216pt too wide) in paragraph at lines 62--63
-\TU/TimesNewRoman(0)/m/n/12 ule, conditioning, backbone, channel/ spectral weig
-hts, EMA) is kept |   [] so the FlowCast-
- []
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [99]
+ [95]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [100]
+ [96]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [101]
-Overfull \hbox (338.22983pt too wide) in paragraph at lines 99--108
+ [97]
+Overfull \hbox (338.22983pt too wide) in paragraph at lines 96--105
  [] 
  []
 
 ) (./back/appendix02.tex
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [102]
+ [98]
 Overfull \hbox (18.91425pt too wide) in paragraph at lines 8--10
 []\TU/TimesNewRoman(0)/m/n/12 The full training and evaluation code for this th
 esis lives in the \TU/lmtt/m/n/12 Stormcast- Distilation
@@ -2508,7 +2474,7 @@ owCast (Conditional Flow Matching) train-
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[103
+[99
 
 
 ]
@@ -2547,7 +2513,7 @@ Overfull \hbox (24.63173pt too wide) in paragraph at lines 21--22
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[104]
+[100]
 Overfull \hbox (7.7274pt too wide) in paragraph at lines 43--44
 \TU/TimesNewRoman(0)/m/n/12 project ships two stages under \TU/lmtt/m/n/12 data
 _preprocessing/\TU/TimesNewRoman(0)/m/n/12 : \TU/lmtt/m/n/12 nc_month_to_day/ \
@@ -2562,7 +2528,7 @@ le per hour with a canonical \TU/lmtt/m/n/12 {variable}_YYYYMMDDTHH.nc
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[105]
+[101]
 Overfull \hbox (107.2639pt too wide) in paragraph at lines 47--48
 [] [] \TU/TimesNewRoman(0)/b/n/12 Stage 2: unified NetCDF-to-Zarr assembly.[] \
 TU/TimesNewRoman(0)/m/n/12 The main pipeline is \TU/lmtt/m/n/12 nc_to_zarr/ nc_
@@ -2571,10 +2537,10 @@ to_zarr_pipeline.py\TU/TimesNewRoman(0)/m/n/12 ,
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[106]
+[102]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [107]
+ [103]
 Overfull \hbox (41.9467pt too wide) in paragraph at lines 67--68
 []\TU/TimesNewRoman(0)/b/n/12 Streaming statistics. \TU/TimesNewRoman(0)/m/n/12
  As each training sample is filled into the data cube, a \TU/lmtt/m/n/12 Stream
@@ -2583,7 +2549,7 @@ ingStats
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[108]
+[104]
 Overfull \hbox (189.1884pt too wide) in paragraph at lines 85--86
 \TU/TimesNewRoman(0)/m/n/12 which matches the layout documented in \TU/lmtt/m/n
 /12 zarr_metadata.json \TU/TimesNewRoman(0)/m/n/12 and consumed by \TU/lmtt/m/n
@@ -2592,7 +2558,7 @@ Overfull \hbox (189.1884pt too wide) in paragraph at lines 85--86
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[109]
+[105]
 Overfull \hbox (1.55957pt too wide) in paragraph at lines 122--123
 [] [] \TU/TimesNewRoman(0)/b/n/12 Auto-resume.[] \TU/TimesNewRoman(0)/m/n/12 Re
 -running the same command picks up from the latest checkpoint; Flow-
@@ -2619,13 +2585,13 @@ MEANFLOW_NFES="1
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[110]) (./back/appendix03.tex
+[106]) (./back/appendix03.tex
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [111]
+ [107]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [112]
+ [108]
 Overfull \hbox (43.52554pt too wide) in paragraph at lines 12--13
 []\TU/TimesNewRoman(0)/m/n/12 Let $\OML/cmm/m/it/12 x[] \OMS/cmsy/m/n/12 ^^X \O
 ML/cmm/m/it/12 p[]$ \TU/TimesNewRoman(0)/m/n/12 and $\OML/cmm/m/it/12 x \OT1/cm
@@ -2644,7 +2610,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [113
+ [109
 
 
 ]
@@ -2661,7 +2627,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [114]
+ [110]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 44.
@@ -2675,16 +2641,16 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [115]
+ [111]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [116]
+ [112]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
 
-[117]
+[113]
 Overfull \hbox (4.24217pt too wide) in paragraph at lines 103--104
 []\TU/TimesNewRoman(0)/b/n/12 Condition bundle. $\OML/cmm/m/it/12 v[]$ \TU/Time
 sNewRoman(0)/m/n/12 is conditioned on $\OML/cmm/m/it/12 c[] \OT1/cmr/m/n/12 = [
@@ -2694,19 +2660,19 @@ sNewRoman(0)/m/n/12 is conditioned on $\OML/cmm/m/it/12 c[] \OT1/cmr/m/n/12 = [
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[118]
+[114]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [119]
+ [115]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [120])
+ [116])
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
 
-[121] (./main.aux)
+[117] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/04/10>
@@ -2717,15 +2683,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.28pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 85E55454AE3111DD76A9EE2EE5407AFE;16188.
+(rerunfilecheck)             Checksum: AE0FB018905FC13C9F650140839AEB6C;16188.
  ) 
 Here is how much of TeX's memory you used:
- 37582 strings out of 476415
- 814339 string characters out of 5792682
- 1946627 words of memory out of 5000000
- 58823 multiletter control sequences out of 15000+600000
+ 37577 strings out of 476415
+ 814228 string characters out of 5792682
+ 1944627 words of memory out of 5000000
+ 58818 multiletter control sequences out of 15000+600000
  570187 words of font info for 133 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  99i,16n,131p,2536b,1243s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.xdv (144 pages, 2224168 bytes).
+Output written on main.xdv (140 pages, 2207864 bytes).

@@ -49,8 +49,6 @@ Global batch size & 96 \\
 Gradient clip (global L2) & 1.0 \\
 EMA decay (fixed) & 0.999 \\
 Channel weights $\beta$ & $(1, 1, 1, w_{\text{pr}})$, $w_{\text{pr}} = 2$ (headline) \\
-Spectral weight $\lambda_{\text{spec}}$ & $0.1$ \\
-Spectral channels & $\{\texttt{qpepre}\}$ \\
 Validation sampler & Euler, $K=10$ \\
 Inference solvers & \texttt{euler} \,/\, \texttt{midpoint} \\
 \bottomrule
@@ -59,7 +57,7 @@ Inference solvers & \texttt{euler} \,/\, \texttt{midpoint} \\
 
 \section{MeanFlow (Average-Velocity Flow Matching)}
 
-Hyperparameters copied from \texttt{stormcast/config/model/meanflow.yaml} and \texttt{stormcast/config/training/meanflow.yaml}. Everything shared with FlowCast (optimiser, schedule, conditioning, backbone, channel/spectral weights, EMA) is kept \emph{identical} so the FlowCast-versus-MeanFlow comparison isolates the objective; only the rows below the divider are MeanFlow-specific:
+Hyperparameters copied from \texttt{stormcast/config/model/meanflow.yaml} and \texttt{stormcast/config/training/meanflow.yaml}. Everything shared with FlowCast (optimiser, schedule, conditioning, backbone, channel weights, EMA) is kept \emph{identical} so the FlowCast-versus-MeanFlow comparison isolates the objective; only the rows below the divider are MeanFlow-specific:
 \begin{center}
 \begin{tabular}{lc}
 \toprule
@@ -77,7 +75,6 @@ Warmup steps (linear) / min-LR ratio & 4{,}000 / $10^{-2}$ \\
 Gradient clip (global L2) & 1.0 \\
 EMA decay (fixed) & 0.999 \\
 Channel weights $\beta$ & $(1, 1, 1, 2)$ \\
-Spectral weight $\lambda_{\text{spec}}$ / channels & $0.1$ / $\{\texttt{qpepre}\}$ \\
 \midrule
 $(r, t)$ sampler & two i.i.d.\ $\mathcal{U}(t_\varepsilon, 1 - t_\varepsilon)$, sorted $r \le t$ \\
 MeanFlow ratio $\rho_{\text{MF}}$ ($r < t$ fraction) & 0.25 \\

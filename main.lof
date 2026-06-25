@@ -2,18 +2,18 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Instantaneous versus average velocity}}{21}{figure.caption.22}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Two-stage StormCast--MeanFlow rollout schematic}}{30}{figure.caption.31}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Per-channel Gaussianity diagnostics for HighRes targets}}{35}{figure.caption.42}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Two-stage StormCast--MeanFlow rollout schematic}}{30}{figure.caption.30}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Per-channel Gaussianity diagnostics for HighRes targets}}{36}{figure.caption.41}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Headline scoreboard plot}}{60}{figure.caption.76}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Per-channel RMSE and CRPS}}{63}{figure.caption.81}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Inference cost and speedup}}{65}{figure.caption.84}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Categorical precipitation skill by threshold}}{68}{figure.caption.88}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Heavy-rain Fractions Skill Score}}{70}{figure.caption.93}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Rollout RMSE versus lead time}}{72}{figure.caption.95}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Qualitative precipitation rollout case study}}{78}{figure.caption.105}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Qualitative wind rollout case study}}{79}{figure.caption.106}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces FlowCast training curves}}{80}{figure.caption.108}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Headline scoreboard plot}}{58}{figure.caption.73}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Per-channel RMSE and CRPS}}{61}{figure.caption.78}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Inference cost and speedup}}{63}{figure.caption.81}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Categorical precipitation skill by threshold}}{65}{figure.caption.85}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Heavy-rain Fractions Skill Score}}{68}{figure.caption.90}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Rollout RMSE versus lead time}}{68}{figure.caption.92}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Qualitative precipitation rollout case study}}{76}{figure.caption.102}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Qualitative wind rollout case study}}{77}{figure.caption.103}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces FlowCast training curves}}{78}{figure.caption.105}%
 \addvspace {10\p@ }
 \contentsfinish 
 \contentsfinish 
