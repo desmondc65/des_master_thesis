@@ -1,4 +1,4 @@
-\begin{thebibliography}{33}
+\begin{thebibliography}{32}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -199,12 +199,6 @@ T.~Salimans and J.~Ho.
 A.~Sauer, D.~Lorenz, A.~Blattmann, and R.~Rombach.
 \newblock Adversarial diffusion distillation.
 \newblock \emph{arXiv preprint arXiv:2311.17042}, 2023.
-
-\bibitem[Schaefer(1990)]{schaefer1990csi}
-J.~T. Schaefer.
-\newblock The critical success index as an indicator of warning skill.
-\newblock \emph{Weather and Forecasting}, 5\penalty0 (4):\penalty0 570--575,
-  1990.
 
 \bibitem[S{\o}nderby et~al.(2020)S{\o}nderby, Espeholt, Heek, Dehghani, Oliver,
   Salimans, Agrawal, Hickey, and Kalchbrenner]{sonderby2020metnet}
