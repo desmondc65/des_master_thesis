@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.16)  26 JUN 2026 04:31
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.16)  26 JUN 2026 11:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1537,10 +1537,9 @@ File: ./figures/seal.pdf Graphic file (type pdf)
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 
-Overfull \hbox (20.61493pt too wide) in paragraph at lines 22--22
+Overfull \hbox (76.61493pt too wide) in paragraph at lines 22--22
 \TU/BiauKai(0)/m/n/16 路 與 多 媒 體 研 究 所 完 成 之 碩 士 學 位 論 文，|  於 民 國 \TU/TimesNewRo
-man(0)/m/n/16 115 \TU/BiauKai(0)/m/n/16 年 \TU/TimesNewRoman(0)/m/n/16 6 \TU/Bia
-uKai(0)/m/n/16 月 \TU/TimesNewRoman(0)/m/n/16 26 \TU/BiauKai(0)/m/n/16 日
+man(0)/m/n/16 115 \TU/BiauKai(0)/m/n/16 年 [] 月 [] 日
  []
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
@@ -2236,23 +2235,25 @@ File: figures/results/rollout6h_qpepre.png Graphic file (type bmp)
 <figures/results/rollout6h_qpepre.png>
 File: figures/results/rollout6h_u10.png Graphic file (type bmp)
 <figures/results/rollout6h_u10.png>
-File: figures/flowcast/loss_curves.png Graphic file (type bmp)
-<figures/flowcast/loss_curves.png>
 
-Overfull \hbox (11.98679pt too wide) in paragraph at lines 409--410
+Overfull \hbox (11.98679pt too wide) in paragraph at lines 400--401
 []\TU/TimesNewRoman(0)/m/n/12 The headline question of the thesis is whether a 
 single-run, teacher-free |   []
  []
 
+) (./contents/chapter05.tex
+Underfull \vbox (badness 3138) has occurred while \output is active []
+
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
-[67]
+ [67]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [68]
+
+[68]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
- [69]) (./contents/chapter05.tex
+ [69]
 File: ./figures/seal.pdf Graphic file (type pdf)
 <use ./figures/seal.pdf>
  [70]
@@ -2538,15 +2539,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.28pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 9A38774DC5B9FB97E4D38CB293BBEAC0;15598.
+(rerunfilecheck)             Checksum: 812C85859D618691C473941EE361C6F3;15598.
  ) 
 Here is how much of TeX's memory you used:
- 37539 strings out of 476415
- 813388 string characters out of 5792682
+ 37530 strings out of 476415
+ 813060 string characters out of 5792682
  1946627 words of memory out of 5000000
- 58780 multiletter control sequences out of 15000+600000
+ 58773 multiletter control sequences out of 15000+600000
  570187 words of font info for 133 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  99i,16n,131p,2428b,972s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.xdv (124 pages, 1920280 bytes).
+Output written on main.xdv (124 pages, 1913604 bytes).

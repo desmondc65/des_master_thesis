@@ -220,7 +220,7 @@ Mean categorical scores hide both the threshold dependence and the neighbourhood
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\linewidth]{figures/results/fss_p16.png}
+  \includegraphics[width=0.95\linewidth]{figures/results/fss_p16.png}
   \caption[Heavy-rain Fractions Skill Score]{FSS at $\tau = 16$\,mm\,h$^{-1}$ for the four pooling windows ($3$, $15$, $27$, $45$\,km), computed on five-member ensemble means, for all heads. The score is near-zero across the board: averaging members suppresses $\geq 16$\,mm\,h$^{-1}$ extremes almost entirely, so this threshold mainly diagnoses ensemble-mean smoothing rather than model skill. Heavy-rain assessment at the member level requires probabilistic scoring (future work).}
   \label{fig:fss}
 \end{figure}
@@ -233,7 +233,7 @@ Single-step skill understates operational risk because errors compound under aut
 
 \begin{table}[htbp]
   \centering
-  \caption[Rollout RMSE versus lead time]{Per-channel RMSE (physical units: m\,s$^{-1}$ for winds, K for \texttt{t2m}, mm\,h$^{-1}$ for \texttt{qpepre}) as a function of autoregressive lead time, $+1$\,h\,$\ldots$\,$+6$\,h, on the 2022 validation year (five-member ensemble means over ten initial times). \textbf{Bold} marks the best value per lead and channel. $^\dagger$Legacy \texttt{qpepre} is scored on the legacy $224{\times}128$ grid (raw mm\,h$^{-1}$ encoding) and is \emph{not} directly comparable to the cleaned $192{\times}96$ heads. $^\ddagger$Corrupt sample, excluded from the best-value bolding.}
+  \caption[Rollout RMSE versus lead time]{Per-channel RMSE (physical units: m\,s$^{-1}$ for winds, K for \texttt{t2m}, mm\,h$^{-1}$ for \texttt{qpepre}) as a function of autoregressive lead time, $+1$\,h\,$\ldots$\,$+6$\,h, on the 2022 validation year (five-member ensemble means over ten initial times). \textbf{Bold} marks the best value per lead and channel. $^\dagger$Legacy \texttt{qpepre} is scored on the legacy $224{\times}128$ grid (raw mm\,h$^{-1}$ encoding) and is \emph{not} directly comparable to the cleaned $192{\times}96$ heads.}
   \label{tab:rollout-rmse}
   \small
   \setlength{\tabcolsep}{5pt}
@@ -259,7 +259,7 @@ Single-step skill understates operational risk because errors compound under aut
       & MeanFlow ($K{=}1$) & 1.3550 & 1.5578 & 0.7109 & 1.2164 \\
       & MeanFlow ($K{=}2$) & \textbf{1.2774} & 1.5393 & \textbf{0.6842} & 1.2112 \\
     \midrule
-    4 & Legacy EDM ($224{\times}128$) & 1.8454 & 1.7200 & 0.9645 & 10.7571$^\ddagger$ \\
+    4 & Legacy EDM ($224{\times}128$) & 1.8454 & 1.7200 & 0.9645 & 10.7571 \\
       & EDM diffusion & 1.4003 & 1.7498 & 0.8679 & 1.3480 \\
       & FlowCast ($K{=}10$) & 1.3180 & \textbf{1.5556} & 0.8998 & \textbf{1.2718} \\
       & MeanFlow ($K{=}1$) & 1.3839 & 1.5981 & 0.7427 & 1.3221 \\
@@ -391,15 +391,6 @@ To complement the aggregate metrics we examine the single most precipitation-act
   \includegraphics[width=0.86\linewidth]{figures/results/rollout6h_u10.png}
   \caption[Qualitative wind rollout case study]{Six-hour autoregressive rollout of the 10\,m zonal wind \texttt{u10} (m\,s$^{-1}$) for the same initial time and row/column layout as Figure~\ref{fig:qual-qpepre}. All heads track the broad-scale wind field; the cleaned flow heads lie closest to the RWRF target with no rollout drift.}
   \label{fig:qual-u10}
-\end{figure}
-
-\paragraph{Training dynamics.} Figure~\ref{fig:flowcast-loss} shows the FlowCast training and validation loss curves over the canonical run. Both the training and validation curves descend smoothly with no divergence, and the EMA-shadow validation loss tracks below the online loss as expected.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.7\linewidth]{figures/flowcast/loss_curves.png}
-  \caption[FlowCast training curves]{FlowCast training and validation loss over the canonical run. The smooth descent and the EMA-shadow validation curve confirm stable optimisation under the CFM objective.}
-  \label{fig:flowcast-loss}
 \end{figure}
 
 % ==================================================
