@@ -16,10 +16,10 @@
   author        = {鍾鎮嶸},
   author*       = {Desmond Cheong Zheng Yong},
   ID            = {R13944064},
-  advisor       = {周承復 博士},
+  advisor       = {周承復},
   advisor*      = {Cheng-Fu Chou},
-  % date          = {2026-06-01},
-  % oral-date     = {2026-06-01},
+  date          = {2026-06-01},   % cover: only the year (2026) is printed; month is blanked below
+  oral-date     = {2026-06-01},   % verification letter: month/day blanked below until defense date is set
   DOI           = {10.6342/NTU202601285},
   keywords      = {平均速度流匹配, MeanFlow, 流匹配, 擴散模型, 單步生成, 生成式天氣預報, 對流尺度預報, 降水臨近預報, StormCast},
   keywords*     = {MeanFlow, Average-Velocity Flow Matching, Flow Matching, Diffusion Models, One-Step Generation, Generative Weather Forecasting, Convective-Scale Forecasting, Precipitation Nowcasting, StormCast},
@@ -82,4 +82,19 @@
   \renewcommand{\theHchapter}{#1}%
   \def\@currentlabel{#1}%
 }
+\makeatother
+
+% --------------------------------------------------
+% Leave month (and day) BLANK until the oral-defense date is finalised
+% --------------------------------------------------
+% The template renders dates through three format macros (cover ZH/EN and the
+% verification letter). We redefine them to keep the ROC/Gregorian year (from
+% the date set above) but print a fill-in underline in place of the month and
+% day. To restore real dates: delete this block and set date / oral-date above.
+\makeatletter
+\newcommand{\ntu@blankshort}{\rule[-0.3ex]{2.5em}{0.4pt}}   % month / day digits
+\newcommand{\ntu@blanklong}{\rule[-0.3ex]{5em}{0.4pt}}      % English month name
+\renewcommand\ntu@date@zh@digit[3]{\the\numexpr#1-1911\relax~年~\ntu@blankshort~月~\ntu@blankshort~日}
+\renewcommand\ntu@date@zh@digit@short[3]{\the\numexpr#1-1911\relax~年~\ntu@blankshort~月}
+\renewcommand\ntu@date@en@short[3]{\ntu@blanklong\ #1}
 \makeatother

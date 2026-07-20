@@ -64,9 +64,9 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1.6}Contributions}{6}{section.1.6}\protected@file@percent }
 \newlabel{sec:intro-contributions}{{1.6}{6}{Contributions}{section.1.6}{}}
 \pgfsyspdfmark {pgfid30}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {1.7}Thesis Outline}{7}{section.1.7}\protected@file@percent }
+\newlabel{sec:intro-outline}{{1.7}{7}{Thesis Outline}{section.1.7}{}}
 \pgfsyspdfmark {pgfid31}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {1.7}Thesis Outline}{8}{section.1.7}\protected@file@percent }
-\newlabel{sec:intro-outline}{{1.7}{8}{Thesis Outline}{section.1.7}{}}
 \pgfsyspdfmark {pgfid32}{19775746}{27690495}
 \@writefile{toc}{\contentsline {chapter}{\numberline {2}Background and Related Work}{9}{chapter.2}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
@@ -148,22 +148,20 @@
 \pgfsyspdfmark {pgfid42}{19775746}{27690495}
 \@writefile{toc}{\contentsline {paragraph}{FlowCast.}{19}{paragraph*.20}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{MeanFlow: average velocity for one-step generation.}{19}{paragraph*.21}\protected@file@percent }
-\pgfsyspdfmark {pgfid43}{19775746}{27690495}
-\pgfsyspdfmark {pgfid44}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Instantaneous versus average velocity}}{21}{figure.caption.22}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:inst-vs-avg}{{2.1}{21}{Instantaneous versus average velocity}{figure.caption.22}{}}
+\citation{lu2022dpmsolver}
 \citation{ribeiro2025flowcast}
-\pgfsyspdfmark {pgfid45}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {2.9}Flow Matching versus Diffusion: Why Straight-Line Paths Help}{22}{section.2.9}\protected@file@percent }
-\newlabel{sec:bg-flow-vs-diffusion}{{2.9}{22}{Flow Matching versus Diffusion: Why Straight-Line Paths Help}{section.2.9}{}}
-\@writefile{toc}{\contentsline {paragraph}{The diffusion path is curved.}{22}{paragraph*.23}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{The I-CFM path is a straight line.}{22}{paragraph*.24}\protected@file@percent }
 \citation{salimans2022progressive}
 \citation{song2023consistency,song2023improved}
 \citation{sauer2023add}
 \citation{liu2022rectifiedflow}
 \citation{geng2025meanflow}
+\pgfsyspdfmark {pgfid43}{19775746}{27690495}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Instantaneous versus average velocity}}{20}{figure.caption.22}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:inst-vs-avg}{{2.1}{20}{Instantaneous versus average velocity}{figure.caption.22}{}}
+\pgfsyspdfmark {pgfid44}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {2.9}Flow Matching versus Diffusion: Why Straight-Line Paths Help}{21}{section.2.9}\protected@file@percent }
+\newlabel{sec:bg-flow-vs-diffusion}{{2.9}{21}{Flow Matching versus Diffusion: Why Straight-Line Paths Help}{section.2.9}{}}
 \citation{ravuri2021dgmr}
 \citation{price2024gencast}
 \citation{pathak2024stormcast}
@@ -173,296 +171,259 @@
 \citation{gao2023prediff}
 \citation{veillette2020sevir}
 \citation{geng2025meanflow}
+\pgfsyspdfmark {pgfid45}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {2.10}Prior Generative Models for Precipitation Nowcasting}{22}{section.2.10}\protected@file@percent }
+\newlabel{sec:bg-prior-weather}{{2.10}{22}{Prior Generative Models for Precipitation Nowcasting}{section.2.10}{}}
 \pgfsyspdfmark {pgfid46}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{No teacher, one training run.}{23}{paragraph*.25}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.10}Prior Generative Models for Precipitation Nowcasting}{23}{section.2.10}\protected@file@percent }
-\newlabel{sec:bg-prior-weather}{{2.10}{23}{Prior Generative Models for Precipitation Nowcasting}{section.2.10}{}}
-\citation{schaefer1990csi}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Method}{23}{chapter.3}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:method}{{3}{23}{Method}{chapter.3}{}}
 \pgfsyspdfmark {pgfid47}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {2.11}Evaluation of Precipitation Forecasts}{24}{section.2.11}\protected@file@percent }
-\newlabel{sec:bg-metrics}{{2.11}{24}{Evaluation of Precipitation Forecasts}{section.2.11}{}}
-\@writefile{toc}{\contentsline {paragraph}{Categorical skill scores.}{24}{paragraph*.26}\protected@file@percent }
-\citation{roberts2008fss}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Problem Setup}{24}{section.3.1}\protected@file@percent }
+\newlabel{sec:method-problem}{{3.1}{24}{Problem Setup}{section.3.1}{}}
+\citation{geng2025meanflow}
 \pgfsyspdfmark {pgfid48}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Fractions Skill Score.}{25}{paragraph*.27}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Spectral diagnostics.}{25}{paragraph*.28}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Rollout error growth.}{25}{paragraph*.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Probabilistic scores (optional).}{25}{paragraph*.30}\protected@file@percent }
 \pgfsyspdfmark {pgfid49}{19775746}{27690495}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Two-stage StormCast--MeanFlow rollout schematic}}{26}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:meanflow-schematic}{{3.1}{26}{Two-stage StormCast--MeanFlow rollout schematic}{figure.caption.23}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Dataset: Taiwan RWRF}{26}{section.3.2}\protected@file@percent }
+\newlabel{sec:method-data}{{3.2}{26}{Dataset: Taiwan RWRF}{section.3.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{LowRes conditioning $S_t$.}{26}{paragraph*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{HighRes target $M_t$.}{26}{paragraph*.25}\protected@file@percent }
 \pgfsyspdfmark {pgfid50}{19775746}{27690495}
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Method}{27}{chapter.3}\protected@file@percent }
-\@writefile{lof}{\addvspace {10\p@ }}
-\@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:method}{{3}{27}{Method}{chapter.3}{}}
-\pgfsyspdfmark {pgfid51}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Problem Setup}{28}{section.3.1}\protected@file@percent }
-\newlabel{sec:method-problem}{{3.1}{28}{Problem Setup}{section.3.1}{}}
-\citation{geng2025meanflow}
-\pgfsyspdfmark {pgfid52}{19775746}{27690495}
-\pgfsyspdfmark {pgfid53}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Two-stage StormCast--MeanFlow rollout schematic}}{30}{figure.caption.31}\protected@file@percent }
-\newlabel{fig:meanflow-schematic}{{3.1}{30}{Two-stage StormCast--MeanFlow rollout schematic}{figure.caption.31}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Dataset: Taiwan RWRF}{30}{section.3.2}\protected@file@percent }
-\newlabel{sec:method-data}{{3.2}{30}{Dataset: Taiwan RWRF}{section.3.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{LowRes conditioning $S_t$.}{30}{paragraph*.32}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{HighRes target $M_t$.}{30}{paragraph*.33}\protected@file@percent }
-\pgfsyspdfmark {pgfid54}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Invariants $I$.}{31}{paragraph*.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Normalisation.}{31}{paragraph*.35}\protected@file@percent }
-\newlabel{eq:hr-stats}{{3.2}{31}{Normalisation}{equation.3.2.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{Cleaned variant used for the reported experiments.}{31}{paragraph*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Invariants $I$.}{27}{paragraph*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Normalisation.}{27}{paragraph*.27}\protected@file@percent }
+\newlabel{eq:hr-stats}{{3.2}{27}{Normalisation}{equation.3.2.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Cleaned variant used for the reported experiments.}{27}{paragraph*.28}\protected@file@percent }
 \citation{hersbach2020era5}
+\pgfsyspdfmark {pgfid51}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Data Sources and Preprocessing Pipeline}{28}{section.3.3}\protected@file@percent }
+\newlabel{sec:method-datasources}{{3.3}{28}{Data Sources and Preprocessing Pipeline}{section.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Raw data sources}{28}{subsection.3.3.1}\protected@file@percent }
+\newlabel{sec:method-datasources-raw}{{3.3.1}{28}{Raw data sources}{subsection.3.3.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{ERA5 (low-resolution input, $S_t$).}{28}{paragraph*.29}\protected@file@percent }
+\pgfsyspdfmark {pgfid52}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{RWRF (high-resolution target, part of $M_t$).}{29}{paragraph*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{QPEPRE (high-resolution target, precipitation channel).}{29}{paragraph*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Invariants $I$.}{29}{paragraph*.32}\protected@file@percent }
+\pgfsyspdfmark {pgfid53}{19775746}{27690495}
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Raw data sources used for training. Low-resolution ERA5 provides synoptic conditioning; RWRF and QPEPRE together supply the convection-permitting target.}}{30}{table.caption.33}\protected@file@percent }
+\newlabel{tab:data-sources}{{3.1}{30}{Raw data sources used for training. Low-resolution ERA5 provides synoptic conditioning; RWRF and QPEPRE together supply the convection-permitting target}{table.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Preprocessing pipeline}{30}{subsection.3.3.2}\protected@file@percent }
+\newlabel{sec:method-datasources-pipeline}{{3.3.2}{30}{Preprocessing pipeline}{subsection.3.3.2}{}}
+\pgfsyspdfmark {pgfid54}{19775746}{27690495}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Target Distributions: Sparsity, Gaussianity, and the Diffusion Prior}{31}{subsection.3.3.3}\protected@file@percent }
+\newlabel{sec:method-datasources-distributions}{{3.3.3}{31}{Target Distributions: Sparsity, Gaussianity, and the Diffusion Prior}{subsection.3.3.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces Gaussianity statistics of HighRes target channels}}{31}{table.caption.35}\protected@file@percent }
+\newlabel{tab:highres-gaussian-stats}{{3.2}{31}{Gaussianity statistics of HighRes target channels}{table.caption.35}{}}
 \pgfsyspdfmark {pgfid55}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Data Sources and Preprocessing Pipeline}{32}{section.3.3}\protected@file@percent }
-\newlabel{sec:method-datasources}{{3.3}{32}{Data Sources and Preprocessing Pipeline}{section.3.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Raw data sources}{32}{subsection.3.3.1}\protected@file@percent }
-\newlabel{sec:method-datasources-raw}{{3.3.1}{32}{Raw data sources}{subsection.3.3.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{ERA5 (low-resolution input, $S_t$).}{32}{paragraph*.37}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Per-channel Gaussianity diagnostics for HighRes targets}}{32}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:highres-gaussian-check}{{3.2}{32}{Per-channel Gaussianity diagnostics for HighRes targets}{figure.caption.34}{}}
 \pgfsyspdfmark {pgfid56}{19775746}{27690495}
-\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Raw data sources used for training. Low-resolution ERA5 provides synoptic conditioning; RWRF and QPEPRE together supply the convection-permitting target.}}{33}{table.caption.41}\protected@file@percent }
-\newlabel{tab:data-sources}{{3.1}{33}{Raw data sources used for training. Low-resolution ERA5 provides synoptic conditioning; RWRF and QPEPRE together supply the convection-permitting target}{table.caption.41}{}}
-\@writefile{toc}{\contentsline {paragraph}{RWRF (high-resolution target, part of $M_t$).}{33}{paragraph*.38}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{QPEPRE (high-resolution target, precipitation channel).}{33}{paragraph*.39}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Invariants $I$.}{33}{paragraph*.40}\protected@file@percent }
 \pgfsyspdfmark {pgfid57}{19775746}{27690495}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Preprocessing pipeline}{34}{subsection.3.3.2}\protected@file@percent }
-\newlabel{sec:method-datasources-pipeline}{{3.3.2}{34}{Preprocessing pipeline}{subsection.3.3.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Regression Mean and the EDM Diffusion Baseline}{34}{section.3.4}\protected@file@percent }
+\newlabel{sec:method-baseline}{{3.4}{34}{Regression Mean and the EDM Diffusion Baseline}{section.3.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Why the baseline matters for a fair comparison.}{34}{paragraph*.36}\protected@file@percent }
 \pgfsyspdfmark {pgfid58}{19775746}{27690495}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Target Distributions: Sparsity, Gaussianity, and the Diffusion Prior}{35}{subsection.3.3.3}\protected@file@percent }
-\newlabel{sec:method-datasources-distributions}{{3.3.3}{35}{Target Distributions: Sparsity, Gaussianity, and the Diffusion Prior}{subsection.3.3.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Per-channel Gaussianity diagnostics for HighRes targets}}{35}{figure.caption.42}\protected@file@percent }
-\newlabel{fig:highres-gaussian-check}{{3.2}{35}{Per-channel Gaussianity diagnostics for HighRes targets}{figure.caption.42}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}The FlowCast Baseline (Conditional Flow Matching)}{35}{section.3.5}\protected@file@percent }
+\newlabel{sec:method-flowcast}{{3.5}{35}{The FlowCast Baseline (Conditional Flow Matching)}{section.3.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Conditioning bundle.}{35}{paragraph*.37}\protected@file@percent }
 \pgfsyspdfmark {pgfid59}{19775746}{27690495}
-\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces Gaussianity statistics of HighRes target channels}}{36}{table.caption.43}\protected@file@percent }
-\newlabel{tab:highres-gaussian-stats}{{3.2}{36}{Gaussianity statistics of HighRes target channels}{table.caption.43}{}}
+\@writefile{toc}{\contentsline {paragraph}{Standardised-residual pipeline.}{36}{paragraph*.38}\protected@file@percent }
+\citation{tong2024improving}
+\citation{tong2024improving}
 \pgfsyspdfmark {pgfid60}{19775746}{27690495}
+\newlabel{eq:flowcast-path}{{3.4}{37}{Standardised-residual pipeline}{equation.3.5.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Velocity predictor.}{37}{paragraph*.39}\protected@file@percent }
+\newlabel{eq:flowcast-precond}{{3.5}{37}{Velocity predictor}{equation.3.5.5}{}}
 \pgfsyspdfmark {pgfid61}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}Regression Mean and the EDM Diffusion Baseline}{38}{section.3.4}\protected@file@percent }
-\newlabel{sec:method-baseline}{{3.4}{38}{Regression Mean and the EDM Diffusion Baseline}{section.3.4}{}}
-\pgfsyspdfmark {pgfid62}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Why the baseline matters for a fair comparison.}{39}{paragraph*.44}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}The FlowCast Baseline (Conditional Flow Matching)}{39}{section.3.5}\protected@file@percent }
-\newlabel{sec:method-flowcast}{{3.5}{39}{The FlowCast Baseline (Conditional Flow Matching)}{section.3.5}{}}
-\pgfsyspdfmark {pgfid63}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Conditioning bundle.}{40}{paragraph*.45}\protected@file@percent }
-\citation{tong2024improving}
-\citation{tong2024improving}
-\pgfsyspdfmark {pgfid64}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Standardised-residual pipeline.}{41}{paragraph*.46}\protected@file@percent }
-\newlabel{eq:flowcast-path}{{3.4}{41}{Standardised-residual pipeline}{equation.3.5.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{Velocity predictor.}{41}{paragraph*.47}\protected@file@percent }
-\newlabel{eq:flowcast-precond}{{3.5}{41}{Velocity predictor}{equation.3.5.5}{}}
-\pgfsyspdfmark {pgfid65}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Loss.}{42}{paragraph*.48}\protected@file@percent }
-\newlabel{eq:flowcast-loss}{{3.6}{42}{Loss}{equation.3.5.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Optimisation.}{42}{paragraph*.49}\protected@file@percent }
-\pgfsyspdfmark {pgfid66}{19775746}{27690495}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces FlowCast training step (I-CFM on the standardised residual)}}{43}{algorithm.1}\protected@file@percent }
-\newlabel{alg:flowcast}{{1}{43}{FlowCast training step (I-CFM on the standardised residual)}{algorithm.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{EMA shadow network.}{43}{paragraph*.50}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces FlowCast training step (I-CFM on the standardised residual)}}{38}{algorithm.1}\protected@file@percent }
+\newlabel{alg:flowcast}{{1}{38}{FlowCast training step (I-CFM on the standardised residual)}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Loss.}{38}{paragraph*.40}\protected@file@percent }
+\newlabel{eq:flowcast-loss}{{3.6}{38}{Loss}{equation.3.5.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Optimisation.}{38}{paragraph*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{EMA shadow network.}{38}{paragraph*.42}\protected@file@percent }
 \citation{ribeiro2025flowcast}
+\pgfsyspdfmark {pgfid62}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Sampling.}{39}{paragraph*.43}\protected@file@percent }
+\newlabel{eq:flowcast-sampler}{{3.7}{39}{Sampling}{equation.3.5.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Why a straight-line flow is the right residual head.}{39}{paragraph*.44}\protected@file@percent }
+\citation{geng2025meanflow}
+\pgfsyspdfmark {pgfid63}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}The MeanFlow Residual (Average-Velocity Flow Matching)}{40}{section.3.6}\protected@file@percent }
+\newlabel{sec:method-meanflow}{{3.6}{40}{The MeanFlow Residual (Average-Velocity Flow Matching)}{section.3.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Average velocity.}{40}{paragraph*.45}\protected@file@percent }
+\citation{geng2025meanflow}
+\pgfsyspdfmark {pgfid64}{19775746}{27690495}
+\newlabel{eq:meanflow-avgvel}{{3.8}{41}{Average velocity}{equation.3.6.8}{}}
+\newlabel{eq:meanflow-displacement}{{3.9}{41}{Average velocity}{equation.3.6.9}{}}
+\@writefile{toc}{\contentsline {paragraph}{The MeanFlow identity.}{41}{paragraph*.46}\protected@file@percent }
+\newlabel{eq:meanflow-identity}{{3.10}{41}{The MeanFlow identity}{equation.3.6.10}{}}
+\newlabel{eq:meanflow-jvp}{{3.11}{41}{The MeanFlow identity}{equation.3.6.11}{}}
+\citation{geng2025meanflow}
+\citation{geng2025meanflow}
+\pgfsyspdfmark {pgfid65}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Training objective.}{42}{paragraph*.47}\protected@file@percent }
+\newlabel{eq:meanflow-loss}{{3.12}{42}{Training objective}{equation.3.6.12}{}}
+\citation{geng2025meanflow}
+\pgfsyspdfmark {pgfid66}{19775746}{27690495}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces MeanFlow training step (average-velocity matching on the standardised residual)}}{43}{algorithm.2}\protected@file@percent }
+\newlabel{alg:meanflow}{{2}{43}{MeanFlow training step (average-velocity matching on the standardised residual)}{algorithm.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Network parameterisation: two times into one backbone.}{43}{paragraph*.48}\protected@file@percent }
+\citation{geng2025meanflow}
 \pgfsyspdfmark {pgfid67}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Sampling.}{44}{paragraph*.51}\protected@file@percent }
-\newlabel{eq:flowcast-sampler}{{3.7}{44}{Sampling}{equation.3.5.7}{}}
-\@writefile{toc}{\contentsline {paragraph}{Why a straight-line flow is the right residual head.}{44}{paragraph*.52}\protected@file@percent }
-\citation{geng2025meanflow}
+\newlabel{eq:meanflow-precond}{{3.13}{44}{Network parameterisation: two times into one backbone}{equation.3.6.13}{}}
+\@writefile{toc}{\contentsline {paragraph}{Sampling.}{44}{paragraph*.49}\protected@file@percent }
+\newlabel{eq:meanflow-sampler}{{3.14}{44}{Sampling}{equation.3.6.14}{}}
+\@writefile{toc}{\contentsline {paragraph}{Optimisation and checkpoints.}{44}{paragraph*.50}\protected@file@percent }
 \pgfsyspdfmark {pgfid68}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {3.6}The MeanFlow Residual (Average-Velocity Flow Matching)}{45}{section.3.6}\protected@file@percent }
-\newlabel{sec:method-meanflow}{{3.6}{45}{The MeanFlow Residual (Average-Velocity Flow Matching)}{section.3.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Average velocity.}{45}{paragraph*.53}\protected@file@percent }
-\citation{geng2025meanflow}
-\citation{geng2025meanflow}
+\@writefile{toc}{\contentsline {paragraph}{Why average velocity for this residual.}{45}{paragraph*.51}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.7}Loss Design for the Precipitation Channel}{45}{section.3.7}\protected@file@percent }
+\newlabel{sec:method-qpepre}{{3.7}{45}{Loss Design for the Precipitation Channel}{section.3.7}{}}
 \pgfsyspdfmark {pgfid69}{19775746}{27690495}
-\newlabel{eq:meanflow-avgvel}{{3.8}{46}{Average velocity}{equation.3.6.8}{}}
-\newlabel{eq:meanflow-displacement}{{3.9}{46}{Average velocity}{equation.3.6.9}{}}
-\@writefile{toc}{\contentsline {paragraph}{The MeanFlow identity.}{46}{paragraph*.54}\protected@file@percent }
-\newlabel{eq:meanflow-identity}{{3.10}{46}{The MeanFlow identity}{equation.3.6.10}{}}
-\newlabel{eq:meanflow-jvp}{{3.11}{46}{The MeanFlow identity}{equation.3.6.11}{}}
-\citation{geng2025meanflow}
-\citation{geng2025meanflow}
+\@writefile{toc}{\contentsline {paragraph}{Channel-weighted L2.}{46}{paragraph*.52}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Monitoring for mode collapse.}{46}{paragraph*.53}\protected@file@percent }
 \pgfsyspdfmark {pgfid70}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Training objective.}{47}{paragraph*.55}\protected@file@percent }
-\newlabel{eq:meanflow-loss}{{3.12}{47}{Training objective}{equation.3.6.12}{}}
-\citation{geng2025meanflow}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Experiments and Results}{47}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:experiments}{{4}{47}{Experiments and Results}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Experimental Protocol}{47}{section.4.1}\protected@file@percent }
+\newlabel{sec:exp-protocol}{{4.1}{47}{Experimental Protocol}{section.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Validation split.}{47}{paragraph*.54}\protected@file@percent }
+\citation{pathak2024stormcast}
 \pgfsyspdfmark {pgfid71}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Network parameterisation: two times into one backbone.}{48}{paragraph*.56}\protected@file@percent }
-\citation{geng2025meanflow}
+\@writefile{toc}{\contentsline {paragraph}{Matched training-sample budget.}{48}{paragraph*.55}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Single-snapshot noise.}{48}{paragraph*.56}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{NFE budgets and samplers.}{48}{paragraph*.57}\protected@file@percent }
 \pgfsyspdfmark {pgfid72}{19775746}{27690495}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces MeanFlow training step (average-velocity matching on the standardised residual)}}{49}{algorithm.2}\protected@file@percent }
-\newlabel{alg:meanflow}{{2}{49}{MeanFlow training step (average-velocity matching on the standardised residual)}{algorithm.2}{}}
-\newlabel{eq:meanflow-precond}{{3.13}{49}{Network parameterisation: two times into one backbone}{equation.3.6.13}{}}
-\@writefile{toc}{\contentsline {paragraph}{Sampling.}{49}{paragraph*.57}\protected@file@percent }
-\newlabel{eq:meanflow-sampler}{{3.14}{49}{Sampling}{equation.3.6.14}{}}
-\pgfsyspdfmark {pgfid73}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Optimisation and checkpoints.}{50}{paragraph*.58}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Why average velocity for this residual.}{50}{paragraph*.59}\protected@file@percent }
-\pgfsyspdfmark {pgfid74}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {3.7}Loss Design for the Precipitation Channel}{51}{section.3.7}\protected@file@percent }
-\newlabel{sec:method-qpepre}{{3.7}{51}{Loss Design for the Precipitation Channel}{section.3.7}{}}
-\@writefile{toc}{\contentsline {paragraph}{Channel-weighted L2.}{51}{paragraph*.60}\protected@file@percent }
-\pgfsyspdfmark {pgfid75}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Radial log-PSD regulariser.}{52}{paragraph*.61}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Monitoring for mode collapse.}{52}{paragraph*.62}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.8}Training Infrastructure}{52}{section.3.8}\protected@file@percent }
-\newlabel{sec:method-infra}{{3.8}{52}{Training Infrastructure}{section.3.8}{}}
-\pgfsyspdfmark {pgfid76}{19775746}{27690495}
-\pgfsyspdfmark {pgfid77}{19775746}{27690495}
-\pgfsyspdfmark {pgfid78}{19775746}{27690495}
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Experiments and Results}{55}{chapter.4}\protected@file@percent }
-\@writefile{lof}{\addvspace {10\p@ }}
-\@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:experiments}{{4}{55}{Experiments and Results}{chapter.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Experimental Protocol}{55}{section.4.1}\protected@file@percent }
-\newlabel{sec:exp-protocol}{{4.1}{55}{Experimental Protocol}{section.4.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{Validation split.}{55}{paragraph*.63}\protected@file@percent }
-\pgfsyspdfmark {pgfid79}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Matched training-sample budget.}{56}{paragraph*.64}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Single-snapshot noise.}{56}{paragraph*.65}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{NFE budgets and samplers.}{56}{paragraph*.66}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Rollouts and ensembling.}{49}{paragraph*.58}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Hardware.}{49}{paragraph*.59}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Evaluation Metrics}{49}{section.4.2}\protected@file@percent }
+\newlabel{sec:exp-metrics}{{4.2}{49}{Evaluation Metrics}{section.4.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{RMSE and MAE.}{49}{paragraph*.60}\protected@file@percent }
 \citation{pathak2024stormcast}
-\pgfsyspdfmark {pgfid80}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Rollouts and ensembling.}{57}{paragraph*.67}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Hardware.}{57}{paragraph*.68}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Evaluation Metrics}{57}{section.4.2}\protected@file@percent }
-\newlabel{sec:exp-metrics}{{4.2}{57}{Evaluation Metrics}{section.4.2}{}}
-\citation{pathak2024stormcast}
-\pgfsyspdfmark {pgfid81}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{RMSE and MAE.}{58}{paragraph*.69}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{CRPS.}{58}{paragraph*.70}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Categorical precipitation scores.}{58}{paragraph*.71}\protected@file@percent }
 \citation{roberts2008fss}
+\pgfsyspdfmark {pgfid73}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{CRPS.}{50}{paragraph*.61}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Categorical precipitation scores.}{50}{paragraph*.62}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Fractions Skill Score.}{50}{paragraph*.63}\protected@file@percent }
+\pgfsyspdfmark {pgfid74}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Rollout metrics.}{51}{paragraph*.64}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}MeanFlow versus Diffusion and FlowCast: Headline Comparison}{51}{section.4.3}\protected@file@percent }
+\newlabel{sec:exp-main}{{4.3}{51}{MeanFlow versus Diffusion and FlowCast: Headline Comparison}{section.4.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces MeanFlow, FlowCast and EDM diffusion scoreboard}}{51}{table.caption.65}\protected@file@percent }
+\newlabel{tab:main-scoreboard}{{4.1}{51}{MeanFlow, FlowCast and EDM diffusion scoreboard}{table.caption.65}{}}
+\@writefile{toc}{\contentsline {paragraph}{Read.}{51}{paragraph*.67}\protected@file@percent }
+\pgfsyspdfmark {pgfid75}{19775746}{27690495}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Headline scoreboard plot}}{52}{figure.caption.66}\protected@file@percent }
+\newlabel{fig:scoreboard}{{4.1}{52}{Headline scoreboard plot}{figure.caption.66}{}}
+\pgfsyspdfmark {pgfid76}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Per-channel RMSE and CRPS.}{53}{paragraph*.68}\protected@file@percent }
+\pgfsyspdfmark {pgfid77}{19775746}{27690495}
+\newlabel{fig:rmse-channel}{{4.2~(a)}{54}{Per-channel RMSE (physical units)}{figure.caption.69}{}}
+\newlabel{sub@fig:rmse-channel}{{~(a)}{54}{Per-channel RMSE (physical units)}{figure.caption.69}{}}
+\newlabel{fig:crps-channel}{{4.2~(b)}{54}{Per-channel CRPS}{figure.caption.69}{}}
+\newlabel{sub@fig:crps-channel}{{~(b)}{54}{Per-channel CRPS}{figure.caption.69}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Per-channel RMSE and CRPS}}{54}{figure.caption.69}\protected@file@percent }
+\newlabel{fig:per-channel}{{4.2}{54}{Per-channel RMSE and CRPS}{figure.caption.69}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Inference Cost: Wall-Clock and NFE Ablation}{54}{section.4.4}\protected@file@percent }
+\newlabel{sec:exp-nfe}{{4.4}{54}{Inference Cost: Wall-Clock and NFE Ablation}{section.4.4}{}}
+\pgfsyspdfmark {pgfid78}{19775746}{27690495}
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Inference timing ablation (A6000)}}{55}{table.caption.70}\protected@file@percent }
+\newlabel{tab:timing}{{4.2}{55}{Inference timing ablation (A6000)}{table.caption.70}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Inference timing ablation (H100)}}{55}{table.caption.71}\protected@file@percent }
+\newlabel{tab:timing-h100}{{4.3}{55}{Inference timing ablation (H100)}{table.caption.71}{}}
+\@writefile{toc}{\contentsline {paragraph}{Read.}{55}{paragraph*.73}\protected@file@percent }
+\pgfsyspdfmark {pgfid79}{19775746}{27690495}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Inference cost and speedup}}{56}{figure.caption.72}\protected@file@percent }
+\newlabel{fig:timing}{{4.3}{56}{Inference cost and speedup}{figure.caption.72}{}}
+\@writefile{toc}{\contentsline {paragraph}{Operational consequence.}{56}{paragraph*.74}\protected@file@percent }
+\pgfsyspdfmark {pgfid80}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Cross-hardware.}{57}{paragraph*.75}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Precipitation Skill by Threshold and Neighbourhood}{57}{section.4.5}\protected@file@percent }
+\newlabel{sec:exp-precip}{{4.5}{57}{Precipitation Skill by Threshold and Neighbourhood}{section.4.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Neighbourhood dependence.}{57}{paragraph*.77}\protected@file@percent }
+\pgfsyspdfmark {pgfid81}{19775746}{27690495}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Categorical precipitation skill by threshold}}{58}{figure.caption.76}\protected@file@percent }
+\newlabel{fig:csi-threshold}{{4.4}{58}{Categorical precipitation skill by threshold}{figure.caption.76}{}}
 \pgfsyspdfmark {pgfid82}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Fractions Skill Score.}{59}{paragraph*.72}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Radial log-PSD.}{59}{paragraph*.73}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Rollout metrics.}{59}{paragraph*.74}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}MeanFlow versus Diffusion and FlowCast: Headline Comparison}{59}{section.4.3}\protected@file@percent }
-\newlabel{sec:exp-main}{{4.3}{59}{MeanFlow versus Diffusion and FlowCast: Headline Comparison}{section.4.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Precipitation skill across pooling windows}}{59}{table.caption.78}\protected@file@percent }
+\newlabel{tab:precip-window}{{4.4}{59}{Precipitation skill across pooling windows}{table.caption.78}{}}
+\@writefile{toc}{\contentsline {paragraph}{Light to moderate rain.}{59}{paragraph*.79}\protected@file@percent }
 \pgfsyspdfmark {pgfid83}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Headline scoreboard plot}}{60}{figure.caption.76}\protected@file@percent }
-\newlabel{fig:scoreboard}{{4.1}{60}{Headline scoreboard plot}{figure.caption.76}{}}
+\@writefile{toc}{\contentsline {paragraph}{Heavy rain.}{60}{paragraph*.80}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Heavy-rain Fractions Skill Score}}{60}{figure.caption.81}\protected@file@percent }
+\newlabel{fig:fss}{{4.5}{60}{Heavy-rain Fractions Skill Score}{figure.caption.81}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.6}Autoregressive Rollout}{60}{section.4.6}\protected@file@percent }
+\newlabel{sec:exp-rollout}{{4.6}{60}{Autoregressive Rollout}{section.4.6}{}}
 \pgfsyspdfmark {pgfid84}{19775746}{27690495}
-\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces MeanFlow, FlowCast and EDM diffusion scoreboard}}{61}{table.caption.75}\protected@file@percent }
-\newlabel{tab:main-scoreboard}{{4.1}{61}{MeanFlow, FlowCast and EDM diffusion scoreboard}{table.caption.75}{}}
-\@writefile{toc}{\contentsline {paragraph}{Read.}{61}{paragraph*.77}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Read (MeanFlow rows).}{61}{paragraph*.78}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Rollout RMSE versus lead time}}{61}{table.caption.82}\protected@file@percent }
+\newlabel{tab:rollout-rmse}{{4.5}{61}{Rollout RMSE versus lead time}{table.caption.82}{}}
 \pgfsyspdfmark {pgfid85}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Interpretation.}{62}{paragraph*.79}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Rollout RMSE versus lead time}}{62}{figure.caption.83}\protected@file@percent }
+\newlabel{fig:rollout}{{4.6}{62}{Rollout RMSE versus lead time}{figure.caption.83}{}}
+\@writefile{toc}{\contentsline {paragraph}{Read.}{62}{paragraph*.84}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.7}Ablation: \texttt  {log1p} Precipitation Encoding}{62}{section.4.7}\protected@file@percent }
+\newlabel{sec:exp-log1p}{{4.7}{62}{Ablation: \texttt {log1p} Precipitation Encoding}{section.4.7}{}}
 \pgfsyspdfmark {pgfid86}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Per-channel RMSE and CRPS.}{63}{paragraph*.80}\protected@file@percent }
-\newlabel{fig:rmse-channel}{{4.2~(a)}{63}{Per-channel RMSE (physical units)}{figure.caption.81}{}}
-\newlabel{sub@fig:rmse-channel}{{~(a)}{63}{Per-channel RMSE (physical units)}{figure.caption.81}{}}
-\newlabel{fig:crps-channel}{{4.2~(b)}{63}{Per-channel CRPS}{figure.caption.81}{}}
-\newlabel{sub@fig:crps-channel}{{~(b)}{63}{Per-channel CRPS}{figure.caption.81}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Per-channel RMSE and CRPS}}{63}{figure.caption.81}\protected@file@percent }
-\newlabel{fig:per-channel}{{4.2}{63}{Per-channel RMSE and CRPS}{figure.caption.81}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces log1p versus raw-mm/h encoding ablation}}{63}{table.caption.85}\protected@file@percent }
+\newlabel{tab:log1p}{{4.6}{63}{log1p versus raw-mm/h encoding ablation}{table.caption.85}{}}
+\@writefile{toc}{\contentsline {paragraph}{Read.}{63}{paragraph*.86}\protected@file@percent }
 \pgfsyspdfmark {pgfid87}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Inference Cost: Wall-Clock and NFE Ablation}{64}{section.4.4}\protected@file@percent }
-\newlabel{sec:exp-nfe}{{4.4}{64}{Inference Cost: Wall-Clock and NFE Ablation}{section.4.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Inference timing ablation (A6000)}}{64}{table.caption.82}\protected@file@percent }
-\newlabel{tab:timing}{{4.2}{64}{Inference timing ablation (A6000)}{table.caption.82}{}}
-\@writefile{toc}{\contentsline {paragraph}{Read.}{64}{paragraph*.85}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.8}Ablation: Precipitation Channel Weight}{64}{section.4.8}\protected@file@percent }
+\newlabel{sec:exp-qpw}{{4.8}{64}{Ablation: Precipitation Channel Weight}{section.4.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces Precipitation channel-weight ablation}}{64}{table.caption.87}\protected@file@percent }
+\newlabel{tab:qpw}{{4.7}{64}{Precipitation channel-weight ablation}{table.caption.87}{}}
+\@writefile{toc}{\contentsline {paragraph}{Read.}{64}{paragraph*.88}\protected@file@percent }
 \pgfsyspdfmark {pgfid88}{19775746}{27690495}
-\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Inference timing ablation (H100)}}{65}{table.caption.83}\protected@file@percent }
-\newlabel{tab:timing-h100}{{4.3}{65}{Inference timing ablation (H100)}{table.caption.83}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Inference cost and speedup}}{65}{figure.caption.84}\protected@file@percent }
-\newlabel{fig:timing}{{4.3}{65}{Inference cost and speedup}{figure.caption.84}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.9}Comparison Against the Legacy Baseline}{65}{section.4.9}\protected@file@percent }
+\newlabel{sec:exp-legacy}{{4.9}{65}{Comparison Against the Legacy Baseline}{section.4.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces Legacy versus cleaned pipeline}}{65}{table.caption.89}\protected@file@percent }
+\newlabel{tab:legacy}{{4.8}{65}{Legacy versus cleaned pipeline}{table.caption.89}{}}
+\@writefile{toc}{\contentsline {paragraph}{Read.}{65}{paragraph*.90}\protected@file@percent }
 \pgfsyspdfmark {pgfid89}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Operational consequence.}{66}{paragraph*.86}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Cross-hardware.}{66}{paragraph*.87}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.10}Qualitative Case Studies}{66}{section.4.10}\protected@file@percent }
+\newlabel{sec:exp-qual}{{4.10}{66}{Qualitative Case Studies}{section.4.10}{}}
+\@writefile{toc}{\contentsline {paragraph}{Precipitation.}{66}{paragraph*.91}\protected@file@percent }
 \pgfsyspdfmark {pgfid90}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}Precipitation Skill by Threshold and Neighbourhood}{67}{section.4.5}\protected@file@percent }
-\newlabel{sec:exp-precip}{{4.5}{67}{Precipitation Skill by Threshold and Neighbourhood}{section.4.5}{}}
-\@writefile{toc}{\contentsline {paragraph}{Neighbourhood dependence.}{67}{paragraph*.89}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Wind.}{67}{paragraph*.92}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.11}Discussion}{67}{section.4.11}\protected@file@percent }
+\newlabel{sec:exp-discussion}{{4.11}{67}{Discussion}{section.4.11}{}}
 \pgfsyspdfmark {pgfid91}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Categorical precipitation skill by threshold}}{68}{figure.caption.88}\protected@file@percent }
-\newlabel{fig:csi-threshold}{{4.4}{68}{Categorical precipitation skill by threshold}{figure.caption.88}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Qualitative precipitation rollout case study}}{68}{figure.caption.93}\protected@file@percent }
+\newlabel{fig:qual-qpepre}{{4.7}{68}{Qualitative precipitation rollout case study}{figure.caption.93}{}}
 \pgfsyspdfmark {pgfid92}{19775746}{27690495}
-\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Precipitation skill across pooling windows}}{69}{table.caption.90}\protected@file@percent }
-\newlabel{tab:precip-window}{{4.4}{69}{Precipitation skill across pooling windows}{table.caption.90}{}}
-\@writefile{toc}{\contentsline {paragraph}{Light to moderate rain.}{69}{paragraph*.91}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Qualitative wind rollout case study}}{69}{figure.caption.94}\protected@file@percent }
+\newlabel{fig:qual-u10}{{4.8}{69}{Qualitative wind rollout case study}{figure.caption.94}{}}
 \pgfsyspdfmark {pgfid93}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Heavy rain.}{70}{paragraph*.92}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Heavy-rain Fractions Skill Score}}{70}{figure.caption.93}\protected@file@percent }
-\newlabel{fig:fss}{{4.5}{70}{Heavy-rain Fractions Skill Score}{figure.caption.93}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.6}Autoregressive Rollout}{70}{section.4.6}\protected@file@percent }
-\newlabel{sec:exp-rollout}{{4.6}{70}{Autoregressive Rollout}{section.4.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Read.}{70}{paragraph*.96}\protected@file@percent }
 \pgfsyspdfmark {pgfid94}{19775746}{27690495}
-\@writefile{lot}{\contentsline {table}{\numberline {4.5}{\ignorespaces Rollout RMSE versus lead time}}{71}{table.caption.94}\protected@file@percent }
-\newlabel{tab:rollout-rmse}{{4.5}{71}{Rollout RMSE versus lead time}{table.caption.94}{}}
-\pgfsyspdfmark {pgfid95}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Rollout RMSE versus lead time}}{72}{figure.caption.95}\protected@file@percent }
-\newlabel{fig:rollout}{{4.6}{72}{Rollout RMSE versus lead time}{figure.caption.95}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.7}Ablation: \texttt  {log1p} Precipitation Encoding}{72}{section.4.7}\protected@file@percent }
-\newlabel{sec:exp-log1p}{{4.7}{72}{Ablation: \texttt {log1p} Precipitation Encoding}{section.4.7}{}}
-\pgfsyspdfmark {pgfid96}{19775746}{27690495}
-\@writefile{lot}{\contentsline {table}{\numberline {4.6}{\ignorespaces log1p versus raw-mm/h encoding ablation}}{73}{table.caption.97}\protected@file@percent }
-\newlabel{tab:log1p}{{4.6}{73}{log1p versus raw-mm/h encoding ablation}{table.caption.97}{}}
-\@writefile{toc}{\contentsline {paragraph}{Read.}{73}{paragraph*.98}\protected@file@percent }
-\pgfsyspdfmark {pgfid97}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {4.8}Ablation: Precipitation Channel Weight}{74}{section.4.8}\protected@file@percent }
-\newlabel{sec:exp-qpw}{{4.8}{74}{Ablation: Precipitation Channel Weight}{section.4.8}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4.7}{\ignorespaces Precipitation channel-weight ablation}}{74}{table.caption.99}\protected@file@percent }
-\newlabel{tab:qpw}{{4.7}{74}{Precipitation channel-weight ablation}{table.caption.99}{}}
-\@writefile{toc}{\contentsline {paragraph}{Read.}{74}{paragraph*.100}\protected@file@percent }
-\pgfsyspdfmark {pgfid98}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {4.9}Comparison Against the Legacy Baseline}{75}{section.4.9}\protected@file@percent }
-\newlabel{sec:exp-legacy}{{4.9}{75}{Comparison Against the Legacy Baseline}{section.4.9}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4.8}{\ignorespaces Legacy versus cleaned pipeline}}{75}{table.caption.101}\protected@file@percent }
-\newlabel{tab:legacy}{{4.8}{75}{Legacy versus cleaned pipeline}{table.caption.101}{}}
-\@writefile{toc}{\contentsline {paragraph}{Read.}{75}{paragraph*.102}\protected@file@percent }
-\pgfsyspdfmark {pgfid99}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {4.10}Qualitative Case Studies}{76}{section.4.10}\protected@file@percent }
-\newlabel{sec:exp-qual}{{4.10}{76}{Qualitative Case Studies}{section.4.10}{}}
-\@writefile{toc}{\contentsline {paragraph}{Precipitation.}{76}{paragraph*.103}\protected@file@percent }
-\pgfsyspdfmark {pgfid100}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Wind.}{77}{paragraph*.104}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Training dynamics.}{77}{paragraph*.107}\protected@file@percent }
-\pgfsyspdfmark {pgfid101}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Qualitative precipitation rollout case study}}{78}{figure.caption.105}\protected@file@percent }
-\newlabel{fig:qual-qpepre}{{4.7}{78}{Qualitative precipitation rollout case study}{figure.caption.105}{}}
-\pgfsyspdfmark {pgfid102}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Qualitative wind rollout case study}}{79}{figure.caption.106}\protected@file@percent }
-\newlabel{fig:qual-u10}{{4.8}{79}{Qualitative wind rollout case study}{figure.caption.106}{}}
-\pgfsyspdfmark {pgfid103}{19775746}{27690495}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces FlowCast training curves}}{80}{figure.caption.108}\protected@file@percent }
-\newlabel{fig:flowcast-loss}{{4.9}{80}{FlowCast training curves}{figure.caption.108}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.11}Failure Modes}{80}{section.4.11}\protected@file@percent }
-\newlabel{sec:exp-failure}{{4.11}{80}{Failure Modes}{section.4.11}{}}
-\@writefile{toc}{\contentsline {paragraph}{Heavy-rain under-detection.}{80}{paragraph*.109}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{\texttt  {t2m} rollout drift.}{80}{paragraph*.110}\protected@file@percent }
-\pgfsyspdfmark {pgfid104}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{One-evaluation under-dispersion (MeanFlow).}{81}{paragraph*.111}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{EMA dependence.}{81}{paragraph*.112}\protected@file@percent }
-\pgfsyspdfmark {pgfid105}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {4.12}Discussion}{82}{section.4.12}\protected@file@percent }
-\newlabel{sec:exp-discussion}{{4.12}{82}{Discussion}{section.4.12}{}}
-\pgfsyspdfmark {pgfid106}{19775746}{27690495}
-\pgfsyspdfmark {pgfid107}{19775746}{27690495}
-\pgfsyspdfmark {pgfid108}{19775746}{27690495}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{85}{chapter.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Conclusion and Future Work}{71}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:conclusion}{{5}{85}{Conclusion and Future Work}{chapter.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Summary of Contributions}{85}{section.5.1}\protected@file@percent }
-\newlabel{sec:concl-summary}{{5.1}{85}{Summary of Contributions}{section.5.1}{}}
-\pgfsyspdfmark {pgfid109}{19775746}{27690495}
-\pgfsyspdfmark {pgfid110}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Limitations}{87}{section.5.2}\protected@file@percent }
-\newlabel{sec:concl-limitations}{{5.2}{87}{Limitations}{section.5.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{Single training snapshot.}{87}{paragraph*.113}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Single regression mean and single domain.}{87}{paragraph*.114}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Heavy-rain detection.}{87}{paragraph*.115}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Limited probabilistic evaluation.}{87}{paragraph*.116}\protected@file@percent }
-\pgfsyspdfmark {pgfid111}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Under-dispersion at low NFE (MeanFlow).}{88}{paragraph*.117}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{No distilled-diffusion comparator.}{88}{paragraph*.118}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Future Work}{88}{section.5.3}\protected@file@percent }
-\newlabel{sec:concl-future}{{5.3}{88}{Future Work}{section.5.3}{}}
-\pgfsyspdfmark {pgfid112}{19775746}{27690495}
-\pgfsyspdfmark {pgfid113}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {5.4}Closing Remarks}{90}{section.5.4}\protected@file@percent }
-\newlabel{sec:concl-closing}{{5.4}{90}{Closing Remarks}{section.5.4}{}}
+\newlabel{ch:conclusion}{{5}{71}{Conclusion and Future Work}{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Summary of Contributions}{71}{section.5.1}\protected@file@percent }
+\newlabel{sec:concl-summary}{{5.1}{71}{Summary of Contributions}{section.5.1}{}}
+\pgfsyspdfmark {pgfid95}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Limitations}{72}{section.5.2}\protected@file@percent }
+\newlabel{sec:concl-limitations}{{5.2}{72}{Limitations}{section.5.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Single training snapshot.}{72}{paragraph*.95}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Single regression mean and single domain.}{72}{paragraph*.96}\protected@file@percent }
+\pgfsyspdfmark {pgfid96}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Heavy-rain detection.}{73}{paragraph*.97}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Limited probabilistic evaluation.}{73}{paragraph*.98}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Under-dispersion at low NFE (MeanFlow).}{73}{paragraph*.99}\protected@file@percent }
+\pgfsyspdfmark {pgfid97}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{No distilled-diffusion comparator.}{74}{paragraph*.100}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{FlowCast \texttt  {t2m} rollout drift.}{74}{paragraph*.101}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{EMA evaluation pitfall.}{74}{paragraph*.102}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Future Work}{74}{section.5.3}\protected@file@percent }
+\newlabel{sec:concl-future}{{5.3}{74}{Future Work}{section.5.3}{}}
+\pgfsyspdfmark {pgfid98}{19775746}{27690495}
+\pgfsyspdfmark {pgfid99}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Closing Remarks}{76}{section.5.4}\protected@file@percent }
+\newlabel{sec:concl-closing}{{5.4}{76}{Closing Remarks}{section.5.4}{}}
 \bibstyle{abbrvnat}
 \bibdata{back/references}
 \bibcite{andrychowicz2023metnet3}{{1}{2023}{{Andrychowicz et~al.}}{{Andrychowicz, Espeholt, Li, Merchant, Merose, Zyda, Agrawal, and Kalchbrenner}}}
@@ -471,8 +432,8 @@
 \bibcite{espeholt2022metnet2}{{4}{2022}{{Espeholt et~al.}}{{Espeholt, Agrawal, S{\o }nderby, Kumar, Heek, Bromberg, Gazen, Carver, Andrychowicz, Hickey, Bell, and Kalchbrenner}}}
 \bibcite{gao2022earthformer}{{5}{2022}{{Gao et~al.}}{{Gao, Shi, Wang, Zhu, Wang, Li, and Yeung}}}
 \bibcite{gao2023prediff}{{6}{2023}{{Gao et~al.}}{{Gao, Shi, Han, Wang, Jin, Maddix, Zhu, Li, and Wang}}}
-\pgfsyspdfmark {pgfid114}{19775746}{27690495}
-\@writefile{toc}{\contentsline {chapter}{References}{91}{section*.119}\protected@file@percent }
+\pgfsyspdfmark {pgfid100}{19775746}{27690495}
+\@writefile{toc}{\contentsline {chapter}{References}{77}{section*.103}\protected@file@percent }
 \bibcite{geng2025meanflow}{{7}{2025}{{Geng et~al.}}{{Geng, Deng, Bai, Kolter, and He}}}
 \bibcite{gong2024cascast}{{8}{2024}{{Gong et~al.}}{{Gong, Bai, Ye, Xu, Liu, Dai, Yang, and Ouyang}}}
 \bibcite{hersbach2020era5}{{9}{2020}{{Hersbach et~al.}}{{Hersbach, Bell, Berrisford, Hirahara, Hor{\'a}nyi, Mu{\~n}oz-Sabater, Nicolas, Peubey, Radu, Schepers, Simmons, Soci, Abdalla, Abellan, Balsamo, Bechtold, Biavati, Bidlot, Bonavita, Chiara, Dahlgren, Dee, Diamantakis, Dragani, Flemming, Forbes, Fuentes, Geer, Haimberger, Healy, Hogan, H{\'o}lm, Janiskov{\'a}, Keeley, Laloyaux, Lopez, Lupu, Radnoti, de~Rosnay, Rozum, Vamborg, Villaume, and Th{\'e}paut}}}
@@ -480,118 +441,101 @@
 \bibcite{ho2020ddpm}{{11}{2020}{{Ho et~al.}}{{Ho, Jain, and Abbeel}}}
 \bibcite{karras2022elucidating}{{12}{2022}{{Karras et~al.}}{{Karras, Aittala, Aila, and Laine}}}
 \bibcite{lam2023graphcast}{{13}{2023}{{Lam et~al.}}{{Lam, Sanchez-Gonzalez, Willson, Wirnsberger, Fortunato, Alet, Ravuri, Ewalds, Eaton-Rosen, Hu, Merose, Hoyer, Holland, Vinyals, Stott, Pritzel, Mohamed, and Battaglia}}}
-\pgfsyspdfmark {pgfid115}{19775746}{27690495}
+\pgfsyspdfmark {pgfid101}{19775746}{27690495}
 \bibcite{lipman2023flow}{{14}{2023}{{Lipman et~al.}}{{Lipman, Chen, Ben-Hamu, Nickel, and Le}}}
 \bibcite{liu2022rectifiedflow}{{15}{2023}{{Liu et~al.}}{{Liu, Gong, and Liu}}}
-\bibcite{mardani2024corrdiff}{{16}{2024}{{Mardani et~al.}}{{Mardani, Brenowitz, Cohen, Pathak, Chen, Liu, Vahdat, Kashinath, Kautz, and Pritchard}}}
-\bibcite{pathak2022fourcastnet}{{17}{2022}{{Pathak et~al.}}{{Pathak, Subramanian, Harrington, Raja, Chattopadhyay, Mardani, Kurth, Hall, Li, Azizzadenesheli, Hassanzadeh, Kashinath, and Anandkumar}}}
-\bibcite{pathak2024stormcast}{{18}{2024}{{Pathak et~al.}}{{Pathak, Cohen, Garg, Harrington, Brenowitz, Durran, Mardani, Vahdat, Xu, Kashinath, and Pritchard}}}
-\bibcite{price2024gencast}{{19}{2025}{{Price et~al.}}{{Price, Sanchez-Gonzalez, Alet, Andersson, El-Kadi, Masters, Ewalds, Stott, Mohamed, Battaglia, Lam, and Willson}}}
-\pgfsyspdfmark {pgfid116}{19775746}{27690495}
-\bibcite{ravuri2021dgmr}{{20}{2021}{{Ravuri et~al.}}{{Ravuri, Lenc, Willson, Kangin, Lam, Mirowski, Fitzsimons, Athanassiadou, Kashem, Madge, Prudden, Mandhane, Clark, Brock, Simonyan, Hadsell, Robinson, Clancy, Arribas, and Mohamed}}}
-\bibcite{ribeiro2025flowcast}{{21}{2025}{{Ribeiro and Pucer}}{{}}}
-\bibcite{roberts2008fss}{{22}{2008}{{Roberts and Lean}}{{}}}
-\bibcite{salimans2022progressive}{{23}{2022}{{Salimans and Ho}}{{}}}
-\bibcite{sauer2023add}{{24}{2023}{{Sauer et~al.}}{{Sauer, Lorenz, Blattmann, and Rombach}}}
-\bibcite{schaefer1990csi}{{25}{1990}{{Schaefer}}{{}}}
+\bibcite{lu2022dpmsolver}{{16}{2022}{{Lu et~al.}}{{Lu, Zhou, Bao, Chen, Li, and Zhu}}}
+\bibcite{mardani2024corrdiff}{{17}{2024}{{Mardani et~al.}}{{Mardani, Brenowitz, Cohen, Pathak, Chen, Liu, Vahdat, Kashinath, Kautz, and Pritchard}}}
+\bibcite{pathak2022fourcastnet}{{18}{2022}{{Pathak et~al.}}{{Pathak, Subramanian, Harrington, Raja, Chattopadhyay, Mardani, Kurth, Hall, Li, Azizzadenesheli, Hassanzadeh, Kashinath, and Anandkumar}}}
+\bibcite{pathak2024stormcast}{{19}{2024}{{Pathak et~al.}}{{Pathak, Cohen, Garg, Harrington, Brenowitz, Durran, Mardani, Vahdat, Xu, Kashinath, and Pritchard}}}
+\pgfsyspdfmark {pgfid102}{19775746}{27690495}
+\bibcite{price2024gencast}{{20}{2025}{{Price et~al.}}{{Price, Sanchez-Gonzalez, Alet, Andersson, El-Kadi, Masters, Ewalds, Stott, Mohamed, Battaglia, Lam, and Willson}}}
+\bibcite{ravuri2021dgmr}{{21}{2021}{{Ravuri et~al.}}{{Ravuri, Lenc, Willson, Kangin, Lam, Mirowski, Fitzsimons, Athanassiadou, Kashem, Madge, Prudden, Mandhane, Clark, Brock, Simonyan, Hadsell, Robinson, Clancy, Arribas, and Mohamed}}}
+\bibcite{ribeiro2025flowcast}{{22}{2025}{{Ribeiro and Pucer}}{{}}}
+\bibcite{roberts2008fss}{{23}{2008}{{Roberts and Lean}}{{}}}
+\bibcite{salimans2022progressive}{{24}{2022}{{Salimans and Ho}}{{}}}
+\bibcite{sauer2023add}{{25}{2023}{{Sauer et~al.}}{{Sauer, Lorenz, Blattmann, and Rombach}}}
 \bibcite{sonderby2020metnet}{{26}{2020}{{S{\o }nderby et~al.}}{{S{\o }nderby, Espeholt, Heek, Dehghani, Oliver, Salimans, Agrawal, Hickey, and Kalchbrenner}}}
 \bibcite{song2021ddim}{{27}{2021{}}{{Song et~al.}}{{Song, Meng, and Ermon}}}
-\pgfsyspdfmark {pgfid117}{19775746}{27690495}
+\pgfsyspdfmark {pgfid103}{19775746}{27690495}
 \bibcite{song2023improved}{{28}{2023}{{Song and Dhariwal}}{{}}}
 \bibcite{song2021scoresde}{{29}{2021{}}{{Song et~al.}}{{Song, Sohl-Dickstein, Kingma, Kumar, Ermon, and Poole}}}
 \bibcite{song2023consistency}{{30}{2023}{{Song et~al.}}{{Song, Dhariwal, Chen, and Sutskever}}}
 \bibcite{tong2024improving}{{31}{2024}{{Tong et~al.}}{{Tong, Fatras, Malkin, Huguet, Zhang, Rector-Brooks, Wolf, and Bengio}}}
 \bibcite{veillette2020sevir}{{32}{2020}{{Veillette et~al.}}{{Veillette, Samsi, and Mattioli}}}
-\pgfsyspdfmark {pgfid118}{19775746}{27690495}
-\pgfsyspdfmark {pgfid119}{19775746}{27690495}
-\pgfsyspdfmark {pgfid120}{19775746}{27690495}
-\@writefile{toc}{\contentsline {chapter}{Appendix~{A}~---~Hyperparameters and Training Configuration}{97}{section*.121}\protected@file@percent }
-\newlabel{app:hyperparams}{{A}{97}{\ntu@appendix ~{A}~---~Hyperparameters and Training Configuration}{chapter*.122}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.1}EDM Diffusion Baseline Hyperparameters}{97}{section.A.1}\protected@file@percent }
-\pgfsyspdfmark {pgfid121}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {A.2}FlowCast (Conditional Flow Matching)}{98}{section.A.2}\protected@file@percent }
-\pgfsyspdfmark {pgfid122}{19775746}{27690495}
-\pgfsyspdfmark {pgfid123}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {A.3}MeanFlow (Average-Velocity Flow Matching)}{100}{section.A.3}\protected@file@percent }
-\pgfsyspdfmark {pgfid124}{19775746}{27690495}
-\pgfsyspdfmark {pgfid125}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {A.4}Ablation Grids}{102}{section.A.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {A.5}Per-Channel Dataset Statistics}{102}{section.A.5}\protected@file@percent }
-\pgfsyspdfmark {pgfid126}{19775746}{27690495}
-\@writefile{toc}{\contentsline {chapter}{Appendix~{B}~---~Reproducibility}{103}{section*.123}\protected@file@percent }
-\newlabel{app:repro}{{B}{103}{\ntu@appendix ~{B}~---~Reproducibility}{chapter*.124}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {B.1}Code Availability}{103}{section.B.1}\protected@file@percent }
-\pgfsyspdfmark {pgfid127}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {B.2}Dataset and Checkpoints}{104}{section.B.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Zarr store.}{104}{paragraph*.125}\protected@file@percent }
-\pgfsyspdfmark {pgfid128}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Checkpoints (cleaned, log1p, $\approx 2\,\text  {M}$-sample anchor).}{105}{paragraph*.126}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {B.3}Preprocessing Pipeline Details}{105}{section.B.3}\protected@file@percent }
-\newlabel{app:preprocessing}{{B.3}{105}{Preprocessing Pipeline Details}{section.B.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Stage 1: monthly-to-hourly split.}{105}{paragraph*.127}\protected@file@percent }
-\pgfsyspdfmark {pgfid129}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Stage 2: unified NetCDF-to-Zarr assembly.}{106}{paragraph*.128}\protected@file@percent }
-\pgfsyspdfmark {pgfid130}{19775746}{27690495}
-\pgfsyspdfmark {pgfid131}{19984150}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Output layout.}{108}{paragraph*.129}\protected@file@percent }
-\pgfsyspdfmark {pgfid132}{19984150}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {B.4}Commands}{109}{section.B.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Regression mean (pre-train once).}{109}{paragraph*.130}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{EDM diffusion baseline.}{109}{paragraph*.131}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{FlowCast.}{109}{paragraph*.132}\protected@file@percent }
-\pgfsyspdfmark {pgfid133}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{MeanFlow.}{110}{paragraph*.133}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Auto-resume.}{110}{paragraph*.134}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Head-to-head evaluation.}{110}{paragraph*.135}\protected@file@percent }
-\pgfsyspdfmark {pgfid134}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{NFE-versus-quality sweeps.}{111}{paragraph*.136}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Figure and results regeneration.}{111}{paragraph*.137}\protected@file@percent }
-\pgfsyspdfmark {pgfid135}{19775746}{27690495}
-\pgfsyspdfmark {pgfid136}{19775746}{27690495}
-\@writefile{toc}{\contentsline {chapter}{Appendix~{C}~---~Detailed Derivations}{113}{section*.138}\protected@file@percent }
-\newlabel{app:derivations}{{C}{113}{\ntu@appendix ~{C}~---~Detailed Derivations}{chapter*.139}{}}
+\pgfsyspdfmark {pgfid104}{19775746}{27690495}
+\pgfsyspdfmark {pgfid105}{19775746}{27690495}
+\pgfsyspdfmark {pgfid106}{19775746}{27690495}
+\@writefile{toc}{\contentsline {chapter}{Appendix~{A}~---~Hyperparameters and Training Configuration}{83}{section*.105}\protected@file@percent }
+\newlabel{app:hyperparams}{{A}{83}{\ntu@appendix ~{A}~---~Hyperparameters and Training Configuration}{chapter*.106}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}EDM Diffusion Baseline Hyperparameters}{83}{section.A.1}\protected@file@percent }
+\pgfsyspdfmark {pgfid107}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {A.2}FlowCast (Conditional Flow Matching)}{84}{section.A.2}\protected@file@percent }
+\pgfsyspdfmark {pgfid108}{19775746}{27690495}
+\pgfsyspdfmark {pgfid109}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {A.3}MeanFlow (Average-Velocity Flow Matching)}{86}{section.A.3}\protected@file@percent }
+\pgfsyspdfmark {pgfid110}{19775746}{27690495}
+\pgfsyspdfmark {pgfid111}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {A.4}Ablation Grids}{88}{section.A.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A.5}Per-Channel Dataset Statistics}{88}{section.A.5}\protected@file@percent }
+\pgfsyspdfmark {pgfid112}{19775746}{27690495}
+\@writefile{toc}{\contentsline {chapter}{Appendix~{B}~---~Reproducibility}{89}{section*.107}\protected@file@percent }
+\newlabel{app:repro}{{B}{89}{\ntu@appendix ~{B}~---~Reproducibility}{chapter*.108}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.1}Code Availability}{89}{section.B.1}\protected@file@percent }
+\pgfsyspdfmark {pgfid113}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {B.2}Dataset and Checkpoints}{90}{section.B.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Zarr store.}{90}{paragraph*.109}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Checkpoints (cleaned, log1p, $\approx 2\,\text  {M}$-sample anchor).}{90}{paragraph*.110}\protected@file@percent }
+\pgfsyspdfmark {pgfid114}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {B.3}Preprocessing Pipeline}{91}{section.B.3}\protected@file@percent }
+\newlabel{app:preprocessing}{{B.3}{91}{Preprocessing Pipeline}{section.B.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B.4}Commands}{91}{section.B.4}\protected@file@percent }
+\pgfsyspdfmark {pgfid115}{19775746}{27690495}
+\pgfsyspdfmark {pgfid116}{19775746}{27690495}
+\@writefile{toc}{\contentsline {chapter}{Appendix~{C}~---~Detailed Derivations}{93}{section*.111}\protected@file@percent }
+\newlabel{app:derivations}{{C}{93}{\ntu@appendix ~{C}~---~Detailed Derivations}{chapter*.112}{}}
 \citation{song2021scoresde}
-\pgfsyspdfmark {pgfid137}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {C.1}Tweedie's Formula: Score and Denoiser}{114}{section.C.1}\protected@file@percent }
-\newlabel{app:tweedie}{{C.1}{114}{Tweedie's Formula: Score and Denoiser}{section.C.1}{}}
-\newlabel{eq:app-tweedie}{{C.1}{114}{Tweedie's Formula: Score and Denoiser}{equation.C.1.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.2}Probability-Flow ODE from the VE-SDE}{114}{section.C.2}\protected@file@percent }
-\newlabel{app:pfode}{{C.2}{114}{Probability-Flow ODE from the VE-SDE}{section.C.2}{}}
-\pgfsyspdfmark {pgfid138}{19775746}{27690495}
-\newlabel{eq:app-pfode}{{C.2}{115}{Probability-Flow ODE from the VE-SDE}{equation.C.2.2}{}}
-\newlabel{eq:app-pfode-denoiser}{{C.3}{115}{Probability-Flow ODE from the VE-SDE}{equation.C.2.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {C.3}CFM Theorem: Conditional $=$ Marginal Gradient}{115}{section.C.3}\protected@file@percent }
-\newlabel{app:cfm-theorem}{{C.3}{115}{CFM Theorem: Conditional $=$ Marginal Gradient}{section.C.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Theorem.}{115}{paragraph*.140}\protected@file@percent }
-\pgfsyspdfmark {pgfid139}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Proof.}{116}{paragraph*.141}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {C.4}Independent CFM: Straight-Line Path and Target}{116}{section.C.4}\protected@file@percent }
-\newlabel{app:icfm}{{C.4}{116}{Independent CFM: Straight-Line Path and Target}{section.C.4}{}}
+\pgfsyspdfmark {pgfid117}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {C.1}Tweedie's Formula: Score and Denoiser}{94}{section.C.1}\protected@file@percent }
+\newlabel{app:tweedie}{{C.1}{94}{Tweedie's Formula: Score and Denoiser}{section.C.1}{}}
+\newlabel{eq:app-tweedie}{{C.1}{94}{Tweedie's Formula: Score and Denoiser}{equation.C.1.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.2}Probability-Flow ODE from the VE-SDE}{94}{section.C.2}\protected@file@percent }
+\newlabel{app:pfode}{{C.2}{94}{Probability-Flow ODE from the VE-SDE}{section.C.2}{}}
+\pgfsyspdfmark {pgfid118}{19775746}{27690495}
+\newlabel{eq:app-pfode}{{C.2}{95}{Probability-Flow ODE from the VE-SDE}{equation.C.2.2}{}}
+\newlabel{eq:app-pfode-denoiser}{{C.3}{95}{Probability-Flow ODE from the VE-SDE}{equation.C.2.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C.3}CFM Theorem: Conditional $=$ Marginal Gradient}{95}{section.C.3}\protected@file@percent }
+\newlabel{app:cfm-theorem}{{C.3}{95}{CFM Theorem: Conditional $=$ Marginal Gradient}{section.C.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Theorem.}{95}{paragraph*.113}\protected@file@percent }
+\pgfsyspdfmark {pgfid119}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Proof.}{96}{paragraph*.114}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C.4}Independent CFM: Straight-Line Path and Target}{96}{section.C.4}\protected@file@percent }
+\newlabel{app:icfm}{{C.4}{96}{Independent CFM: Straight-Line Path and Target}{section.C.4}{}}
 \citation{liu2022rectifiedflow}
 \citation{tong2024improving}
-\pgfsyspdfmark {pgfid140}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Target vector field.}{117}{paragraph*.142}\protected@file@percent }
-\newlabel{eq:app-icfm}{{C.4}{117}{Target vector field}{equation.C.4.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{Why $\sigma _{\text  {path}} > 0$.}{117}{paragraph*.143}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Compared to diffusion.}{117}{paragraph*.144}\protected@file@percent }
-\pgfsyspdfmark {pgfid141}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {C.5}FlowCast's Standardised-Residual Adaptation}{118}{section.C.5}\protected@file@percent }
-\newlabel{app:flowcast-adaptation}{{C.5}{118}{FlowCast's Standardised-Residual Adaptation}{section.C.5}{}}
+\pgfsyspdfmark {pgfid120}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Target vector field.}{97}{paragraph*.115}\protected@file@percent }
+\newlabel{eq:app-icfm}{{C.4}{97}{Target vector field}{equation.C.4.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Why $\sigma _{\text  {path}} > 0$.}{97}{paragraph*.116}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Compared to diffusion.}{97}{paragraph*.117}\protected@file@percent }
+\pgfsyspdfmark {pgfid121}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {C.5}FlowCast's Standardised-Residual Adaptation}{98}{section.C.5}\protected@file@percent }
+\newlabel{app:flowcast-adaptation}{{C.5}{98}{FlowCast's Standardised-Residual Adaptation}{section.C.5}{}}
 \citation{geng2025meanflow}
-\pgfsyspdfmark {pgfid142}{19775746}{27690495}
-\@writefile{toc}{\contentsline {section}{\numberline {C.6}The MeanFlow Average-Velocity Identity}{119}{section.C.6}\protected@file@percent }
-\newlabel{app:meanflow-identity}{{C.6}{119}{The MeanFlow Average-Velocity Identity}{section.C.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Setup.}{119}{paragraph*.145}\protected@file@percent }
-\newlabel{eq:app-mf-avgvel}{{C.5}{119}{Setup}{equation.C.6.5}{}}
-\newlabel{eq:app-mf-displacement}{{C.6}{119}{Setup}{equation.C.6.6}{}}
-\pgfsyspdfmark {pgfid143}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Differentiating away the integral.}{120}{paragraph*.146}\protected@file@percent }
-\newlabel{eq:app-mf-identity}{{C.7}{120}{Differentiating away the integral}{equation.C.6.7}{}}
-\newlabel{eq:app-mf-jvp}{{C.8}{120}{Differentiating away the integral}{equation.C.6.8}{}}
+\pgfsyspdfmark {pgfid122}{19775746}{27690495}
+\@writefile{toc}{\contentsline {section}{\numberline {C.6}The MeanFlow Average-Velocity Identity}{99}{section.C.6}\protected@file@percent }
+\newlabel{app:meanflow-identity}{{C.6}{99}{The MeanFlow Average-Velocity Identity}{section.C.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Setup.}{99}{paragraph*.118}\protected@file@percent }
+\newlabel{eq:app-mf-avgvel}{{C.5}{99}{Setup}{equation.C.6.5}{}}
+\newlabel{eq:app-mf-displacement}{{C.6}{99}{Setup}{equation.C.6.6}{}}
+\pgfsyspdfmark {pgfid123}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Differentiating away the integral.}{100}{paragraph*.119}\protected@file@percent }
+\newlabel{eq:app-mf-identity}{{C.7}{100}{Differentiating away the integral}{equation.C.6.7}{}}
+\newlabel{eq:app-mf-jvp}{{C.8}{100}{Differentiating away the integral}{equation.C.6.8}{}}
 \citation{geng2025meanflow}
-\pgfsyspdfmark {pgfid144}{19775746}{27690495}
-\@writefile{toc}{\contentsline {paragraph}{Why this is trainable.}{121}{paragraph*.147}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Boundary condition and the FlowCast special case.}{121}{paragraph*.148}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Convention note.}{121}{paragraph*.149}\protected@file@percent }
+\pgfsyspdfmark {pgfid124}{19775746}{27690495}
+\@writefile{toc}{\contentsline {paragraph}{Why this is trainable.}{101}{paragraph*.120}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Boundary condition and the FlowCast special case.}{101}{paragraph*.121}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Convention note.}{101}{paragraph*.122}\protected@file@percent }
 \ttl@finishall
-\gdef \@abspage@last{144}
+\gdef \@abspage@last{124}

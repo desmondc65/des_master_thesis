@@ -1,50 +1,2553 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.31)  20 JUL 2026 21:13
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023/Debian) (preloaded format=xelatex 2026.4.16)  26 JUN 2026 11:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
-LaTeX2e <2021-11-15> patch level 1
-L3 programming layer <2022-01-21> (./ntuthesis.cls
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-01-22>
+(./ntuthesis.cls
 Document Class: ntuthesis 2020/05/01 v2.0 NTU Thesis Template
 (/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
-Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+(/usr/share/texlive/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
-Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks16
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
 )
 (/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
-Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
-Package: iftex 2020/03/06 v1.0d TeX engine tests
+Package: iftex 2022/02/03 v1.0f TeX engine tests
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2020/11/24 v1.1c Standard LaTeX ifthen package (DPC)
+Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2023/05/17 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count183
+\c@chapter=\count184
+\c@section=\count185
+\c@subsection=\count186
+\c@subsubsection=\count187
+\c@paragraph=\count188
+\c@subparagraph=\count189
+\c@figure=\count190
+\c@table=\count191
+\abovecaptionskip=\skip48
+\belowcaptionskip=\skip49
+\bibindent=\dimen140
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2024-01-22 L3 programming layer (loader) 
+
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
+File: l3backend-xetex.def 2024-01-04 L3 backend support: XeTeX
+\g__graphics_track_int=\count192
+\l__pdf_internal_box=\box51
+\g__pdf_backend_object_int=\count193
+\g__pdf_backend_annotation_int=\count194
+\g__pdf_backend_link_int=\count195
+))
+Package: xparse 2023-10-10 L3 Experimental document command parser
+)
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
+Package: xeCJK 2022/08/05 v3.9.1 Typesetting CJK scripts with XeLaTeX
+
+(/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty
+Package: ctexhook 2022/07/14 v2.5.10 Document and package hooks (CTEX)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty
+Package: xtemplate 2023-10-10 L3 Experimental prototype document functions
+\l__xtemplate_tmp_dim=\dimen141
+\l__xtemplate_tmp_int=\count196
+\l__xtemplate_tmp_muskip=\muskip16
+\l__xtemplate_tmp_skip=\skip50
+)
+\l__xeCJK_tmp_int=\count197
+\l__xeCJK_tmp_box=\box52
+\l__xeCJK_tmp_dim=\dimen142
+\l__xeCJK_tmp_skip=\skip51
+\g__xeCJK_space_factor_int=\count198
+\l__xeCJK_begin_int=\count199
+\l__xeCJK_end_int=\count266
+\c__xeCJK_CJK_class_int=\XeTeXcharclass1
+\c__xeCJK_FullLeft_class_int=\XeTeXcharclass2
+\c__xeCJK_FullRight_class_int=\XeTeXcharclass3
+\c__xeCJK_HalfLeft_class_int=\XeTeXcharclass4
+\c__xeCJK_HalfRight_class_int=\XeTeXcharclass5
+\c__xeCJK_NormalSpace_class_int=\XeTeXcharclass6
+\c__xeCJK_CM_class_int=\XeTeXcharclass7
+\c__xeCJK_HangulJamo_class_int=\XeTeXcharclass8
+\l__xeCJK_last_skip=\skip52
+\c__xeCJK_none_node=\count267
+\g__xeCJK_node_int=\count268
+\c__xeCJK_CJK_node_dim=\dimen143
+\c__xeCJK_CJK-space_node_dim=\dimen144
+\c__xeCJK_default_node_dim=\dimen145
+\c__xeCJK_CJK-widow_node_dim=\dimen146
+\c__xeCJK_normalspace_node_dim=\dimen147
+\c__xeCJK_default-space_node_skip=\skip53
+\l__xeCJK_ccglue_skip=\skip54
+\l__xeCJK_ecglue_skip=\skip55
+\l__xeCJK_punct_kern_skip=\skip56
+\l__xeCJK_indent_box=\box53
+\l__xeCJK_last_penalty_int=\count269
+\l__xeCJK_last_bound_dim=\dimen148
+\l__xeCJK_last_kern_dim=\dimen149
+\l__xeCJK_widow_penalty_int=\count270
+
+Package xtemplate Info: Declaring object type 'xeCJK/punctuation' taking 0
+(xtemplate)             argument(s) on line 2396.
+
+\l__xeCJK_fixed_punct_width_dim=\dimen150
+\l__xeCJK_mixed_punct_width_dim=\dimen151
+\l__xeCJK_middle_punct_width_dim=\dimen152
+\l__xeCJK_fixed_margin_width_dim=\dimen153
+\l__xeCJK_mixed_margin_width_dim=\dimen154
+\l__xeCJK_middle_margin_width_dim=\dimen155
+\l__xeCJK_bound_punct_width_dim=\dimen156
+\l__xeCJK_bound_margin_width_dim=\dimen157
+\l__xeCJK_margin_minimum_dim=\dimen158
+\l__xeCJK_kerning_total_width_dim=\dimen159
+\l__xeCJK_same_align_margin_dim=\dimen160
+\l__xeCJK_different_align_margin_dim=\dimen161
+\l__xeCJK_kerning_margin_width_dim=\dimen162
+\l__xeCJK_kerning_margin_minimum_dim=\dimen163
+\l__xeCJK_bound_dim=\dimen164
+\l__xeCJK_reverse_bound_dim=\dimen165
+\l__xeCJK_margin_dim=\dimen166
+\l__xeCJK_minimum_bound_dim=\dimen167
+\l__xeCJK_kerning_margin_dim=\dimen168
+\g__xeCJK_family_int=\count271
+\l__xeCJK_fam_int=\count272
+\g__xeCJK_fam_allocation_int=\count273
+\l__xeCJK_verb_case_int=\count274
+\l__xeCJK_verb_exspace_skip=\skip57
+
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.sty
+Package: fontspec 2022/01/15 v2.8a Font selection for XeLaTeX and LuaLaTeX
+
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+Package: fontspec-xetex 2022/01/15 v2.8a Font selection for XeLaTeX and LuaLaTe
+X
+\l__fontspec_script_int=\count275
+\l__fontspec_language_int=\count276
+\l__fontspec_strnum_int=\count277
+\l__fontspec_tmp_int=\count278
+\l__fontspec_tmpa_int=\count279
+\l__fontspec_tmpb_int=\count280
+\l__fontspec_tmpc_int=\count281
+\l__fontspec_em_int=\count282
+\l__fontspec_emdef_int=\count283
+\l__fontspec_strong_int=\count284
+\l__fontspec_strongdef_int=\count285
+\l__fontspec_tmpa_dim=\dimen169
+\l__fontspec_tmpb_dim=\dimen170
+\l__fontspec_tmpc_dim=\dimen171
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(/usr/share/texlive/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg
+File: xeCJK.cfg 2022/08/05 v3.9.1 Configuration file for xeCJK package
+))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty
+Package: indentfirst 2023/07/02 v1.03 Indent first paragraph (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2023/11/15 v3.01 LaTeX color extensions (UK)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: xetex.def on input line 274.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/xetex.def
+File: xetex.def 2022/09/22 v5.0n Graphics/color driver for xetex
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1350.
+Package xcolor Info: Model `RGB' extended on input line 1366.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1368.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2023/10/27 v2.16 Sectioning titles
+\ttl@box=\box54
+\beforetitleunit=\skip58
+\aftertitleunit=\skip59
+\ttl@plus=\dimen172
+\ttl@minus=\dimen173
+\ttl@toksa=\toks18
+\titlewidth=\dimen174
+\titlewidthlast=\dimen175
+\titlewidthfirst=\dimen176
+)
+(/usr/share/texlive/texmf-dist/tex/latex/titlesec/titletoc.sty
+Package: titletoc 2023/10/27 v2.16 TOC entries
+\ttl@leftsep=\dimen177
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tocloft/tocloft.sty
+Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
+Package tocloft Info: The document has chapter divisions on input line 51.
+\cftparskip=\skip60
+\cftbeforetoctitleskip=\skip61
+\cftaftertoctitleskip=\skip62
+\cftbeforepartskip=\skip63
+\cftpartnumwidth=\skip64
+\cftpartindent=\skip65
+\cftbeforechapskip=\skip66
+\cftchapindent=\skip67
+\cftchapnumwidth=\skip68
+\cftbeforesecskip=\skip69
+\cftsecindent=\skip70
+\cftsecnumwidth=\skip71
+\cftbeforesubsecskip=\skip72
+\cftsubsecindent=\skip73
+\cftsubsecnumwidth=\skip74
+\cftbeforesubsubsecskip=\skip75
+\cftsubsubsecindent=\skip76
+\cftsubsubsecnumwidth=\skip77
+\cftbeforeparaskip=\skip78
+\cftparaindent=\skip79
+\cftparanumwidth=\skip80
+\cftbeforesubparaskip=\skip81
+\cftsubparaindent=\skip82
+\cftsubparanumwidth=\skip83
+\cftbeforeloftitleskip=\skip84
+\cftafterloftitleskip=\skip85
+\cftbeforefigskip=\skip86
+\cftfigindent=\skip87
+\cftfignumwidth=\skip88
+\c@lofdepth=\count286
+\c@lotdepth=\count287
+\cftbeforelottitleskip=\skip89
+\cftafterlottitleskip=\skip90
+\cftbeforetabskip=\skip91
+\cfttabindent=\skip92
+\cfttabnumwidth=\skip93
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+Package: fancyhdr 2022/11/09 v4.1 Extensive control of page headers and footers
+
+\f@nch@headwidth=\skip94
+\f@nch@O@elh=\skip95
+\f@nch@O@erh=\skip96
+\f@nch@O@olh=\skip97
+\f@nch@O@orh=\skip98
+\f@nch@O@elf=\skip99
+\f@nch@O@erf=\skip100
+\f@nch@O@olf=\skip101
+\f@nch@O@orf=\skip102
+)
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: xetex.def on input line 107.
+)
+\Gin@req@height=\dimen178
+\Gin@req@width=\dimen179
+)
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2023/05/03 v3.0c eso-pic (RN)
+\ESO@tempdima=\dimen180
+\ESO@tempdimb=\dimen181
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+\pgfutil@everybye=\toks19
+\pgfutil@tempdima=\dimen182
+\pgfutil@tempdimb=\dimen183
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+\pgfutil@abb=\box55
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/pgf.revision.tex)
+Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
+))
+Package: pgf 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks20
+\pgfkeys@temptoks=\toks21
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered
+.code.tex
+\pgfkeys@tmptoks=\toks22
+))
+\pgf@x=\dimen184
+\pgf@y=\dimen185
+\pgf@xa=\dimen186
+\pgf@ya=\dimen187
+\pgf@xb=\dimen188
+\pgf@yb=\dimen189
+\pgf@xc=\dimen190
+\pgf@yc=\dimen191
+\pgf@xd=\dimen192
+\pgf@yd=\dimen193
+\w@pgf@writea=\write3
+\r@pgf@reada=\read2
+\c@pgf@counta=\count288
+\c@pgf@countb=\count289
+\c@pgf@countc=\count290
+\c@pgf@countd=\count291
+\t@pgf@toka=\toks23
+\t@pgf@tokb=\toks24
+\t@pgf@tokc=\toks25
+\pgf@sys@id@count=\count292
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
+)
+Driver file for pgf: pgfsys-xetex.def
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-xetex.def
+File: pgfsys-xetex.def 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvipdfmx.def
+File: pgfsys-dvipdfmx.def 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.de
+f
+File: pgfsys-common-pdf.def 2023-01-15 v3.1.10 (3.1.10)
+)
+\pgfsys@objnum=\count293
+)))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
+tex
+File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfsyssoftpath@smallbuffer@items=\count294
+\pgfsyssoftpath@bigbuffer@items=\count295
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
+tex
+File: pgfsysprotocol.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+\pgfmath@dimen=\dimen194
+\pgfmath@count=\count296
+\pgfmath@box=\box56
+\pgfmath@toks=\toks26
+\pgfmath@stack@operand=\toks27
+\pgfmath@stack@operation=\toks28
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code
+.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonomet
+ric.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.cod
+e.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison
+.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.
+tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code
+.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.
+tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerari
+thmetics.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count297
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
+x
+File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@picminx=\dimen195
+\pgf@picmaxx=\dimen196
+\pgf@picminy=\dimen197
+\pgf@picmaxy=\dimen198
+\pgf@pathminx=\dimen199
+\pgf@pathmaxx=\dimen256
+\pgf@pathminy=\dimen257
+\pgf@pathmaxy=\dimen258
+\pgf@xx=\dimen259
+\pgf@xy=\dimen260
+\pgf@yx=\dimen261
+\pgf@yy=\dimen262
+\pgf@zx=\dimen263
+\pgf@zy=\dimen264
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.
+code.tex
+File: pgfcorepathconstruct.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@path@lastx=\dimen265
+\pgf@path@lasty=\dimen266
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code
+.tex
+File: pgfcorepathusage.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@shorten@end@additional=\dimen267
+\pgf@shorten@start@additional=\dimen268
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.te
+x
+File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfpic=\box57
+\pgf@hbox=\box58
+\pgf@layerbox@main=\box59
+\pgf@picture@serial@count=\count298
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
+ode.tex
+File: pgfcoregraphicstate.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgflinewidth=\dimen269
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformation
+s.code.tex
+File: pgfcoretransformations.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@pt@x=\dimen270
+\pgf@pt@y=\dimen271
+\pgf@pt@temp=\dimen272
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.t
+ex
+File: pgfcoreobjects.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing
+.code.tex
+File: pgfcorepathprocessing.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.te
+x
+File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfarrowsep=\dimen273
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@max=\dimen274
+\pgf@sys@shading@range@num=\count299
+\pgf@shadingcount=\count300
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.
+tex
+File: pgfcoreexternal.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfexternal@startupbox=\box60
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.te
+x
+File: pgfcorelayers.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.c
+ode.tex
+File: pgfcoretransparency.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.
+tex
+File: pgfcorepatterns.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
+File: pgfcorerdf.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfnodeparttextbox=\box61
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+File: pgfmoduleplot.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65
+.sty
+Package: pgfcomp-version-0-65 2023-01-15 v3.1.10 (3.1.10)
+\pgf@nodesepstart=\dimen275
+\pgf@nodesepend=\dimen276
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18
+.sty
+Package: pgfcomp-version-1-18 2023-01-15 v3.1.10 (3.1.10)
+)) (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex))
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/math/pgfmath.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2023-01-15 v3.1.10 (3.1.10)
+\pgffor@iter=\dimen277
+\pgffor@skip=\dimen278
+\pgffor@stack=\toks29
+\pgffor@toks=\toks30
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+Package: tikz 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
+.code.tex
+File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@plot@mark@count=\count301
+\pgfplotmarksize=\dimen279
+)
+\tikz@lastx=\dimen280
+\tikz@lasty=\dimen281
+\tikz@lastxsaved=\dimen282
+\tikz@lastysaved=\dimen283
+\tikz@lastmovetox=\dimen284
+\tikz@lastmovetoy=\dimen285
+\tikzleveldistance=\dimen286
+\tikzsiblingdistance=\dimen287
+\tikz@figbox=\box62
+\tikz@figbox@bg=\box63
+\tikz@tempbox=\box64
+\tikz@tempbox@bg=\box65
+\tikztreelevel=\count302
+\tikznumberofchildren=\count303
+\tikznumberofcurrentchild=\count304
+\tikz@fig@count=\count305
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfmatrixcurrentrow=\count306
+\pgfmatrixcurrentcolumn=\count307
+\pgf@matrix@numberofcolumns=\count308
+)
+\tikz@expandcount=\count309
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)))
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+Package: pdfpages 2024/01/21 v0.5y Insert pages of external PDF documents (AM)
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2023/07/08 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count310
+\calc@Bcount=\count311
+\calc@Adimen=\dimen288
+\calc@Bdimen=\dimen289
+\calc@Askip=\skip103
+\calc@Bskip=\skip104
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count312
+\calc@Cskip=\skip105
+)
+\AM@pagewidth=\dimen290
+\AM@pageheight=\dimen291
+\AM@fboxrule=\dimen292
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdfpages/ppxetex.def
+File: ppxetex.def 2024/01/21 v0.5y Pdfpages driver for XeTeX (AM)
+)
+\pdfpages@includegraphics@status=\count313
+\AM@pagebox=\box66
+\AM@global@opts=\toks31
+\AM@pagecnt=\count314
+\AM@toc@title=\toks32
+\AM@lof@heading=\toks33
+\c@AM@survey=\count315
+\AM@templatesizebox=\box67
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2023/07/08 v2.11c `tabularx' package (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
+\col@sep=\dimen293
+\ar@mcellbox=\box68
+\extrarowheight=\dimen294
+\NC@list=\toks34
+\extratabsurround=\skip106
+\backup@length=\skip107
+\ar@cellbox=\box69
+)
+\TX@col@width=\dimen295
+\TX@old@table=\dimen296
+\TX@old@col=\dimen297
+\TX@target=\dimen298
+\TX@delta=\dimen299
+\TX@cols=\count316
+\TX@ftn=\toks35
+)
+(/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen300
+\lightrulewidth=\dimen301
+\cmidrulewidth=\dimen302
+\belowrulesep=\dimen303
+\belowbottomsep=\dimen304
+\aboverulesep=\dimen305
+\abovetopsep=\dimen306
+\cmidrulesep=\dimen307
+\cmidrulekern=\dimen308
+\defaultaddspace=\dimen309
+\@cmidla=\count317
+\@cmidlb=\count318
+\@aboverulesep=\dimen310
+\@belowrulesep=\dimen311
+\@thisruleclass=\count319
+\@lastruleclass=\count320
+\@thisrulewidth=\dimen312
+)
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip108
+\multirow@cntb=\count321
+\multirow@dima=\skip109
+\bigstrutjot=\dimen313
+)
+(/usr/share/texlive/texmf-dist/tex/latex/diagbox/diagbox.sty
+Package: diagbox 2020/02/09 v2.3 Making table heads with diagonal lines
+
+(/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.sty
+Package: pict2e 2020/09/30 v0.4b Improved picture commands (HjG,RN,JT)
+
+(/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.cfg
+File: pict2e.cfg 2016/02/05 v0.1u pict2e configuration for teTeX/TeXLive
+)
+Package pict2e Info: Driver file: xetex.def on input line 112.
+Package pict2e Info: Driver file for pict2e: p2e-xetex.def on input line 114.
+
+(/usr/share/texlive/texmf-dist/tex/latex/pict2e/p2e-xetex.def
+File: p2e-xetex.def 2016/02/05 v0.1u Driver-dependant file (RN,HjG,JT)
+)
+\pIIe@GRAPH=\toks36
+\@arclen=\dimen314
+\@arcrad=\dimen315
+\pIIe@tempdima=\dimen316
+\pIIe@tempdimb=\dimen317
+\pIIe@tempdimc=\dimen318
+\pIIe@tempdimd=\dimen319
+\pIIe@tempdime=\dimen320
+\pIIe@tempdimf=\dimen321
+)
+\diagbox@boxa=\box70
+\diagbox@boxb=\box71
+\diagbox@boxm=\box72
+\diagbox@wd=\dimen322
+\diagbox@ht=\dimen323
+\diagbox@insepl=\dimen324
+\diagbox@insepr=\dimen325
+\diagbox@outsepl=\dimen326
+\diagbox@outsepr=\dimen327
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2023-11-01 v4.19 Multi-page Table package (DPC)
+\LTleft=\skip110
+\LTright=\skip111
+\LTpre=\skip112
+\LTpost=\skip113
+\LTchunksize=\count322
+\LTcapwidth=\dimen328
+\LT@head=\box73
+\LT@firsthead=\box74
+\LT@foot=\box75
+\LT@lastfoot=\box76
+\LT@gbox=\box77
+\LT@cols=\count323
+\LT@rows=\count324
+\c@LT@tables=\count325
+\c@LT@chunks=\count326
+\LT@p@ftn=\toks37
+)
+(/usr/share/texlive/texmf-dist/tex/latex/datetime/datetime.sty
+Package: datetime 2015/03/20 v2.60 Date Time Package
+
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count327
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fmtcount/fmtcount.sty
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+Package: fmtcount 2020/01/30 v3.07
+
+(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
+
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks38
+\XKV@tempa@toks=\toks39
+)
+\XKV@depth=\count328
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/fmtcount/fcprefix.sty
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+Package: fcprefix 2012/09/28
+
+(/usr/share/texlive/texmf-dist/tex/latex/fmtcount/fcnumparser.sty
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+Package: fcnumparser 2017/06/15
+\fc@digit@counter=\count329
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks40
+\ex@=\dimen329
+)
+\c@padzeroesN=\count330
+\fc@tmpcatcode=\count331
+\@DT@modctr=\count332
+\@ordinalctr=\count333
+\@orgargctr=\count334
+\@strctr=\count335
+\@tmpstrctr=\count336
+\@DT@loopN=\count337
+\@DT@X=\count338
+)
+(/usr/share/texlive/texmf-dist/tex/latex/datetime/datetime-defaults.sty
+Package: datetime-defaults 2013/09/10
+)
+\@day=\count339
+\@month=\count340
+\@year=\count341
+\c@HOUR=\count342
+\c@HOURXII=\count343
+\c@MINUTE=\count344
+\c@TOHOUR=\count345
+\c@TOMINUTE=\count346
+\c@SECOND=\count347
+\currenthour=\count348
+\currentminute=\count349
+\currentsecond=\count350
+Package datetime Info: No datetime.cfg file found, using default settings on in
+put line 308.
+\@dtctr=\count351
+\dayofyear=\count352
+\dayofweek=\count353
+LaTeX Info: Redefining \today on input line 736.
+\dt@a=\toks41
+\dt@b=\toks42
+)
+(/usr/share/texmf/tex/latex/CJK/CJKnumb.sty
+Package: CJKnumb 2021/10/16 4.8.5
+\CJK@q=\count354
+\CJK@r=\count355
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp.sty
+Package: fp 1995/04/02
+
+`Fixed Point Package', Version 0.8, April 2, 1995 (C) Michael Mehlich
+(/usr/share/texlive/texmf-dist/tex/latex/fp/defpattern.sty
+Package: defpattern 1994/10/12
+\actioncount=\count356
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-basic.sty
+Package: fp-basic 1996/05/13
+\FP@xs=\count357
+\FP@xia=\count358
+\FP@xib=\count359
+\FP@xfa=\count360
+\FP@xfb=\count361
+\FP@rega=\count362
+\FP@regb=\count363
+\FP@regs=\count364
+\FP@times=\count365
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-addons.sty
+Package: fp-addons 1995/03/15
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-snap.sty
+Package: fp-snap 1995/04/05
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-exp.sty
+Package: fp-exp 1995/04/03
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-trigo.sty
+Package: fp-trigo 1995/04/14
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-pas.sty
+Package: fp-pas 1994/08/29
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-random.sty
+Package: fp-random 1995/02/23
+\FPseed=\count366
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-eqn.sty
+Package: fp-eqn 1995/04/03
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-upn.sty
+Package: fp-upn 1996/10/21
+)
+(/usr/share/texlive/texmf-dist/tex/latex/fp/fp-eval.sty
+Package: fp-eval 1995/04/03
+))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2024-01-20 v7.01h Hypertext links for LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
 )
 
-! Class ntuthesis Error: XeLaTeX is required to compile this document..
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode not found.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2023-11-26 v2.56 Cross-referencing by name of section
 
-See the ntuthesis class documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.233 ...eX is required to compile this document.}
-                                                   
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count367
+)
+\@linkdim=\dimen330
+\Hy@linkcounter=\count368
+\Hy@pagecounter=\count369
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2024-01-20 v7.01h Hyperref: PDFDocEncoding definition (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count370
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2024-01-20 v7.01h Hyperref: PDF Unicode definition (HO)
+)
+Package hyperref Info: Hyper figures OFF on input line 4179.
+Package hyperref Info: Link nesting OFF on input line 4184.
+Package hyperref Info: Hyper index ON on input line 4187.
+Package hyperref Info: Plain pages OFF on input line 4194.
+Package hyperref Info: Backreferencing OFF on input line 4199.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4446.
+\c@Hy@tempcnt=\count371
+
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4784.
+\XeTeXLinkMargin=\dimen331
+
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count372
+\Field@Width=\dimen332
+\Fld@charsize=\dimen333
+Package hyperref Info: Hyper figures OFF on input line 6063.
+Package hyperref Info: Link nesting OFF on input line 6068.
+Package hyperref Info: Hyper index ON on input line 6071.
+Package hyperref Info: backreferencing OFF on input line 6078.
+Package hyperref Info: Link coloring OFF on input line 6083.
+Package hyperref Info: Link coloring with OCG OFF on input line 6088.
+Package hyperref Info: PDF/A mode OFF on input line 6093.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
+package with kernel methods
+)
+\Hy@abspage=\count373
+\c@Item=\count374
+\c@Hfootnote=\count375
+)
+Package hyperref Info: Driver (autodetected): hxetex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hxetex.def
+File: hxetex.def 2024-01-20 v7.01h Hyperref driver for XeTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/stringenc/stringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\pdfm@box=\box78
+\c@Hy@AnnotLevel=\count376
+\HyField@AnnotCount=\count377
+\Fld@listcount=\count378
+\c@bookmark@seq@number=\count379
+
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
+kage
+with kernel methods
+)
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+85.
+)
+\Hy@SectionHShift=\skip114
+)
+(/usr/share/texlive/texmf-dist/tex/latex/paralist/paralist.sty
+Package: paralist 2017/01/22 v2.7 Extended list environments
+\pltopsep=\skip115
+\plpartopsep=\skip116
+\plitemsep=\skip117
+\plparsep=\skip118
+\pl@lab=\toks43
+)
+(/usr/share/texlive/texmf-dist/tex/latex/footmisc/footmisc.sty
+Package: footmisc 2023/07/05 v6.0f a miscellany of footnote facilities
+\FN@temptoken=\toks44
+\footnotemargin=\dimen334
+\@outputbox@depth=\dimen335
+Package footmisc Info: Declaring symbol style bringhurst on input line 696.
+Package footmisc Info: Declaring symbol style chicago on input line 704.
+Package footmisc Info: Declaring symbol style wiley on input line 713.
+Package footmisc Info: Declaring symbol style lamport-robust on input line 724.
+
+Package footmisc Info: Declaring symbol style lamport* on input line 744.
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 765
+.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen336
+\captionmargin=\dimen337
+\caption@leftmargin=\dimen338
+\caption@rightmargin=\dimen339
+\caption@width=\dimen340
+\caption@indent=\dimen341
+\caption@parindent=\dimen342
+\caption@hangindent=\dimen343
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count380
+\c@continuedfloat=\count381
+Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count382
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count383
+)
+
+Package fontspec Info: Font family 'TimesNewRoman(0)' created for font 'Times
+(fontspec)             New Roman' with options [Ligatures=TeX,Path =
+(fontspec)             ./fonts/english/,Extension = .ttf,BoldFont =
+(fontspec)             *-Bold,ItalicFont = *-Italic,BoldItalicFont =
+(fontspec)             *-BoldItalic].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman.ttf]/OT:script=latn;language=dflt;mapping=tex-text
+;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman.ttf]/OT:script=latn;language=dflt;+smcp;mapping=te
+x-text;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman-Bold.ttf]/OT:script=latn;language=dflt;mapping=tex
+-text;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman-Bold.ttf]/OT:script=latn;language=dflt;+smcp;mappi
+ng=tex-text;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman-Italic.ttf]/OT:script=latn;language=dflt;mapping=t
+ex-text;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman-Italic.ttf]/OT:script=latn;language=dflt;+smcp;map
+ping=tex-text;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman-BoldItalic.ttf]/OT:script=latn;language=dflt;mappi
+ng=tex-text;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.:
+(fontspec)             <->"[./fonts/english/Times New
+(fontspec)             Roman-BoldItalic.ttf]/OT:script=latn;language=dflt;+smcp
+;mapping=tex-text;"
+
+
+Package fontspec Info: Font family 'BiauKai(0)' created for font 'BiauKai'
+(fontspec)             with options
+(fontspec)             [Script={CJK},Path={./fonts/chinese/},Extension={.ttf},B
+oldFont={Kaiti-Black}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"[./fonts/chinese/BiauKai.ttf]/OT:script=hani;languag
+e=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->"[./fonts/chinese/Kaiti-Black.ttf]/OT:script=hani;lan
+guage=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count384
+\Gm@cntv=\count385
+\c@Gm@tempcnt=\count386
+\Gm@bindingoffset=\dimen344
+\Gm@wd@mp=\dimen345
+\Gm@odd@mp=\dimen346
+\Gm@even@mp=\dimen347
+\Gm@layoutwidth=\dimen348
+\Gm@layoutheight=\dimen349
+\Gm@layouthoffset=\dimen350
+\Gm@layoutvoffset=\dimen351
+\Gm@dimlist=\toks45
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 577.
+\ntu@CJKChar@size@dimen=\dimen352
+) (./ntusetup.tex
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip119
+\bibsep=\skip120
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count387
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2023/05/13 v2.17o AMS math features
+\@mathmargin=\skip121
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen353
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count388
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count389
+\leftroot@=\count390
+LaTeX Info: Redefining \overline on input line 399.
+LaTeX Info: Redefining \colon on input line 410.
+\classnum@=\count391
+\DOTSCASE@=\count392
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box79
+\strutbox@=\box80
+LaTeX Info: Redefining \big on input line 722.
+LaTeX Info: Redefining \Big on input line 723.
+LaTeX Info: Redefining \bigg on input line 724.
+LaTeX Info: Redefining \Bigg on input line 725.
+\big@size=\dimen354
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count393
+LaTeX Info: Redefining \bmod on input line 905.
+LaTeX Info: Redefining \pmod on input line 910.
+LaTeX Info: Redefining \smash on input line 940.
+LaTeX Info: Redefining \relbar on input line 970.
+LaTeX Info: Redefining \Relbar on input line 971.
+\c@MaxMatrixCols=\count394
+\dotsspace@=\muskip18
+\c@parentequation=\count395
+\dspbrk@lvl=\count396
+\tag@help=\toks46
+\row@=\count397
+\column@=\count398
+\maxfields@=\count399
+\andhelp@=\toks47
+\eqnshift@=\dimen355
+\alignsep@=\dimen356
+\tagshift@=\dimen357
+\tagwidth@=\dimen358
+\totwidth@=\dimen359
+\lineht@=\dimen360
+\@envbody=\toks48
+\multlinegap=\skip122
+\multlinetaggap=\skip123
+\mathdisplay@stack=\toks49
+LaTeX Info: Redefining \[ on input line 2953.
+LaTeX Info: Redefining \] on input line 2954.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks50
+\thm@bodyfont=\toks51
+\thm@headfont=\toks52
+\thm@notefont=\toks53
+\thm@headpunct=\toks54
+\thm@preskip=\skip124
+\thm@postskip=\skip125
+\thm@headsep=\skip126
+\dth@everypar=\toks55
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/share/texlive/texmf-dist/tex/generic/ulem/ulem.sty
+\UL@box=\box81
+\UL@hyphenbox=\box82
+\UL@skip=\skip127
+\UL@hook=\toks56
+\UL@height=\dimen361
+\UL@pe=\count400
+\UL@pixel=\dimen362
+\ULC@box=\box83
+Package: ulem 2019/11/18
+\ULdepth=\dimen363
+)
+
+Package ctexhook Warning: Package `CJKulem' can not be loaded with `xeCJK'.
+
+LaTeX Info: Package 'CJKulem.sty' has been disabled.
+            Load request ignored on input line 35.
+(/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count401
+\float@exts=\toks57
+\float@box=\box84
+\@float@everytoks=\toks58
+\@floatcapt=\box85
+)
+\@float@every@algorithm=\toks59
+\c@algorithm=\count402
+)
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count403
+\c@ALG@rem=\count404
+\c@ALG@nested=\count405
+\ALG@tlm=\skip128
+\ALG@thistlm=\skip129
+\c@ALG@Lnr=\count406
+\c@ALG@blocknr=\count407
+\c@ALG@storecount=\count408
+\c@ALG@tmpcounter=\count409
+\ALG@tmplength=\skip130
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty
+Package: siunitx 2024-01-25 v3.3.10 A comprehensive (SI) units package
+\l__siunitx_number_uncert_offset_int=\count410
+\l__siunitx_number_exponent_fixed_int=\count411
+\l__siunitx_number_min_decimal_int=\count412
+\l__siunitx_number_min_integer_int=\count413
+\l__siunitx_number_round_precision_int=\count414
+\l__siunitx_number_lower_threshold_int=\count415
+\l__siunitx_number_upper_threshold_int=\count416
+\l__siunitx_number_group_first_int=\count417
+\l__siunitx_number_group_size_int=\count418
+\l__siunitx_number_group_minimum_int=\count419
+\l__siunitx_angle_tmp_dim=\dimen364
+\l__siunitx_angle_marker_box=\box86
+\l__siunitx_angle_unit_box=\box87
+\l__siunitx_compound_count_int=\count420
+
+(/usr/share/texlive/texmf-dist/tex/latex/translations/translations.sty
+Package: translations 2022/02/05 v1.12 internationalization of LaTeX2e packages
+ (CN)
+)
+\l__siunitx_table_tmp_box=\box88
+\l__siunitx_table_tmp_dim=\dimen365
+\l__siunitx_table_column_width_dim=\dimen366
+\l__siunitx_table_integer_box=\box89
+\l__siunitx_table_decimal_box=\box90
+\l__siunitx_table_uncert_box=\box91
+\l__siunitx_table_before_box=\box92
+\l__siunitx_table_after_box=\box93
+\l__siunitx_table_before_dim=\dimen367
+\l__siunitx_table_carry_dim=\dimen368
+\l__siunitx_unit_tmp_int=\count421
+\l__siunitx_unit_position_int=\count422
+\l__siunitx_unit_total_int=\count423
+)
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+Package: l3keys2e 2023-10-10 LaTeX2e option processing using LaTeX3 keys
+)
+Package: lipsum 2021-09-20 v2.7 150 paragraphs of Lorem Ipsum dummy text
+\g__lipsum_par_int=\count424
+\l__lipsum_a_int=\count425
+\l__lipsum_b_int=\count426
+
+(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex))
+(/usr/share/texlive/texmf-dist/tex/latex/zhlipsum/zhlipsum.sty
+Package: zhlipsum 2020/04/10 v1.2.0 Chinese dummy text
+\l__zhlipsum_begin_int=\count427
+\l__zhlipsum_end_int=\count428
+\l__zhlipsum_max_int=\count429
+
+(/usr/share/texlive/texmf-dist/tex/latex/zhlipsum/zhlipsum-utf8.def
+File: zhlipsum-utf8.def 2020/04/10 v1.2.0 Chinese dummy text with UTF-8 encodin
+g (for zhlipsum)
+\g__zhlipsum_simp_int=\count430
+
+Package zhlipsum Info: Chinese dummy text "simp" is created. It has 50
+(zhlipsum)             paragraphs.
+
+\g__zhlipsum_trad_int=\count431
+
+Package zhlipsum Info: Chinese dummy text "trad" is created. It has 50
+(zhlipsum)             paragraphs.
+
+\g__zhlipsum_nanshanjing_int=\count432
+
+Package zhlipsum Info: Chinese dummy text "nanshanjing" is created. It has 43
+(zhlipsum)             paragraphs.
+
+\g__zhlipsum_xiangyu_int=\count433
+
+Package zhlipsum Info: Chinese dummy text "xiangyu" is created. It has 45
+(zhlipsum)             paragraphs.
+
+\g__zhlipsum_zhufu_int=\count434
+
+Package zhlipsum Info: Chinese dummy text "zhufu" is created. It has 110
+(zhlipsum)             paragraphs.
+
+\g__zhlipsum_aspirin_int=\count435
+
+Package zhlipsum Info: Chinese dummy text "aspirin" is created. It has 66
+(zhlipsum)             paragraphs.
+
+)))
+Package translations Info: No language package found. I am going to use `englis
+h' as default language. on input line 17.
+
+(./main.aux)
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
+7.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+
+Package fontspec Info: Adjusting the maths setup (use [no-math] to avoid
+(fontspec)             this).
+
+\symlegacymaths=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 17.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 17.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 17.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 17.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 17.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 17.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 17.
+LaTeX Font Info:    Redeclaring math accent \check on input line 17.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 17.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 17.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 17.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 17.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 17.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `normal' on input line 17.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> TU/TimesNewRoman(0)/m/n on input line 1
+7.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `bold' on input line 17.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> TU/TimesNewRoman(0)/m/n on input line 
+17.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  TU/TimesNewRoman(0)/m/n --> TU/TimesNewRoman(0)/m/n on 
+input line 17.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> TU/TimesNewRoman(0)/m/it on input line
+ 17.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> TU/TimesNewRoman(0)/b/n on input line 
+17.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 17.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 17.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  TU/TimesNewRoman(0)/m/n --> TU/TimesNewRoman(0)/b/n on 
+input line 17.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> TU/TimesNewRoman(0)/b/it on input lin
+e 17.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 17.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 17.
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdflscape/pdflscape-nometadata.sty
+Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PD
+F (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: dvipdfm (xetex) on input line 98.
+
+))
+(/usr/share/texlive/texmf-dist/tex/latex/fmtcount/fc-english.def
+Invalid UTF-8 byte or sequence at line 10 replaced by U+FFFD.
+Invalid UTF-8 byte or sequence at line 22 replaced by U+FFFD.
+File: fc-english.def 2016/01/12
+)
+Package hyperref Info: Link coloring ON on input line 17.
+ (./main.out)
+(./main.out)
+\@outlinefile=\write4
+\openout4 = `main.out'.
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
+Package caption Info: End \AtBeginDocument code.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+*geometry* verbose mode - [ preamble ] result:
+* driver: xetex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(85.35826pt, 426.79135pt, 85.35826pt)
+* v-part:(T,H,B)=(85.35826pt, 702.78308pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=426.79135pt
+* \textheight=702.78308pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
+* \topmargin=-23.91173pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=85.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictio
+nary-english.trsl
+File: translations-basic-dictionary-english.trsl (english translation file `tra
+nslations-basic-dictionary')
+)
+Package translations Info: loading dictionary `translations-basic-dictionary' f
+or `english'. on input line 17.
+*geometry* verbose mode - [ newgeometry ] result:
+* driver: xetex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(85.35826pt, 426.79135pt, 85.35826pt)
+* v-part:(T,H,B)=(113.81102pt, 645.87756pt, 85.35826pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=426.79135pt
+* \textheight=645.87756pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
+* \topmargin=4.54103pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=85.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [1
+
+
+]
+*geometry* verbose mode - [ newgeometry ] result:
+* driver: xetex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(85.35826pt, 426.79135pt, 85.35826pt)
+* v-part:(T,H,B)=(85.35826pt, 702.78308pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=426.79135pt
+* \textheight=702.78308pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
+* \topmargin=-23.91173pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=85.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+
+Overfull \hbox (76.61493pt too wide) in paragraph at lines 22--22
+\TU/BiauKai(0)/m/n/16 路 與 多 媒 體 研 究 所 完 成 之 碩 士 學 位 論 文，|  於 民 國 \TU/TimesNewRo
+man(0)/m/n/16 115 \TU/BiauKai(0)/m/n/16 年 [] 月 [] 日
+ []
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [1
+
+
+
+
+]
+(./front/acknowledgement.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [2
+
+
+]) (./front/abstract.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [3]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [4
+
+]
+
+Package xeCJK Warning: Unknown CJK family `\CJKttdefault' is being ignored.
+(xeCJK)                
+(xeCJK)                Try to use `\setCJKmonofont[<...>]{<...>}' to define
+(xeCJK)                it.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [5]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[6]
+Overfull \hbox (20.1282pt too wide) in paragraph at lines 15--16
+\TU/TimesNewRoman(0)/m/n/12 recently surpassed deterministic deep-learning base
+lines on probabilistic, sharp, and ensemble-
+ []
+
+
+Overfull \hbox (2.98209pt too wide) in paragraph at lines 17--18
+[]\TU/TimesNewRoman(0)/m/n/12 This thesis builds on a two-stage StormCast model
+ trained on a Taiwan-domain RWRF
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [7
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [8]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [9])
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[10] (./main.toc
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [11
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [12]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [13])
+\tf@toc=\write5
+\openout5 = `main.toc'.
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[14] (./main.lof)
+\tf@lof=\write6
+\openout6 = `main.lof'.
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [15
+
+]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [16
+
+] (./main.lot)
+\tf@lot=\write7
+\openout7 = `main.lot'.
+
+ (./front/denotation.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [17]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [18
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [19]
+Overfull \hbox (15.37598pt too wide) in paragraph at lines 26--27
+[]\TU/TimesNewRoman(0)/m/n/12 Deterministic regression network producing mean $
+\OML/cmm/m/it/12 ^^V[] \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 F[]\OT1/cmr/m/n/12 (\
+OML/cmm/m/it/12 M[]; S[]; I\OT1/cmr/m/n/12 )$\TU/TimesNewRoman(0)/m/n/12 . 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [20]
+Overfull \hbox (46.62202pt too wide) in paragraph at lines 32--33
+[]\TU/TimesNewRoman(0)/m/n/12 MeanFlow average-velocity field $\OML/cmm/m/it/12
+ u[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 z; r; t; c\OT1/cmr/m/n/12 )$ \TU/TimesNew
+Roman(0)/m/n/12 (MeanFlowPrecond SongUNet);
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [21]
+Overfull \hbox (4.72687pt too wide) in paragraph at lines 43--44
+[]\TU/TimesNewRoman(0)/m/n/12 Number of sampling network evaluations (NFE): Eul
+er steps for Flow-
+ []
+
+)
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [22]
+*geometry* verbose mode - [ newgeometry ] result:
+* driver: xetex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(85.35826pt, 426.79135pt, 85.35826pt)
+* v-part:(T,H,B)=(85.35826pt, 702.78308pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=426.79135pt
+* \textheight=702.78308pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
+* \topmargin=-23.91173pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=85.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+ (./contents/chapter01.tex
+Chapter 1.
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[1
+
+
+
+]
+Overfull \hbox (0.14499pt too wide) in paragraph at lines 18--19
+[]\TU/TimesNewRoman(0)/m/n/12 For most of a century, operational forecasting ha
+s meant |   []   |   []   |   []
+ []
+
+
+Overfull \hbox (6.71494pt too wide) in paragraph at lines 18--19
+\TU/TimesNewRoman(0)/m/n/12 dimensional grid, with unresolved sub-grid processe
+s (convection, microphysics, boundary-
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [2]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[3]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [4]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [5]
+Overfull \hbox (1.72427pt too wide) in paragraph at lines 50--51
+\TU/TimesNewRoman(0)/m/n/12 regression-plus-residual architecture as the genera
+tive residual head — to our knowl-
+ []
+
+
+Overfull \hbox (2.9653pt too wide) in paragraph at lines 54--55
+\TU/TimesNewRoman(0)/m/n/12 tional Flow Matching, and the MeanFlow average-velo
+city identity — self-contained
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[6]) (./contents/chapter02.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [7]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [8
+
+]
+Chapter 2.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [9]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [10]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[11]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [12]
+Underfull \vbox (badness 3568) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [13]
+Overfull \hbox (3.28236pt too wide) in paragraph at lines 59--60
+\TU/TimesNewRoman(0)/m/n/12 to supervised denoising, with one network call per 
+training step. The cost lands at |   [],
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [14]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [15]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[16]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [17]
+Overfull \hbox (14.0954pt too wide) detected at line 129
+[][][]\OML/cmm/m/it/12 p[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x \OMS/cmsy/m/n/12 
+j \OML/cmm/m/it/12 x[]; x[]\OT1/cmr/m/n/12 ) = \OMS/cmsy/m/n/12 N[]\OT1/cmr/m/n
+/12 (1 \OMS/cmsy/m/n/12 ^^@ \OML/cmm/m/it/12 t\OT1/cmr/m/n/12 ) \OML/cmm/m/it/1
+2 x[] \OT1/cmr/m/n/12 + \OML/cmm/m/it/12 t x[];  ^^[[]I[];  x[] \OT1/cmr/m/n/12
+ = (1 \OMS/cmsy/m/n/12 ^^@ \OML/cmm/m/it/12 t\OT1/cmr/m/n/12 ) \OML/cmm/m/it/12
+ x[] \OT1/cmr/m/n/12 + \OML/cmm/m/it/12 t x[] \OT1/cmr/m/n/12 + \OML/cmm/m/it/1
+2 ^^[[] ^^Q;  ^^Q \OMS/cmsy/m/n/12 ^^X N\OT1/cmr/m/n/12 (0\OML/cmm/m/it/12 ; I\
+OT1/cmr/m/n/12 )\OML/cmm/m/it/12 :
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[18]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [19]
+File: figures/instantaneous_vs_average_velocity.png Graphic file (type bmp)
+<figures/instantaneous_vs_average_velocity.png>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [20]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [21])
+(./contents/chapter03.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [22]
+Chapter 3.
+
+Overfull \hbox (14.74251pt too wide) in paragraph at lines 6--7
+[]\TU/TimesNewRoman(0)/m/n/12 This chapter describes what was actually built. S
+ection [][]3.1[][] states the residual-forecasting
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [23
+
+]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[24]
+File: figures/meanflow_figs/meancasthd.png Graphic file (type bmp)
+<figures/meanflow_figs/meancasthd.png>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [25]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[26]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [27]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [28]
+Overfull \hbox (26.85803pt too wide) in paragraph at lines 96--98
+[]\TU/TimesNewRoman(0)/m/n/12 Two staged scripts under \TU/lmtt/m/n/12 data_pre
+processing/ \TU/TimesNewRoman(0)/m/n/12 assemble the store: \TU/lmtt/m/n/12 nc_
+month_to_day/
+ []
+
+
+Underfull \vbox (badness 4013) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [29]
+Underfull \vbox (badness 6125) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [30]
+File: figures/highres_distributions/stormcast_test_train_HighRes_t2m_gaussian_c
+heck.png Graphic file (type bmp)
+<figures/highres_distributions/stormcast_test_train_HighRes_t2m_gaussian_check.
+png>
+File: figures/highres_distributions/stormcast_test_train_HighRes_u10_gaussian_c
+heck.png Graphic file (type bmp)
+<figures/highres_distributions/stormcast_test_train_HighRes_u10_gaussian_check.
+png>
+File: figures/highres_distributions/stormcast_test_train_HighRes_v10_gaussian_c
+heck.png Graphic file (type bmp)
+<figures/highres_distributions/stormcast_test_train_HighRes_v10_gaussian_check.
+png>
+File: figures/highres_distributions/stormcast_test_train_HighRes_qpepre_gaussia
+n_check.png Graphic file (type bmp)
+<figures/highres_distributions/stormcast_test_train_HighRes_qpepre_gaussian_che
+ck.png>
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[31]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [32]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [33]
+Overfull \hbox (26.05408pt too wide) in paragraph at lines 166--167
+[]\TU/TimesNewRoman(0)/m/n/12 Both networks are instantiated through the factor
+y \TU/lmtt/m/n/12 get_preconditioned_architecture
+ []
+
+
+Overfull \hbox (44.27266pt too wide) in paragraph at lines 166--167
+\TU/TimesNewRoman(0)/m/n/12 per by name. The conditioning bundle is assembled b
+y \TU/lmtt/m/n/12 build_network_condition_and_target\TU/TimesNewRoman(0)/m/n/12
+ ,
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[34]
+Underfull \vbox (badness 2134) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [35]
+Overfull \hbox (18.08263pt too wide) in paragraph at lines 181--182
+\TU/TimesNewRoman(0)/m/n/12 which is identical in \TU/lmtt/m/n/12 stormcast/ co
+nfig/ model/ flowcast.yaml \TU/TimesNewRoman(0)/m/n/12 and \TU/lmtt/m/n/12 stor
+mcast/ config/
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[36]
+Overfull \hbox (19.57584pt too wide) in paragraph at lines 195--196
+[] [] \TU/TimesNewRoman(0)/b/n/12 Velocity predictor.[] \TU/TimesNewRoman(0)/m/
+n/12 The FlowCast network is the \TU/lmtt/m/n/12 FlowCastPrecond \TU/TimesNewRo
+man(0)/m/n/12 module at \TU/lmtt/m/n/12 stormcast/
+ []
+
+
+Overfull \hbox (198.1561pt too wide) in paragraph at lines 195--196
+\TU/lmtt/m/n/12 utils/ flowcast_precond.py\TU/TimesNewRoman(0)/m/n/12 , instant
+iated through the factory call \TU/lmtt/m/n/12 get_preconditioned_architecture(
+name="flowcast",
+ []
+
+
+Overfull \hbox (4.19218pt too wide) in paragraph at lines 195--196
+\TU/lmtt/m/n/12 …) \TU/TimesNewRoman(0)/m/n/12 at \TU/lmtt/m/n/12 stormcast/ ut
+ils/ nn.py\TU/TimesNewRoman(0)/m/n/12 . The factory wraps a SongUNet with \TU/l
+mtt/m/n/12 channel_mult=[1,
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [37]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 210.
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[38]
+Overfull \hbox (14.42024pt too wide) in paragraph at lines 236--238
+\TU/TimesNewRoman(0)/m/n/12 plemented but unused in the reported experiments). 
+The sampler finishes by de-standardising:
+ []
+
+
+Underfull \vbox (badness 1062) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [39]
+Overfull \hbox (19.05179pt too wide) in paragraph at lines 242--242
+|[]\TU/TimesNewRoman(0)/b/n/17.28 The MeanFlow Residual (Average-Velocity Flow 
+Match-
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [40]
+Overfull \hbox (1.20279pt too wide) in paragraph at lines 260--261
+[] [] \TU/TimesNewRoman(0)/b/n/12 The MeanFlow identity.[] \TU/TimesNewRoman(0)
+/m/n/12 The integral is eliminated by differentiation rather than quadra-
+ []
+
+
+Underfull \vbox (badness 6461) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [41]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[42]
+Overfull \hbox (53.01587pt too wide) in paragraph at lines 307--308
+[] [] \TU/TimesNewRoman(0)/b/n/12 Network parameterisation: two times into one 
+backbone.[] \TU/TimesNewRoman(0)/m/n/12 The network is the \TU/lmtt/m/n/12 Mean
+FlowPrecond
+ []
+
+
+Overfull \hbox (10.64813pt too wide) in paragraph at lines 307--308
+\TU/TimesNewRoman(0)/m/n/12 module (\TU/lmtt/m/n/12 stormcast/ utils/ meanflow_
+precond.py\TU/TimesNewRoman(0)/m/n/12 ), wrapping the |   [] SongUNet back-
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[43]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [44]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [45])
+(./contents/chapter04.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [46]
+Chapter 4.
+
+Overfull \hbox (22.78807pt too wide) in paragraph at lines 12--13
+\TU/TimesNewRoman(0)/m/n/12 validation store (8,759 hourly samples; Section [][
+]3.2[][]). This contrasts with the stale \TU/lmtt/m/n/12 valid_dates
+ []
+
+
+Underfull \vbox (badness 1577) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [47
+
+]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[48]
+Overfull \hbox (13.05392pt too wide) in paragraph at lines 28--29
+[]\TU/TimesNewRoman(0)/m/n/12 All metrics are computed on denormalised fields w
+ith physical units (K, ms$[]$, mmh$[]$). 
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[49]
+Overfull \hbox (79.52882pt too wide) detected at line 43
+[][][][]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^\\OT1/cmr/m/n/12 ) = []\OML/cmm/m/i
+t/12 ;  []\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^\\OT1/cmr/m/n/12 ) = []\OML/cmm/m
+/it/12 ;  []\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 ^^\\OT1/cmr/m/n/12 ) = []\OML/cmm
+/m/it/12 ;
+ []
+
+
+Underfull \vbox (badness 3058) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [50]
+Overfull \hbox (61.00731pt too wide) in paragraph at lines 66--77
+ [][] 
+ []
+
+File: figures/results/scoreboard_3way.png Graphic file (type bmp)
+<figures/results/scoreboard_3way.png>
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[51]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [52]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [53]
+File: figures/results/rmse_per_channel.png Graphic file (type bmp)
+<figures/results/rmse_per_channel.png>
+File: figures/results/crps_per_channel.png Graphic file (type bmp)
+<figures/results/crps_per_channel.png>
+
+Overfull \hbox (3.35812pt too wide) in paragraph at lines 118--130
+ [][] 
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[54]
+Overfull \hbox (3.35812pt too wide) in paragraph at lines 138--150
+ [][] 
+ []
+
+File: figures/results/timing_speedup.png Graphic file (type bmp)
+<figures/results/timing_speedup.png>
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[55]
+Overfull \hbox (31.13248pt too wide) in paragraph at lines 163--164
+[] [] \TU/TimesNewRoman(0)/b/n/12 Cross-hardware.[] \TU/TimesNewRoman(0)/m/n/12
+ The H100 leg (Table [][]4.3[][]) confirms that the ranking is hardware-indepen
+dent:
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[56]
+File: figures/results/csi_per_threshold.png Graphic file (type bmp)
+<figures/results/csi_per_threshold.png>
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [57]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [58]
+Underfull \hbox (badness 4084) in paragraph at lines 182--182
+[]\TU/TimesNewRoman(0)/m/n/12 Table 4.4: |Threshold-averaged categorical precip
+itation skill (mean over $\OML/cmm/m/it/12 ^^\ \OMS/cmsy/m/n/12 2
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[59]
+File: figures/results/fss_p16.png Graphic file (type bmp)
+<figures/results/fss_p16.png>
+File: figures/results/rollout_rmse.png Graphic file (type bmp)
+<figures/results/rollout_rmse.png>
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [60]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [61]
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <17.28> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 293.
+
+Underfull \vbox (badness 1342) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [62]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [63]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[64]
+Overfull \hbox (7.58835pt too wide) in paragraph at lines 350--351
+[]\TU/TimesNewRoman(0)/m/n/12 To place the cleaned-pipeline heads in context, T
+able [][]4.8[][] adds the legacy old-StormCast
+ []
+
+
+Overfull \hbox (4.48808pt too wide) in paragraph at lines 358--368
+ [][] 
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[65]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [66]
+File: figures/results/rollout6h_qpepre.png Graphic file (type bmp)
+<figures/results/rollout6h_qpepre.png>
+File: figures/results/rollout6h_u10.png Graphic file (type bmp)
+<figures/results/rollout6h_u10.png>
+
+Overfull \hbox (11.98679pt too wide) in paragraph at lines 400--401
+[]\TU/TimesNewRoman(0)/m/n/12 The headline question of the thesis is whether a 
+single-run, teacher-free |   []
+ []
+
+) (./contents/chapter05.tex
+Underfull \vbox (badness 3138) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [67]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[68]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [69]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [70]
+Chapter 5.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [71
+
+]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[72]
+Underfull \vbox (badness 1082) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [73]
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 30.
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[74]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [75])
+Overfull \hbox (28.3981pt too wide) in paragraph at lines 50--45
+[]\TU/TimesNewRoman(0)/m/n/12 Generative modelling is almost certainly the righ
+t inductive bias for short-range convective-
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[76] (./main.bbl
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [77
+
+
+]
+Underfull \hbox (badness 1424) in paragraph at lines 84--87
+[]\TU/TimesNewRoman(0)/m/n/12 J. Ho and T. Salimans.  Classifier-free diffusion
+ guidance.  |   []   |   []
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[78]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [79]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [80]) (./back/appendix01.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [81]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [82
+
+]
+Overfull \hbox (46.77966pt too wide) in paragraph at lines 28--29
+[]\TU/TimesNewRoman(0)/m/n/12 Hyperparameters copied from \TU/lmtt/m/n/12 storm
+cast/ config/ model/ flowcast.yaml \TU/TimesNewRoman(0)/m/n/12 and \TU/lmtt/m/n
+/12 stormcast/
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [83
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [84]
+Overfull \hbox (46.77966pt too wide) in paragraph at lines 60--61
+[]\TU/TimesNewRoman(0)/m/n/12 Hyperparameters copied from \TU/lmtt/m/n/12 storm
+cast/ config/ model/ meanflow.yaml \TU/TimesNewRoman(0)/m/n/12 and \TU/lmtt/m/n
+/12 stormcast/
+ []
+
+
+Overfull \hbox (4.4379pt too wide) in paragraph at lines 60--61
+\TU/lmtt/m/n/12 config/ training/ meanflow.yaml\TU/TimesNewRoman(0)/m/n/12 . Ev
+erything shared with FlowCast (optimiser, sched-
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [85]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [86]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [87]
+Overfull \hbox (338.22983pt too wide) in paragraph at lines 96--105
+ [] 
+ []
+
+) (./back/appendix02.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [88]
+Overfull \hbox (18.91425pt too wide) in paragraph at lines 8--10
+[]\TU/TimesNewRoman(0)/m/n/12 The full training and evaluation code for this th
+esis lives in the \TU/lmtt/m/n/12 Stormcast- Distilation
+ []
+
+
+Overfull \hbox (3.82431pt too wide) in paragraph at lines 11--12
+\TU/TimesNewRoman(0)/m/n/12 MeanFlow (JVP-bootstrapped, stop-gradient, adaptive
+ly weighted) losses, both shar-
+ []
+
+
+Overfull \hbox (158.88866pt too wide) in paragraph at lines 13--14
+[]\TU/lmtt/m/n/12 stormcast/ utils/ nn.py \TU/TimesNewRoman(0)/m/n/12 — \TU/lmt
+t/m/n/12 get_preconditioned_architecture\TU/TimesNewRoman(0)/m/n/12 , \TU/lmtt/
+m/n/12 build_network_condition_and_target\TU/TimesNewRoman(0)/m/n/12 ,
+ []
+
+
+Overfull \hbox (115.6378pt too wide) in paragraph at lines 13--14
+\TU/TimesNewRoman(0)/m/n/12 and the samplers \TU/lmtt/m/n/12 diffusion_model_fo
+rward \TU/TimesNewRoman(0)/m/n/12 / \TU/lmtt/m/n/12 flowcast_model_forward \TU/
+TimesNewRoman(0)/m/n/12 / \TU/lmtt/m/n/12 meanflow_model_forward\TU/TimesNewRom
+an(0)/m/n/12 . 
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[89
+
+
+]
+Overfull \hbox (24.63173pt too wide) in paragraph at lines 15--16
+[]\TU/lmtt/m/n/12 experiment_scripts/ make_thesis_figures.py \TU/TimesNewRoman(
+0)/m/n/12 / \TU/lmtt/m/n/12 make_thesis_qualitative.sh
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[90]
+Overfull \hbox (7.59326pt too wide) in paragraph at lines 41--42
+\TU/TimesNewRoman(0)/m/n/12 re-running the same command auto-resumes from the l
+atest checkpoint plus \TU/lmtt/m/n/12 ema_state.pt\TU/TimesNewRoman(0)/m/n/12 .
+ 
+ []
+
+
+Overfull \hbox (11.17093pt too wide) in paragraph at lines 47--48
+\TU/TimesNewRoman(0)/m/n/12 which runs \TU/lmtt/m/n/12 compare_diffusion_vs_flo
+wcast.py \TU/TimesNewRoman(0)/m/n/12 (MeanFlow leg at \TU/lmtt/m/n/12 MEANFLOW_
+NFES="1
+ []
+
+
+Overfull \hbox (56.32516pt too wide) in paragraph at lines 47--48
+\TU/lmtt/m/n/12 2"\TU/TimesNewRoman(0)/m/n/12 ) and writes \TU/lmtt/m/n/12 scor
+eboard. {md,csv}\TU/TimesNewRoman(0)/m/n/12 , \TU/lmtt/m/n/12 per_threshold.csv
+\TU/TimesNewRoman(0)/m/n/12 , \TU/lmtt/m/n/12 fss_p16.csv\TU/TimesNewRoman(0)/m
+/n/12 , \TU/lmtt/m/n/12 rmse_per_step.csv\TU/TimesNewRoman(0)/m/n/12 ,
+ []
+
+
+Overfull \hbox (22.62837pt too wide) in paragraph at lines 47--48
+\TU/TimesNewRoman(0)/m/n/12 The NFE-versus-quality sweeps of Section [][]4.4[][
+] are wrapped by \TU/lmtt/m/n/12 run_flowcast_nfe_sweep.sh
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[91]) (./back/appendix03.tex
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [92]
+Overfull \hbox (43.52554pt too wide) in paragraph at lines 12--13
+[]\TU/TimesNewRoman(0)/m/n/12 Let $\OML/cmm/m/it/12 x[] \OMS/cmsy/m/n/12 ^^X \O
+ML/cmm/m/it/12 p[]$ \TU/TimesNewRoman(0)/m/n/12 and $\OML/cmm/m/it/12 x \OT1/cm
+r/m/n/12 = \OML/cmm/m/it/12 x[] \OT1/cmr/m/n/12 + \OML/cmm/m/it/12 ^^[^^O$ \TU/
+TimesNewRoman(0)/m/n/12 with $\OML/cmm/m/it/12 ^^O \OMS/cmsy/m/n/12 ^^X N\OT1/c
+mr/m/n/12 (0\OML/cmm/m/it/12 ; I\OT1/cmr/m/n/12 )$\TU/TimesNewRoman(0)/m/n/12 .
+ Write $\OML/cmm/m/it/12 p[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x\OT1/cmr/m/n/12 
+) = [] \OML/cmm/m/it/12 p[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x[]\OT1/cmr/m/n/12
+ ) \OMS/cmsy/m/n/12 N\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x\OT1/cmr/m/n/12 ; \OML/
+cmm/m/it/12 x[]; ^^[[]I\OT1/cmr/m/n/12 ) \OML/cmm/m/it/12 dx[]$\TU/TimesNewRoma
+n(0)/m/n/12 .
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [93
+
+
+]
+Overfull \hbox (22.38525pt too wide) in paragraph at lines 24--26
+|   []   |   [] \TU/TimesNewRoman(0)/m/n/12 are equivalent as learning objectiv
+es: fitting $\OML/cmm/m/it/12 D[]$ \TU/TimesNewRoman(0)/m/n/12 to minimise $\U/
+msb/m/n/12 E\OMS/cmsy/m/n/12 k\OML/cmm/m/it/12 D[]\OT1/cmr/m/n/12 (\OML/cmm/m/i
+t/12 x\OT1/cmr/m/n/12 ; \OML/cmm/m/it/12 ^^[\OT1/cmr/m/n/12 ) \OMS/cmsy/m/n/12 
+^^@
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [94]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 44.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 44.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [95]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [96]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[97]
+Overfull \hbox (4.24217pt too wide) in paragraph at lines 103--104
+[]\TU/TimesNewRoman(0)/b/n/12 Condition bundle. $\OML/cmm/m/it/12 v[]$ \TU/Time
+sNewRoman(0)/m/n/12 is conditioned on $\OML/cmm/m/it/12 c[] \OT1/cmr/m/n/12 = [
+](\OML/cmm/m/it/12 M[]; ^^V[]; I\OT1/cmr/m/n/12 )$ \TU/TimesNewRoman(0)/m/n/12 
+(the low-resolution
+ []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+[98]
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [99]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+ [100])
+File: ./figures/seal.pdf Graphic file (type pdf)
+<use ./figures/seal.pdf>
+
+[101] (./main.aux)
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2020/04/10>
+ ***********
+
+
+LaTeX Font Warning: Size substitutions with differences
+(Font)              up to 1.28pt have occurred.
+
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 812C85859D618691C473941EE361C6F3;15598.
+ ) 
 Here is how much of TeX's memory you used:
- 647 strings out of 480247
- 12043 string characters out of 5896151
- 294991 words of memory out of 5000000
- 18658 multiletter control sequences out of 15000+600000
- 469259 words of font info for 28 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 55i,0n,62p,153b,17s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37530 strings out of 476415
+ 813060 string characters out of 5792682
+ 1946627 words of memory out of 5000000
+ 58773 multiletter control sequences out of 15000+600000
+ 570187 words of font info for 133 fonts, out of 8000000 for 9000
+ 264 hyphenation exceptions out of 8191
+ 99i,16n,131p,2428b,972s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-!  ==> Fatal error occurred, no output PDF file produced!
+Output written on main.xdv (124 pages, 1913604 bytes).
