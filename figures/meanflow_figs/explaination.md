@@ -21,6 +21,8 @@ The three figures are:
 | `meanflow_overall.png` | the whole training step (data → frozen regression → condition/residual → objective → optimizer/EMA → validation) |
 | `meanflow_network.png` | the `MeanFlowPrecond` network internals (SongUNet + the two time embeddings) |
 | `meanflow_objective.png` | the MeanFlow loss: time sampling, the I-CFM vs JVP-identity targets, and the loss terms |
+| `regression_network_detail.png` | layer-level detail of the Stage-1 regression net $F_\theta$ (StormCastUNet, 30 ch in, zero embedding): all 5 U levels with measured per-level params, bottleneck attention, 80,726,404 total |
+| `meanflow_network_detail.png` | layer-level detail of the Stage-2 head $MF_\theta$ (MeanFlowPrecond, 14 ch in): same U backbone plus the two time-embedding rails and mapping MLP, 81,040,772 total |
 
 ---
 

@@ -16,8 +16,8 @@ mkdir -p "$BUILD"
 # let \input{mfstyle} resolve from this directory
 export TEXINPUTS="$HERE:${TEXINPUTS:-}"
 
-# default = all three figures
-read -r -a FIGS <<< "${*:-meanflow_overall meanflow_network meanflow_objective}"
+# default = all figures
+read -r -a FIGS <<< "${*:-meanflow_overall meanflow_network meanflow_objective regression_network_detail meanflow_network_detail}"
 
 # pick a PDF->PNG rasterizer that is actually installed
 if command -v pdftoppm >/dev/null 2>&1; then
